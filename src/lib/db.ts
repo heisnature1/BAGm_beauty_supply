@@ -100,20 +100,17 @@ function createUniversalDbClient() {
           if (lower.includes('from brands where slug = ?')) {
             return memoryStore.brands.find((b) => b.slug === flat[0]);
           }
-          if (lower.includes('from products where slug = ?')) {
+          if (lower.includes('p.slug = ?') || lower.includes('products where slug = ?') || lower.includes('from products where slug = ?')) {
             return memoryStore.products.find((p) => p.slug === flat[0]);
           }
-          if (lower.includes('from products where id = ?')) {
+          if (lower.includes('p.id = ?') || lower.includes('products where id = ?') || lower.includes('from products where id = ?')) {
             return memoryStore.products.find((p) => p.id === flat[0]);
           }
           if (lower.includes('from orders where id = ? or order_number = ?') || lower.includes('from orders where id = ?')) {
             return memoryStore.orders.find((o) => o.id === flat[0] || o.order_number === flat[0] || (flat[1] && o.order_number === flat[1]));
           }
-          if (lower.includes('count(*) as count from products')) {
-            return { count: memoryStore.products.length };
-          }
-          if (lower.includes('count(*) as total from products')) {
-            return { total: memoryStore.products.length };
+          if (lower.includes('count(*) as count from products') || lower.includes('count(*) as total from products') || lower.includes('count(p.id) as count')) {
+            return { count: memoryStore.products.length, total: memoryStore.products.length };
           }
           if (lower.includes('sum(total_amount) as total_revenue')) {
             const total = memoryStore.orders.filter((o) => o.payment_status === 'paid').reduce((acc, o) => acc + (o.total_amount || 0), 0);
@@ -146,6 +143,22 @@ function createUniversalDbClient() {
           }
           if (lower.includes('from products')) {
             let list = [...memoryStore.products];
+            if (lower.includes('is_featured = 1')) {
+              list = list.filter((p) => p.is_featured === 1);
+            }
+            if (lower.includes('is_bestseller = 1')) {
+              list = list.filter((p) => p.is_bestseller === 1);
+            }
+            if (lower.includes('is_new_arrival = 1')) {
+              list = list.filter((p) => p.is_new_arrival === 1);
+            }
+            if (flat.length > 0 && typeof flat[0] === 'string') {
+              const param = flat[0];
+              const byCategory = list.filter((p) => p.category_slug === param || p.category_id === param);
+              if (byCategory.length > 0) return byCategory;
+              const byBrand = list.filter((p) => p.brand_slug === param || p.brand_id === param);
+              if (byBrand.length > 0) return byBrand;
+            }
             return list;
           }
           if (lower.includes('from delivery_zones')) {
