@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Clock, ArrowRight, ShieldCheck, CheckCircle2, Sparkles } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, ArrowRight, ShieldCheck, CheckCircle2, Sparkles, Truck, Sun, HeartHandshake, CreditCard } from 'lucide-react';
 import { Logo } from '@/components/common/Logo';
 
 export function Footer() {
@@ -40,43 +40,59 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-charcoal-950 text-charcoal-200 border-t border-charcoal-800">
-      {/* Top Value Propositions */}
-      <div className="border-b border-charcoal-800/80 bg-charcoal-900/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center md:text-left">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 p-4 rounded-xl bg-charcoal-900/40 border border-charcoal-800">
-              <div className="w-12 h-12 rounded-full bg-brand-900/60 text-brand-400 flex items-center justify-center shrink-0 border border-brand-800/50">
-                <ShieldCheck className="w-6 h-6" />
+    <footer className="bg-gradient-to-b from-[#FFF5F8] via-[#FAF6F3] to-[#F5ECEE] text-charcoal-800 border-t border-brand-200/80">
+      {/* Top Value Proposition Bar (Clean, Luxury, Everything Beauty Ghana Style) */}
+      <div className="border-b border-brand-200/70 bg-white/70 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {/* Value 1 */}
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-brand-50 text-brand-700 flex items-center justify-center shrink-0 border border-brand-200/60 shadow-2xs">
+                <ShieldCheck className="w-6 h-6 text-brand-600" />
               </div>
               <div>
-                <h4 className="text-white font-serif font-semibold text-base">100% Authentic Beauty</h4>
-                <p className="text-xs text-charcoal-400 mt-1 leading-relaxed">
-                  Carefully sourced directly from authorized global labs and certified Ghanaian beauty artisans.
+                <h4 className="text-charcoal-900 font-serif font-bold text-base">100% Authentic Beauty</h4>
+                <p className="text-xs text-charcoal-600 mt-1 leading-relaxed">
+                  Directly sourced from authorized global laboratories and certified Ghanaian botanical artisans. Zero fakes.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 p-4 rounded-xl bg-charcoal-900/40 border border-charcoal-800">
-              <div className="w-12 h-12 rounded-full bg-gold-900/40 text-gold-400 flex items-center justify-center shrink-0 border border-gold-800/50">
-                <Clock className="w-6 h-6" />
+            {/* Value 2 */}
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200/60 shadow-2xs">
+                <Truck className="w-6 h-6 text-amber-600" />
               </div>
               <div>
-                <h4 className="text-white font-serif font-semibold text-base">Reliable Ghana Fulfilment</h4>
-                <p className="text-xs text-charcoal-400 mt-1 leading-relaxed">
-                  Express delivery across Greater Accra, nationwide courier across all regions, and pickup in East Legon.
+                <h4 className="text-charcoal-900 font-serif font-bold text-base">Fast Ghana Delivery</h4>
+                <p className="text-xs text-charcoal-600 mt-1 leading-relaxed">
+                  Same-day express delivery across Greater Accra, nationwide courier across all regions, and East Legon pickup.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 p-4 rounded-xl bg-charcoal-900/40 border border-charcoal-800">
-              <div className="w-12 h-12 rounded-full bg-brand-900/60 text-brand-400 flex items-center justify-center shrink-0 border border-brand-800/50">
-                <Sparkles className="w-6 h-6" />
+            {/* Value 3 */}
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-200/60 shadow-2xs">
+                <Sun className="w-6 h-6 text-rose-600" />
               </div>
               <div>
-                <h4 className="text-white font-serif font-semibold text-base">Tailored Routine Guidance</h4>
-                <p className="text-xs text-charcoal-400 mt-1 leading-relaxed">
-                  Interactive skincare routine questionnaire to discover formulations suited for your skin profile.
+                <h4 className="text-charcoal-900 font-serif font-bold text-base">Melanin-Tested Formulas</h4>
+                <p className="text-xs text-charcoal-600 mt-1 leading-relaxed">
+                  Zero white cast sunscreens, lightweight non-greasy textures, and proven actives suited for tropical heat.
+                </p>
+              </div>
+            </div>
+
+            {/* Value 4 */}
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-brand-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200/60 shadow-2xs">
+                <CreditCard className="w-6 h-6 text-emerald-600" />
+              </div>
+              <div>
+                <h4 className="text-charcoal-900 font-serif font-bold text-base">Secure MoMo &amp; Cards</h4>
+                <p className="text-xs text-charcoal-600 mt-1 leading-relaxed">
+                  Instant MTN Mobile Money, Telecel Cash, AT Money, Visa, Mastercard, and Cash on Delivery.
                 </p>
               </div>
             </div>
@@ -90,69 +106,69 @@ export function Footer() {
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <Logo variant="footer" size="lg" />
-            <p className="text-xs sm:text-sm text-charcoal-400 max-w-sm leading-relaxed">
-              BAGm Beauty Supply is Ghana’s premier beauty destination, offering authentic international skincare, handcrafted Ghanaian botanicals, and personalized beauty solutions.
+            <p className="text-xs sm:text-sm text-charcoal-600 max-w-sm leading-relaxed">
+              BAGm Beauty Supply is Ghana’s premier luxury beauty and skincare destination, offering verified international clinical formulations, handcrafted Ghanaian botanicals, and personalized beauty guidance.
             </p>
 
-            <div className="space-y-2 text-xs text-charcoal-300 pt-2">
+            <div className="space-y-2.5 text-xs text-charcoal-600 pt-2">
               <div className="flex items-center gap-2.5">
-                <MapPin className="w-4 h-4 text-brand-400 shrink-0" />
+                <MapPin className="w-4 h-4 text-brand-600 shrink-0" />
                 <span>Plot 42 Lagos Avenue, East Legon, Accra, Ghana</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-brand-400 shrink-0" />
+                <Phone className="w-4 h-4 text-brand-600 shrink-0" />
                 <span>+233 24 123 4567 / +233 55 987 6543</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-brand-400 shrink-0" />
+                <Mail className="w-4 h-4 text-brand-600 shrink-0" />
                 <span>support@bagmbeauty.com</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Clock className="w-4 h-4 text-brand-400 shrink-0" />
-                <span>Mon – Sat: 9:00 AM – 7:00 PM GMT</span>
+                <Clock className="w-4 h-4 text-brand-600 shrink-0" />
+                <span>Monday – Saturday: 9:00 AM – 7:00 PM GMT</span>
               </div>
             </div>
           </div>
 
           {/* Quick Categories */}
           <div>
-            <h5 className="font-serif font-semibold text-white text-sm tracking-wider uppercase mb-4 border-b border-brand-800 pb-1.5 inline-block">
-              Categories
+            <h5 className="font-serif font-bold text-charcoal-900 text-sm tracking-wider uppercase mb-4 border-b border-brand-200 pb-1.5 inline-block">
+              Shop Categories
             </h5>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-400">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-600">
               <li>
-                <Link href="/categories/skincare" className="hover:text-brand-400 transition-colors">
+                <Link href="/categories/skincare" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
                   Skincare Essentials
                 </Link>
               </li>
               <li>
-                <Link href="/categories/facial-care" className="hover:text-brand-400 transition-colors">
-                  Facial Cleansers & Toners
+                <Link href="/categories/facial-care" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Facial Cleansers &amp; Toners
                 </Link>
               </li>
               <li>
-                <Link href="/categories/serums-and-treatments" className="hover:text-brand-400 transition-colors">
-                  Serums & Treatments
+                <Link href="/categories/serums-and-treatments" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Serums &amp; Treatments
                 </Link>
               </li>
               <li>
-                <Link href="/categories/sun-protection" className="hover:text-brand-400 transition-colors">
-                  Invisible Sunscreens (SPF)
+                <Link href="/categories/sun-protection" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Invisible Sunscreens (SPF 50+)
                 </Link>
               </li>
               <li>
-                <Link href="/categories/body-care" className="hover:text-brand-400 transition-colors">
-                  Body Care & Shea Soufflés
+                <Link href="/categories/body-care" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Body Care &amp; Shea Soufflés
                 </Link>
               </li>
               <li>
-                <Link href="/categories/body-splashes-and-sprays" className="hover:text-brand-400 transition-colors">
-                  Body Splashes & Mists
+                <Link href="/categories/body-splashes-and-sprays" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Body Splashes &amp; Mists
                 </Link>
               </li>
               <li>
-                <Link href="/categories/makeup" className="hover:text-brand-400 transition-colors">
-                  Makeup & Beauty Tools
+                <Link href="/shop" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all font-semibold text-brand-700">
+                  Shop All Products →
                 </Link>
               </li>
             </ul>
@@ -160,48 +176,49 @@ export function Footer() {
 
           {/* Customer Care & Policies */}
           <div>
-            <h5 className="font-serif font-semibold text-white text-sm tracking-wider uppercase mb-4 border-b border-brand-800 pb-1.5 inline-block">
+            <h5 className="font-serif font-bold text-charcoal-900 text-sm tracking-wider uppercase mb-4 border-b border-brand-200 pb-1.5 inline-block">
               Customer Care
             </h5>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-400">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-600">
               <li>
-                <Link href="/routine-finder" className="hover:text-brand-400 transition-colors text-gold-400">
-                  Skincare Routine Finder
+                <Link href="/routine-finder" className="hover:text-brand-700 font-bold text-brand-700 inline-flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-gold-500" />
+                  <span>Routine Finder Quiz</span>
                 </Link>
               </li>
               <li>
-                <Link href="/track-order" className="hover:text-brand-400 transition-colors">
+                <Link href="/track-order" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
                   Track Your Order
                 </Link>
               </li>
               <li>
-                <Link href="/policy/delivery" className="hover:text-brand-400 transition-colors">
-                  Delivery & Pickup Policy
+                <Link href="/policy/delivery" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Delivery &amp; Pickup Policy
                 </Link>
               </li>
               <li>
-                <Link href="/policy/returns" className="hover:text-brand-400 transition-colors">
-                  Returns & Refunds Policy
+                <Link href="/policy/returns" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Returns &amp; Refunds Policy
                 </Link>
               </li>
               <li>
-                <Link href="/policy/privacy" className="hover:text-brand-400 transition-colors">
+                <Link href="/policy/privacy" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/policy/terms" className="hover:text-brand-400 transition-colors">
-                  Terms and Conditions
+                <Link href="/policy/terms" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="hover:text-brand-400 transition-colors">
-                  Frequently Asked Questions
+                <Link href="/faq" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  FAQs &amp; Help
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-brand-400 transition-colors">
-                  Contact Support
+                <Link href="/contact" className="hover:text-brand-700 hover:translate-x-0.5 inline-block transition-all">
+                  Contact Us
                 </Link>
               </li>
             </ul>
@@ -209,27 +226,27 @@ export function Footer() {
 
           {/* Newsletter Box */}
           <div className="space-y-4">
-            <h5 className="font-serif font-semibold text-white text-sm tracking-wider uppercase mb-4 border-b border-brand-800 pb-1.5 inline-block">
-              Stay Connected
+            <h5 className="font-serif font-bold text-charcoal-900 text-sm tracking-wider uppercase mb-4 border-b border-brand-200 pb-1.5 inline-block">
+              BAGm VIP Club
             </h5>
-            <p className="text-xs text-charcoal-400 leading-relaxed">
-              Subscribe to receive curated skincare rituals, new product arrivals, and beauty education.
+            <p className="text-xs text-charcoal-600 leading-relaxed">
+              Subscribe for expert melanin skincare tips, new product launches, and exclusive Ghanaian beauty guides.
             </p>
 
-            <form onSubmit={handleNewsletterSubmit} className="space-y-2.5">
-              <div className="flex rounded-xl overflow-hidden border border-charcoal-700 bg-charcoal-900 focus-within:border-brand-500">
+            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+              <div className="flex rounded-xl overflow-hidden border border-brand-200 bg-white focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-100 shadow-2xs">
                 <input
                   type="email"
                   required
                   placeholder="Enter your email address"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
-                  className="bg-transparent text-xs text-white px-3 py-2.5 w-full focus:outline-none placeholder-charcoal-500"
+                  className="bg-transparent text-xs text-charcoal-900 px-3.5 py-3 w-full focus:outline-none placeholder-charcoal-400 font-medium"
                 />
                 <button
                   type="submit"
                   disabled={status === 'loading' || !consentChecked}
-                  className="bg-brand-700 hover:bg-brand-600 disabled:opacity-40 text-white px-3.5 transition-colors flex items-center justify-center"
+                  className="bg-brand-600 hover:bg-brand-700 disabled:opacity-40 text-white px-4 transition-colors flex items-center justify-center font-bold text-xs shrink-0"
                   aria-label="Subscribe to newsletter"
                 >
                   <ArrowRight className="w-4 h-4" />
@@ -242,22 +259,22 @@ export function Footer() {
                   required
                   checked={consentChecked}
                   onChange={(e) => setConsentChecked(e.target.checked)}
-                  className="mt-0.5 rounded border-charcoal-700 text-brand-600 focus:ring-0 bg-charcoal-900 text-xs"
+                  className="mt-0.5 rounded border-brand-300 text-brand-600 focus:ring-0 bg-white text-xs"
                 />
-                <span className="text-[11px] text-charcoal-400 leading-tight">
-                  I consent to receive beauty updates and educational articles from BAGm Beauty Supply.
+                <span className="text-[11px] text-charcoal-500 leading-tight">
+                  I agree to receive skincare advice and product alerts from BAGm Beauty Supply.
                 </span>
               </label>
 
               {status === 'success' && (
-                <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-1.5 animate-fade-in">
-                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 animate-fade-in">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
                   <span>{message}</span>
                 </div>
               )}
 
               {status === 'error' && (
-                <div className="p-2.5 rounded-lg bg-red-950/60 border border-red-800 text-red-300 text-xs animate-fade-in">
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs animate-fade-in">
                   {message}
                 </div>
               )}
@@ -266,28 +283,28 @@ export function Footer() {
         </div>
 
         {/* Bottom Payment Methods & Copyright */}
-        <div className="mt-12 pt-8 border-t border-charcoal-800/80 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-charcoal-500">
+        <div className="mt-12 pt-8 border-t border-brand-200/80 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-charcoal-500">
           <p>© {new Date().getFullYear()} BAGm Beauty Supply. All rights reserved. Accra, Ghana.</p>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-[11px] text-charcoal-400">Secure Payments for Ghana:</span>
-            <span className="px-2 py-1 rounded bg-charcoal-900 border border-charcoal-800 text-[10px] text-charcoal-300 font-semibold">
-              MTN MoMo
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <span className="text-[11px] font-semibold text-charcoal-600 mr-1">Accepted in Ghana:</span>
+            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
+              MTN MoMo 🟡
             </span>
-            <span className="px-2 py-1 rounded bg-charcoal-900 border border-charcoal-800 text-[10px] text-charcoal-300 font-semibold">
-              Telecel Cash
+            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
+              Telecel Cash 🔴
             </span>
-            <span className="px-2 py-1 rounded bg-charcoal-900 border border-charcoal-800 text-[10px] text-charcoal-300 font-semibold">
-              AT Money
+            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
+              AT Money 🔵
             </span>
-            <span className="px-2 py-1 rounded bg-charcoal-900 border border-charcoal-800 text-[10px] text-charcoal-300 font-semibold">
-              Visa & Mastercard
+            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
+              Visa &amp; Mastercard 💳
             </span>
-            <span className="px-2 py-1 rounded bg-charcoal-900 border border-charcoal-800 text-[10px] text-charcoal-300 font-semibold">
-              Bank Transfer
+            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
+              Paystack ⚡
             </span>
-            <span className="px-2 py-1 rounded bg-charcoal-900 border border-charcoal-800 text-[10px] text-charcoal-300 font-semibold">
-              Cash on Delivery
+            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
+              Cash on Delivery 📦
             </span>
           </div>
         </div>
