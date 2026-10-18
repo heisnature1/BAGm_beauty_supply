@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import {
   Sparkles,
   ArrowRight,
@@ -9,18 +10,33 @@ import {
   Truck,
   HeartHandshake,
   ShoppingBag,
-  ChevronLeft,
-  ChevronRight,
   Check,
   Star,
-  Flame,
+  RotateCw,
+  Box,
+  Layers,
 } from 'lucide-react';
 import { StoreSettings } from '@/types';
 import { useCart } from '../providers/CartProvider';
 import { useToast } from '../providers/ToastProvider';
 import { formatGHS } from '@/lib/utils';
+import { Product3DConfig } from './Product3DViewer';
 
-interface HeroSlide {
+// Dynamically import 3D viewer with SSR disabled for optimal WebGL performance
+const Product3DViewer = dynamic(
+  () => import('./Product3DViewer').then((mod) => mod.Product3DViewer),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full min-h-[380px] sm:min-h-[460px] flex flex-col items-center justify-center space-y-3 bg-blush-light rounded-3xl border border-brand-100 animate-pulse">
+        <Box className="w-10 h-10 text-brand-400 animate-bounce" />
+        <p className="text-xs font-bold text-brand-700">Loading 3D Product Experience...</p>
+      </div>
+    ),
+  }
+);
+
+interface HeroProductItem {
   id: string;
   sku: string;
   name: string;
@@ -35,9 +51,10 @@ interface HeroSlide {
   rating: number;
   reviewsCount: number;
   badges: string[];
+  config3D: Product3DConfig;
 }
 
-const HERO_SLIDES: HeroSlide[] = [
+const HERO_PRODUCTS: HeroProductItem[] = [
   {
     id: 'prod-bagm-peptide-cream',
     sku: 'BAGM-CR-001',
@@ -45,15 +62,28 @@ const HERO_SLIDES: HeroSlide[] = [
     slug: 'bagm-silk-barrier-peptide-cream-50ml',
     brand: 'BAGm Signature',
     origin: 'BAGm',
-    tag: '✨ BAGm Signature Formulation',
+    tag: '✨ BAGm Signature Formula',
     headline: 'Rich Peptides & Baobab Oil For Radiant Skin Barrier',
     subtitle:
-      'Formulated specifically for melanin-rich skin in West African heat. Non-greasy satin finish with 48H deep hydration and peptide repair.',
+      'Formulated specifically for melanin-rich skin in West African heat. Non-greasy satin finish with 48H deep hydration and peptide cellular repair.',
     price: 340.0,
-    image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=800',
     rating: 5.0,
     reviewsCount: 38,
     badges: ['💧 48H Hydration Lock', '🌿 Ghanaian Baobab Seed Oil', '🛡️ Multi-Peptides'],
+    config3D: {
+      id: 'jar-peptide',
+      name: 'Silk Barrier Peptide Cream',
+      brand: 'BAGm Signature',
+      type: 'jar',
+      glassColor: 0xfff0f3,
+      liquidColor: 0xfffcf5,
+      capColor: 0xd4af37,
+      labelBg: 0xffffff,
+      labelTitle: 'SILK BARRIER',
+      labelSubtitle: 'Peptide & Baobab Cream',
+      accentGold: true,
+    },
   },
   {
     id: 'prod-laroche-anthelios',
@@ -65,12 +95,25 @@ const HERO_SLIDES: HeroSlide[] = [
     tag: '☀️ 100% Zero White Cast Guaranteed',
     headline: 'Invisible Daily Sun Protection For Melanin-Rich Skin',
     subtitle:
-      'Maximum UVA/UVB broad spectrum defense with Mexoryl 400. Sweat and tropical humidity resistant with a transparent radiant finish.',
+      'Maximum UVA/UVB broad spectrum defense with Mexoryl 400. Sweat & tropical humidity resistant with a transparent radiant finish.',
     price: 320.0,
-    image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=800',
     rating: 4.9,
     reviewsCount: 52,
     badges: ['🛡️ SPF 50+ Broad Spectrum', '✨ 100% Clear On Dark Skin', '⚡ Ultra-Light Fluid'],
+    config3D: {
+      id: 'flask-anthelios',
+      name: 'Anthelios Invisible Fluid',
+      brand: 'La Roche-Posay',
+      type: 'flask',
+      glassColor: 0xffeedd,
+      liquidColor: 0xffffff,
+      capColor: 0xe67e22,
+      labelBg: 0xffffff,
+      labelTitle: 'ANTHELIOS 400',
+      labelSubtitle: 'Invisible Fluid SPF 50+',
+      accentGold: false,
+    },
   },
   {
     id: 'prod-kaeme-shea-souffle',
@@ -84,10 +127,23 @@ const HERO_SLIDES: HeroSlide[] = [
     subtitle:
       'Unrefined Northern Ghana shea butter whipped to airy perfection with warm oriental oud and vitamin-rich botanical oils for a luminous body glow.',
     price: 220.0,
-    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800',
     rating: 5.0,
     reviewsCount: 29,
     badges: ['🌰 100% Pure Raw Shea', '👑 Long-Lasting Warm Oud', '✨ Velvety Glow Soufflé'],
+    config3D: {
+      id: 'jar-kaeme',
+      name: 'Eternal Oud Shea Soufflé',
+      brand: 'Kaeme Ghana',
+      type: 'jar',
+      glassColor: 0xfdfbf7,
+      liquidColor: 0xfbf1dd,
+      capColor: 0x8c6b26,
+      labelBg: 0xffffff,
+      labelTitle: 'ETERNAL OUD',
+      labelSubtitle: 'Whipped Shea Soufflé',
+      accentGold: true,
+    },
   },
   {
     id: 'prod-ordinary-niacinamide',
@@ -101,45 +157,35 @@ const HERO_SLIDES: HeroSlide[] = [
     subtitle:
       'High-potency clinical vitamin serum that targets post-acne hyperpigmentation, decongests pores, and regulates shine in humid weather.',
     price: 180.0,
-    image: 'https://images.unsplash.com/photo-1608248597359-216259021419?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://images.unsplash.com/photo-1608248597359-216259021419?auto=format&fit=crop&q=80&w=800',
     rating: 4.8,
     reviewsCount: 64,
     badges: ['💧 10% High-Purity Niacinamide', '✨ Fades Dark Spots', '⚡ Oil Balance'],
+    config3D: {
+      id: 'dropper-niacinamide',
+      name: 'Niacinamide 10% + Zinc 1%',
+      brand: 'The Ordinary',
+      type: 'dropper',
+      glassColor: 0xffffff,
+      liquidColor: 0xf8f9fa,
+      capColor: 0xd4af37,
+      labelBg: 0xffffff,
+      labelTitle: 'NIACINAMIDE 10%',
+      labelSubtitle: 'Zinc 1% Blemish Active',
+      accentGold: true,
+    },
   },
 ];
 
 export function HeroBanner({ settings }: { settings: StoreSettings }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [addedSlides, setAddedSlides] = useState<{ [key: string]: boolean }>({});
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [addedSuccess, setAddedSuccess] = useState(false);
   const { addItem } = useCart();
   const { showToast } = useToast();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const slide = HERO_SLIDES[currentSlide];
+  const current = HERO_PRODUCTS[selectedIndex];
 
-  // Auto-advance slides every 5.5s
-  useEffect(() => {
-    if (isPaused) return;
-
-    timerRef.current = setTimeout(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 5500);
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [currentSlide, isPaused]);
-
-  const handleNext = () => {
-    setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-  };
-
-  const handleQuickAdd = (current: HeroSlide) => {
+  const handleQuickAdd = () => {
     addItem({
       productId: current.id,
       name: current.name,
@@ -151,7 +197,7 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
       brandName: current.brand,
     });
 
-    setAddedSlides((prev) => ({ ...prev, [current.id]: true }));
+    setAddedSuccess(true);
     showToast({
       title: 'Added to Shopping Bag!',
       message: `${current.name} (${formatGHS(current.price)})`,
@@ -159,65 +205,58 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
       type: 'cart',
     });
 
-    setTimeout(() => {
-      setAddedSlides((prev) => ({ ...prev, [current.id]: false }));
-    }, 2000);
+    setTimeout(() => setAddedSuccess(false), 2000);
   };
 
   return (
-    <section
-      className="relative overflow-hidden bg-gradient-to-b from-blush via-blush-light to-white pt-6 pb-12 sm:pt-10 sm:pb-16 lg:pt-14 lg:pb-20 border-b border-brand-100/60"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-brand-200/40 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
-      <div className="absolute bottom-10 right-0 w-96 h-96 bg-gold-200/30 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-blush via-blush-light to-white pt-8 pb-14 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-24 border-b border-brand-100/60">
+      {/* Ambient background decorative light halos */}
+      <div className="absolute top-1/4 -left-28 w-96 h-96 bg-brand-200/40 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
+      <div className="absolute bottom-10 -right-20 w-96 h-96 bg-gold-200/30 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Grid: Left copy, Right big product showcase */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left Column: Text info & Action */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left z-10">
-            {/* Top Tag & Origin */}
+          {/* Left Column: Headline, Description & Actions */}
+          <div className="lg:col-span-6 space-y-6 text-center lg:text-left z-10">
+            {/* Tag Badges */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 border border-brand-200 text-brand-800 text-xs font-bold tracking-wide shadow-xs backdrop-blur-md">
                 <Sparkles className="w-3.5 h-3.5 text-gold-500 shrink-0" />
-                <span>{slide.tag}</span>
+                <span>{current.tag}</span>
               </span>
 
-              {slide.origin === 'Ghanaian' && (
+              {current.origin === 'Ghanaian' && (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
                   <span>Ghanaian Artisan 🇬🇭</span>
                 </span>
               )}
 
-              {slide.origin === 'BAGm' && (
+              {current.origin === 'BAGm' && (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-900 text-xs font-bold">
-                  <span>Signature Line</span>
+                  <span>Signature Formula</span>
                 </span>
               )}
             </div>
 
-            {/* Dynamic Headline with animation key */}
+            {/* Dynamic Headline */}
             <h1
-              key={`h1-${slide.id}`}
+              key={`h1-${current.id}`}
               className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-charcoal-900 leading-[1.12] animate-fade-in"
             >
-              {slide.headline}
+              {current.headline}
             </h1>
 
             {/* Subtitle */}
             <p
-              key={`p-${slide.id}`}
+              key={`p-${current.id}`}
               className="text-sm sm:text-base lg:text-lg text-charcoal-600 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed animate-fade-in"
             >
-              {slide.subtitle}
+              {current.subtitle}
             </p>
 
-            {/* Key Ingredient Badges */}
+            {/* Key Benefits Badges */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
-              {slide.badges.map((b) => (
+              {current.badges.map((b) => (
                 <span
                   key={b}
                   className="px-3 py-1 rounded-lg bg-brand-50/80 border border-brand-100 text-charcoal-700 text-xs font-medium backdrop-blur-xs"
@@ -227,18 +266,17 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
               ))}
             </div>
 
-            {/* Price & Action Buttons */}
+            {/* Actions: Quick Add & Explore */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3">
-              {/* Direct Quick Add */}
               <button
-                onClick={() => handleQuickAdd(slide)}
+                onClick={handleQuickAdd}
                 className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-md active:scale-98 ${
-                  addedSlides[slide.id]
+                  addedSuccess
                     ? 'bg-emerald-600 text-white'
                     : 'bg-brand-600 hover:bg-brand-700 text-white shadow-luxury hover:shadow-luxury-hover'
                 }`}
               >
-                {addedSlides[slide.id] ? (
+                {addedSuccess ? (
                   <>
                     <Check className="w-4 h-4" />
                     <span>Added to Bag!</span>
@@ -246,17 +284,16 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
                 ) : (
                   <>
                     <ShoppingBag className="w-4 h-4" />
-                    <span>Quick Add • {formatGHS(slide.price)}</span>
+                    <span>Quick Add • {formatGHS(current.price)}</span>
                   </>
                 )}
               </button>
 
-              {/* View Full Product Details */}
               <Link
-                href={`/product/${slide.slug}`}
+                href={`/product/${current.slug}`}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-brand-200 bg-white/95 hover:bg-brand-50 text-brand-900 font-semibold text-sm transition-all shadow-xs"
               >
-                <span>Discover Formula</span>
+                <span>View Full Details</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -273,135 +310,62 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
               </div>
               <div className="flex items-center gap-1.5">
                 <HeartHandshake className="w-4 h-4 text-gold-600 shrink-0" />
-                <span>Free Routine Guidance</span>
+                <span>Routine Guidance</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Big Sliding Product Showcase Card */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              {/* Product Card Container with Smooth Transition */}
-              <div
-                key={`img-${slide.id}`}
-                className="relative rounded-3xl overflow-hidden shadow-luxury-hover border-4 border-white bg-white aspect-[4/5] sm:aspect-square lg:aspect-[4/5] animate-scale-in group"
-              >
-                <img
-                  src={slide.image}
-                  alt={slide.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          {/* Right Column: 3D Product Interactive Canvas */}
+          <div className="lg:col-span-6 relative">
+            <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
+              {/* 3D Canvas Box */}
+              <div className="relative rounded-3xl overflow-hidden shadow-luxury-hover border-4 border-white bg-gradient-to-b from-white via-blush-light to-brand-50/50 aspect-square sm:aspect-[4/3] lg:aspect-[4/3] flex items-center justify-center group">
+                <Product3DViewer
+                  product={current.config3D}
+                  className="w-full h-full"
                 />
 
-                {/* Subtle Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/80 via-charcoal-950/15 to-transparent" />
-
-                {/* Top Badge Overlay */}
-                <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md shadow-md text-[11px] font-bold text-charcoal-900">
-                    <Flame className="w-3.5 h-3.5 text-amber-500 fill-current" />
-                    <span>Featured Hero Spotlight</span>
-                  </div>
-
-                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-charcoal-900/80 backdrop-blur-md text-amber-400 text-xs font-bold">
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <span>{slide.rating.toFixed(1)}</span>
-                    <span className="text-[10px] text-white/70">({slide.reviewsCount})</span>
-                  </div>
-                </div>
-
-                {/* Floating Bottom Card */}
-                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-brand-100 shadow-xl flex items-center justify-between">
-                  <div className="min-w-0 pr-3">
-                    <span className="text-[10px] font-bold text-brand-700 uppercase tracking-wider block truncate">
-                      {slide.brand}
-                    </span>
-                    <h3 className="text-xs sm:text-sm font-semibold text-charcoal-900 truncate">
-                      {slide.name}
-                    </h3>
-                    <p className="text-xs sm:text-sm font-bold text-brand-700 mt-0.5">
-                      {formatGHS(slide.price)}
-                    </p>
-                  </div>
-
-                  <Link
-                    href={`/product/${slide.slug}`}
-                    className="p-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white transition-all shadow-sm shrink-0"
-                    aria-label={`View ${slide.name}`}
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
+                {/* Rating Badge Top Left */}
+                <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-brand-100 text-xs font-bold text-charcoal-900">
+                  <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
+                  <span>{current.rating.toFixed(1)}</span>
+                  <span className="text-[10px] text-charcoal-400">({current.reviewsCount} verified reviews)</span>
                 </div>
               </div>
 
-              {/* Slider Controls (Prev / Next Arrows) */}
-              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
-                <button
-                  onClick={handlePrev}
-                  className="w-10 h-10 rounded-full bg-white shadow-luxury border border-brand-100 flex items-center justify-center text-charcoal-700 hover:text-brand-700 hover:scale-105 active:scale-95 transition-all"
-                  aria-label="Previous Product"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-
-                {/* Slide indicator dots */}
-                <div className="flex items-center gap-1.5 bg-white/95 px-3 py-2 rounded-full border border-brand-100 shadow-sm">
-                  {HERO_SLIDES.map((s, idx) => (
+              {/* 3D Product Switcher Pills */}
+              <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {HERO_PRODUCTS.map((prod, idx) => {
+                  const isSel = selectedIndex === idx;
+                  return (
                     <button
-                      key={s.id}
-                      onClick={() => setCurrentSlide(idx)}
-                      className={`h-2 rounded-full transition-all duration-300 ${
-                        currentSlide === idx ? 'w-6 bg-brand-600' : 'w-2 bg-brand-200 hover:bg-brand-400'
+                      key={prod.id}
+                      onClick={() => setSelectedIndex(idx)}
+                      className={`p-2.5 rounded-2xl border text-left transition-all flex items-center gap-2.5 ${
+                        isSel
+                          ? 'bg-white border-brand-500 shadow-md ring-2 ring-brand-200/60'
+                          : 'bg-white/70 hover:bg-white border-brand-100 hover:border-brand-200'
                       }`}
-                      aria-label={`Go to slide ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  onClick={handleNext}
-                  className="w-10 h-10 rounded-full bg-white shadow-luxury border border-brand-100 flex items-center justify-center text-charcoal-700 hover:text-brand-700 hover:scale-105 active:scale-95 transition-all"
-                  aria-label="Next Product"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                    >
+                      <img
+                        src={prod.image}
+                        alt={prod.name}
+                        className="w-9 h-9 rounded-xl object-cover shrink-0 border border-gray-100"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <span className="text-[10px] font-bold text-brand-700 uppercase tracking-wider block truncate">
+                          {prod.brand}
+                        </span>
+                        <p className="text-[11px] font-bold text-charcoal-900 truncate">
+                          {prod.config3D.name}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Thumbnail Selector Ribbon at Bottom */}
-        <div className="mt-14 pt-8 border-t border-brand-100/70 hidden md:grid grid-cols-4 gap-4">
-          {HERO_SLIDES.map((s, idx) => {
-            const isSelected = currentSlide === idx;
-            return (
-              <button
-                key={s.id}
-                onClick={() => setCurrentSlide(idx)}
-                className={`p-3 rounded-2xl border transition-all text-left flex items-center gap-3 group ${
-                  isSelected
-                    ? 'bg-white border-brand-400 shadow-md ring-2 ring-brand-200/50'
-                    : 'bg-white/60 hover:bg-white border-brand-100 hover:border-brand-200'
-                }`}
-              >
-                <img
-                  src={s.image}
-                  alt={s.name}
-                  className="w-12 h-12 rounded-xl object-cover border border-gray-100 shrink-0 group-hover:scale-105 transition-transform"
-                />
-                <div className="min-w-0 flex-1">
-                  <span className="text-[10px] font-bold text-brand-700 uppercase tracking-wider block truncate">
-                    {s.brand}
-                  </span>
-                  <p className="text-xs font-semibold text-charcoal-900 truncate">
-                    {s.name}
-                  </p>
-                  <span className="text-xs font-bold text-charcoal-700 block mt-0.5">
-                    {formatGHS(s.price)}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
         </div>
       </div>
     </section>
