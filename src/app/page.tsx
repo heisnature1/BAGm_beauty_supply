@@ -12,7 +12,6 @@ import { FeaturedSection } from '@/components/home/FeaturedSection';
 import { IngredientSpotlight } from '@/components/home/IngredientSpotlight';
 import { RoutineFinderTeaser } from '@/components/home/RoutineFinderTeaser';
 import { BrandMarquee } from '@/components/home/BrandMarquee';
-import { CommunityGlow } from '@/components/home/CommunityGlow';
 import { EditorialPreview } from '@/components/home/EditorialPreview';
 
 export const revalidate = 0; // Dynamic server rendering
@@ -43,7 +42,6 @@ export default function HomePage() {
         <IngredientSpotlight />
         <RoutineFinderTeaser />
         <BrandMarquee brands={brands} />
-        <CommunityGlow />
         <EditorialPreview articles={articles} />
       </main>
 
