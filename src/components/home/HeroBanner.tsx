@@ -33,20 +33,25 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
         </video>
 
         {/* Luxury Dark Gradient Tint Overlay for Crisp Readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-charcoal-950/85 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-charcoal-950/85 pointer-events-none" />
 
         {/* Direct Text & Action Overlay on Video */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-28 text-center text-white space-y-6">
-          {/* Top Badge */}
+          {/* Welcome Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md backdrop-blur-md animate-fade-in">
             <Sparkles className="w-3.5 h-3.5 text-gold-300 shrink-0" />
-            <span>Ghana’s Premier Luxury Beauty &amp; Skincare Destination</span>
+            <span>Welcome to BAGm Beauty Supply</span>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white leading-[1.12] drop-shadow-lg max-w-4xl mx-auto">
-            {settings.hero_headline || 'Your Beauty. Your Ritual. Your Glow.'}
-          </h1>
+          {/* Main Headline & Destination Subheading */}
+          <div className="space-y-2">
+            <span className="text-xs sm:text-sm lg:text-base font-bold uppercase tracking-[0.25em] text-gold-300 block drop-shadow-md">
+              Ghana’s Premier Luxury Beauty &amp; Skincare Destination
+            </span>
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white leading-[1.12] drop-shadow-lg max-w-4xl mx-auto">
+              {settings.hero_headline || 'Your Beauty. Your Ritual. Your Glow.'}
+            </h1>
+          </div>
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base lg:text-xl text-white/95 max-w-2xl mx-auto font-normal leading-relaxed drop-shadow-md">
