@@ -113,9 +113,9 @@ function wrapEmailTemplate(content: string, previewText: string = ''): string {
     ${previewText}
   </div>
   <div class="container">
-    <div class="header">
-      <div class="logo">BAGM BEAUTY SUPPLY</div>
-      <div class="tagline">Your Beauty • Your Ritual • Your Glow</div>
+    <div class="header" style="background: #0f172a; padding: 24px; text-align: center;">
+      <img src="https://bagmbeauty.com/logo.png" alt="BAGm Beauty Supply" style="height: 44px; max-width: 180px; object-fit: contain; display: inline-block; vertical-align: middle;" />
+      <div class="tagline" style="color: #d4af37; margin-top: 8px; font-size: 11px; letter-spacing: 2px;">Your Beauty • Your Ritual • Your Glow</div>
     </div>
     <div class="content">
       ${content}

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { Logo } from '@/components/common/Logo';
 import {
   LayoutDashboard,
   Package,
@@ -74,20 +75,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen bg-charcoal-900 text-charcoal-100 flex flex-col md:flex-row">
       {/* Sidebar for Desktop */}
       <aside className="hidden md:flex flex-col w-64 bg-charcoal-950 border-r border-charcoal-800 shrink-0">
-        <div className="p-5 border-b border-charcoal-800 flex items-center justify-between">
-          <Link href="/admin" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-700 flex items-center justify-center font-serif font-bold text-white text-base">
-              B
-            </div>
-            <div>
-              <span className="font-serif font-bold text-white text-base block leading-none">
-                BAGm Admin
-              </span>
-              <span className="text-[10px] uppercase tracking-wider text-gold-400 font-semibold">
-                Store Operations
-              </span>
-            </div>
-          </Link>
+        <div className="p-4 border-b border-charcoal-800 flex items-center justify-between">
+          <Logo href="/admin" variant="admin" size="sm" />
         </div>
 
         {/* Nav Links */}
@@ -185,7 +174,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           />
           <div className="relative w-4/5 max-w-xs bg-charcoal-950 h-full shadow-2xl flex flex-col z-10">
             <div className="p-4 border-b border-charcoal-800 flex items-center justify-between">
-              <span className="font-serif font-bold text-white text-base">BAGm Admin</span>
+              <Logo href="/admin" variant="admin" size="sm" />
               <button
                 onClick={() => setMobileSidebarOpen(false)}
                 className="p-1 text-charcoal-400 hover:text-white"
