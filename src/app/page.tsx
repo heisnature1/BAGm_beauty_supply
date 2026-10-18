@@ -9,7 +9,6 @@ import { HeroBanner } from '@/components/home/HeroBanner';
 import { TrustMarquee } from '@/components/home/TrustMarquee';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
 import { FeaturedSection } from '@/components/home/FeaturedSection';
-import { IngredientSpotlight } from '@/components/home/IngredientSpotlight';
 import { RoutineFinderTeaser } from '@/components/home/RoutineFinderTeaser';
 import { BrandMarquee } from '@/components/home/BrandMarquee';
 import { EditorialPreview } from '@/components/home/EditorialPreview';
@@ -39,7 +38,6 @@ export default function HomePage() {
         <TrustMarquee />
         <CategoryGrid categories={categories} />
         <FeaturedSection featured={featured} bestsellers={bestsellers} newArrivals={newArrivals} />
-        <IngredientSpotlight />
         <RoutineFinderTeaser />
         <BrandMarquee brands={brands} />
         <EditorialPreview articles={articles} />
