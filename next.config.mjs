@@ -28,7 +28,7 @@ const nextConfig = {
       '@': path.resolve(__dirname, 'src'),
     };
     if (isServer) {
-      config.externals.push('better-sqlite3', 'sql.js', 'pg-native');
+      config.externals.push('pg-native');
     }
     return config;
   },
