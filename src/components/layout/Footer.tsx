@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Clock, ArrowRight, ShieldCheck, CheckCircle2, Sparkles } from 'lucide-react';
+import { Logo } from '@/components/common/Logo';
 
 export function Footer() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -88,14 +89,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-brand-700 flex items-center justify-center text-white font-serif font-bold text-base shadow-sm">
-                B
-              </div>
-              <span className="font-serif text-2xl font-bold tracking-tight text-white">
-                BAGm <span className="font-sans font-light text-brand-400">Beauty</span>
-              </span>
-            </div>
+            <Logo variant="footer" size="lg" />
             <p className="text-xs sm:text-sm text-charcoal-400 max-w-sm leading-relaxed">
               BAGm Beauty Supply is Ghana’s premier beauty destination, offering authentic international skincare, handcrafted Ghanaian botanicals, and personalized beauty solutions.
             </p>

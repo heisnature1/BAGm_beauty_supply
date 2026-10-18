@@ -21,6 +21,7 @@ import {
 import { useCart } from '../providers/CartProvider';
 import { useWishlist } from '../providers/WishlistProvider';
 import { useAuth } from '../providers/AuthProvider';
+import { Logo } from '@/components/common/Logo';
 import { formatGHS } from '@/lib/utils';
 
 export function Header() {
@@ -117,19 +118,7 @@ export function Header() {
 
             {/* Brand Logo */}
             <div className="flex-1 lg:flex-initial flex items-center justify-center lg:justify-start">
-              <Link href="/" className="group flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white shadow-sm ring-2 ring-brand-100 group-hover:ring-brand-300 transition-all">
-                  <span className="font-serif font-bold text-lg tracking-wider">B</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-charcoal-900 group-hover:text-brand-700 transition-colors">
-                    BAGm <span className="font-sans font-light text-brand-600 text-lg sm:text-xl">Beauty</span>
-                  </span>
-                  <span className="text-[10px] tracking-[0.25em] uppercase font-semibold text-gold-500 -mt-1 hidden sm:block">
-                    Supply Ghana
-                  </span>
-                </div>
-              </Link>
+              <Logo variant="header" size="md" />
             </div>
 
             {/* Desktop Navigation (Home & Shop All) */}
@@ -409,12 +398,9 @@ export function Header() {
           />
           <div className="relative w-4/5 max-w-sm bg-white h-full shadow-2xl flex flex-col z-10 animate-fade-in">
             <div className="p-4 border-b border-brand-100 flex items-center justify-between">
-              <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-                <div className="w-8 h-8 rounded-full bg-brand-700 flex items-center justify-center text-white font-serif font-bold text-sm">
-                  B
-                </div>
-                <span className="font-serif font-bold text-lg text-charcoal-900">BAGm Beauty</span>
-              </Link>
+              <div onClick={() => setMobileMenuOpen(false)}>
+                <Logo variant="header" size="sm" />
+              </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-1.5 text-charcoal-500 hover:text-charcoal-800 rounded-full"

@@ -35,9 +35,13 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-charcoal-950 flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full bg-charcoal-900 border border-charcoal-800 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-6">
-        <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-brand-700 text-white flex items-center justify-center mx-auto shadow-lg">
-            <ShieldAlert className="w-7 h-7" />
+        <div className="text-center space-y-3">
+          <div className="flex justify-center">
+            <img
+              src="/logo.png"
+              alt="BAGm Beauty Supply"
+              className="h-16 w-auto object-contain p-1 rounded-xl bg-charcoal-950 border border-charcoal-800 shadow-md"
+            />
           </div>
           <h1 className="font-serif font-bold text-2xl text-white">
             BAGm Store Administration

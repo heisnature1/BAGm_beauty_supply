@@ -183,8 +183,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   <div class="invoice-card">
     <div class="header">
       <div>
-        <div class="brand-title">BAGm Beauty Supply</div>
-        <div class="brand-sub">Luxury Skincare & Authenticity Hub</div>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <img src="/logo.png" alt="BAGm Beauty Supply" style="height: 48px; border-radius: 6px; background: #000; padding: 2px;" />
+          <div>
+            <div class="brand-title" style="margin-bottom: 0;">BAGm Beauty Supply</div>
+            <div class="brand-sub">Luxury Skincare & Authenticity Hub</div>
+          </div>
+        </div>
         <p class="meta-text" style="margin-top: 8px;">
           Lagos Avenue, East Legon, Accra, Ghana<br/>
           Tel: +233 24 123 4567 • Web: bagmbeauty.com<br/>
