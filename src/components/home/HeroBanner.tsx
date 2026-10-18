@@ -10,11 +10,9 @@ import {
   Truck,
   HeartHandshake,
   ShoppingBag,
-  Check,
   Star,
-  RotateCw,
   Box,
-  Layers,
+  Compass,
 } from 'lucide-react';
 import { StoreSettings } from '@/types';
 import { useCart } from '../providers/CartProvider';
@@ -28,9 +26,9 @@ const Product3DViewer = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-full min-h-[380px] sm:min-h-[460px] flex flex-col items-center justify-center space-y-3 bg-blush-light rounded-3xl border border-brand-100 animate-pulse">
-        <Box className="w-10 h-10 text-brand-400 animate-bounce" />
-        <p className="text-xs font-bold text-brand-700">Loading 3D Product Experience...</p>
+      <div className="w-full h-full min-h-[440px] sm:min-h-[520px] flex flex-col items-center justify-center space-y-3 bg-blush-light rounded-3xl border border-brand-100 animate-pulse">
+        <Box className="w-12 h-12 text-brand-400 animate-bounce" />
+        <p className="text-xs font-bold text-brand-700 tracking-wider uppercase">Loading 3D Luxury Experience...</p>
       </div>
     ),
   }
@@ -83,6 +81,8 @@ const HERO_PRODUCTS: HeroProductItem[] = [
       labelTitle: 'SILK BARRIER',
       labelSubtitle: 'Peptide & Baobab Cream',
       accentGold: true,
+      price: 340.0,
+      slug: 'bagm-silk-barrier-peptide-cream-50ml',
     },
   },
   {
@@ -113,6 +113,8 @@ const HERO_PRODUCTS: HeroProductItem[] = [
       labelTitle: 'ANTHELIOS 400',
       labelSubtitle: 'Invisible Fluid SPF 50+',
       accentGold: false,
+      price: 320.0,
+      slug: 'la-roche-posay-anthelios-uvmune-400-invisible-fluid-spf-50',
     },
   },
   {
@@ -143,6 +145,8 @@ const HERO_PRODUCTS: HeroProductItem[] = [
       labelTitle: 'ETERNAL OUD',
       labelSubtitle: 'Whipped Shea Soufflé',
       accentGold: true,
+      price: 220.0,
+      slug: 'kaeme-eternal-oud-luxury-whipped-shea-souffle-200g',
     },
   },
   {
@@ -173,198 +177,187 @@ const HERO_PRODUCTS: HeroProductItem[] = [
       labelTitle: 'NIACINAMIDE 10%',
       labelSubtitle: 'Zinc 1% Blemish Active',
       accentGold: true,
+      price: 180.0,
+      slug: 'the-ordinary-niacinamide-10-zinc-1-30ml',
     },
   },
 ];
 
 export function HeroBanner({ settings }: { settings: StoreSettings }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [addedSuccess, setAddedSuccess] = useState(false);
-  const { addItem } = useCart();
-  const { showToast } = useToast();
-
   const current = HERO_PRODUCTS[selectedIndex];
 
-  const handleQuickAdd = () => {
-    addItem({
-      productId: current.id,
-      name: current.name,
-      sku: current.sku,
-      price: current.price,
-      quantity: 1,
-      image: current.image,
-      maxStock: 50,
-      brandName: current.brand,
-    });
-
-    setAddedSuccess(true);
-    showToast({
-      title: 'Added to Shopping Bag!',
-      message: `${current.name} (${formatGHS(current.price)})`,
-      image: current.image,
-      type: 'cart',
-    });
-
-    setTimeout(() => setAddedSuccess(false), 2000);
-  };
-
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-blush via-blush-light to-white pt-8 pb-14 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-24 border-b border-brand-100/60">
-      {/* Ambient background decorative light halos */}
+    <section className="relative overflow-hidden bg-gradient-to-b from-blush via-blush-light to-white pt-8 pb-16 sm:pt-12 sm:pb-20 lg:pt-14 lg:pb-24 border-b border-brand-100/60">
+      {/* Ambient background glows */}
       <div className="absolute top-1/4 -left-28 w-96 h-96 bg-brand-200/40 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
       <div className="absolute bottom-10 -right-20 w-96 h-96 bg-gold-200/30 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left Column: Headline, Description & Actions */}
-          <div className="lg:col-span-6 space-y-6 text-center lg:text-left z-10">
-            {/* Tag Badges */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 border border-brand-200 text-brand-800 text-xs font-bold tracking-wide shadow-xs backdrop-blur-md">
-                <Sparkles className="w-3.5 h-3.5 text-gold-500 shrink-0" />
-                <span>{current.tag}</span>
-              </span>
+        {/* Top Header Text Banner */}
+        <div className="text-center max-w-3xl mx-auto mb-8 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-brand-200 text-brand-900 text-xs font-bold tracking-wide shadow-xs backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5 text-gold-500 shrink-0" />
+            <span>Ghana’s Premier Luxury Beauty &amp; Skincare Destination</span>
+          </div>
 
-              {current.origin === 'Ghanaian' && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
-                  <span>Ghanaian Artisan 🇬🇭</span>
+          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-charcoal-900 leading-[1.12]">
+            {settings.hero_headline || 'Your Beauty. Your Ritual. Your Glow.'}
+          </h1>
+
+          <p className="text-sm sm:text-base lg:text-lg text-charcoal-600 max-w-2xl mx-auto font-normal leading-relaxed">
+            {settings.hero_subtitle ||
+              'Discover authentic Ghanaian botanicals, curated global dermatological science, and personalized skincare rituals.'}
+          </p>
+        </div>
+
+        {/* Full-Width Cinematic 3D Hero Stage */}
+        <div className="relative rounded-3xl overflow-hidden shadow-luxury-hover border-4 border-white bg-gradient-to-b from-white/90 via-blush-light/80 to-brand-50/60 backdrop-blur-md p-4 sm:p-8 lg:p-10 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left 3D Product Info Card */}
+            <div className="lg:col-span-5 space-y-5 text-center lg:text-left z-20">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
+                <span className="px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-800 text-xs font-bold">
+                  {current.tag}
                 </span>
-              )}
-
-              {current.origin === 'BAGm' && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-900 text-xs font-bold">
-                  <span>Signature Formula</span>
-                </span>
-              )}
-            </div>
-
-            {/* Dynamic Headline */}
-            <h1
-              key={`h1-${current.id}`}
-              className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-charcoal-900 leading-[1.12] animate-fade-in"
-            >
-              {current.headline}
-            </h1>
-
-            {/* Subtitle */}
-            <p
-              key={`p-${current.id}`}
-              className="text-sm sm:text-base lg:text-lg text-charcoal-600 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed animate-fade-in"
-            >
-              {current.subtitle}
-            </p>
-
-            {/* Key Benefits Badges */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
-              {current.badges.map((b) => (
-                <span
-                  key={b}
-                  className="px-3 py-1 rounded-lg bg-brand-50/80 border border-brand-100 text-charcoal-700 text-xs font-medium backdrop-blur-xs"
-                >
-                  {b}
-                </span>
-              ))}
-            </div>
-
-            {/* Actions: Quick Add & Explore */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3">
-              <button
-                onClick={handleQuickAdd}
-                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-md active:scale-98 ${
-                  addedSuccess
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-brand-600 hover:bg-brand-700 text-white shadow-luxury hover:shadow-luxury-hover'
-                }`}
-              >
-                {addedSuccess ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Added to Bag!</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="w-4 h-4" />
-                    <span>Quick Add • {formatGHS(current.price)}</span>
-                  </>
+                {current.origin === 'Ghanaian' && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold">
+                    Ghana 🇬🇭
+                  </span>
                 )}
-              </button>
+              </div>
 
-              <Link
-                href={`/product/${current.slug}`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-brand-200 bg-white/95 hover:bg-brand-50 text-brand-900 font-semibold text-sm transition-all shadow-xs"
-              >
-                <span>View Full Details</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div>
+                <span className="text-xs font-bold text-brand-700 uppercase tracking-widest block">
+                  {current.brand}
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal-900 mt-1">
+                  {current.name}
+                </h2>
+                <div className="flex items-center justify-center lg:justify-start gap-2 mt-2">
+                  <span className="text-xl sm:text-2xl font-serif font-bold text-brand-700">
+                    {formatGHS(current.price)}
+                  </span>
+                  <div className="flex items-center gap-1 text-xs text-amber-500 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60">
+                    <Star className="w-3.5 h-3.5 fill-current" />
+                    <span>{current.rating.toFixed(1)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm text-charcoal-600 leading-relaxed">
+                {current.subtitle}
+              </p>
+
+              {/* Badges */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-1.5 pt-1">
+                {current.badges.map((b) => (
+                  <span
+                    key={b}
+                    className="px-2.5 py-1 rounded-lg bg-white border border-brand-100 text-charcoal-700 text-[11px] font-medium shadow-2xs"
+                  >
+                    {b}
+                  </span>
+                ))}
+              </div>
+
+              {/* Main "Shop With Us" CTA Links */}
+              <div className="pt-3 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
+                <Link
+                  href="/shop"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition-all shadow-luxury hover:shadow-luxury-hover active:scale-98"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>Shop With Us</span>
+                  <ArrowRight className="w-4 h-4 text-gold-300" />
+                </Link>
+
+                <Link
+                  href={`/product/${current.slug}`}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl border border-brand-200 bg-white hover:bg-brand-50 text-brand-900 font-semibold text-xs sm:text-sm transition-colors shadow-xs"
+                >
+                  <span>Explore Formula</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
 
-            {/* Micro Trust Indicators */}
-            <div className="pt-4 border-t border-brand-100 flex flex-wrap items-center justify-center lg:justify-start gap-5 text-xs text-charcoal-600 font-medium">
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>100% Verified Authentic</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-brand-600 shrink-0" />
-                <span>Same-Day / Express Ghana Delivery</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <HeartHandshake className="w-4 h-4 text-gold-600 shrink-0" />
-                <span>Routine Guidance</span>
+            {/* Center/Right 3D Interactive Stage Canvas */}
+            <div className="lg:col-span-7 relative flex items-center justify-center">
+              <div className="w-full aspect-square sm:aspect-[4/3] lg:aspect-[16/11] max-w-xl mx-auto flex items-center justify-center">
+                <Product3DViewer
+                  product={current.config3D}
+                  className="w-full h-full"
+                  shopHref="/shop"
+                />
               </div>
             </div>
           </div>
 
-          {/* Right Column: 3D Product Interactive Canvas */}
-          <div className="lg:col-span-6 relative">
-            <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
-              {/* 3D Canvas Box */}
-              <div className="relative rounded-3xl overflow-hidden shadow-luxury-hover border-4 border-white bg-gradient-to-b from-white via-blush-light to-brand-50/50 aspect-square sm:aspect-[4/3] lg:aspect-[4/3] flex items-center justify-center group">
-                <Product3DViewer
-                  product={current.config3D}
-                  className="w-full h-full"
-                />
-
-                {/* Rating Badge Top Left */}
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md shadow-md border border-brand-100 text-xs font-bold text-charcoal-900">
-                  <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
-                  <span>{current.rating.toFixed(1)}</span>
-                  <span className="text-[10px] text-charcoal-400">({current.reviewsCount} verified reviews)</span>
-                </div>
-              </div>
-
-              {/* 3D Product Switcher Pills */}
-              <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {HERO_PRODUCTS.map((prod, idx) => {
-                  const isSel = selectedIndex === idx;
-                  return (
-                    <button
-                      key={prod.id}
-                      onClick={() => setSelectedIndex(idx)}
-                      className={`p-2.5 rounded-2xl border text-left transition-all flex items-center gap-2.5 ${
-                        isSel
-                          ? 'bg-white border-brand-500 shadow-md ring-2 ring-brand-200/60'
-                          : 'bg-white/70 hover:bg-white border-brand-100 hover:border-brand-200'
-                      }`}
-                    >
-                      <img
-                        src={prod.image}
-                        alt={prod.name}
-                        className="w-9 h-9 rounded-xl object-cover shrink-0 border border-gray-100"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <span className="text-[10px] font-bold text-brand-700 uppercase tracking-wider block truncate">
-                          {prod.brand}
-                        </span>
-                        <p className="text-[11px] font-bold text-charcoal-900 truncate">
-                          {prod.config3D.name}
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Bottom Switcher: 3D Product Switcher Ribbon */}
+          <div className="mt-8 pt-6 border-t border-brand-100/80">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[11px] font-bold text-charcoal-500 uppercase tracking-wider">
+                Select 3D Formulation to Inspect:
+              </span>
+              <Link
+                href="/shop"
+                className="text-xs font-bold text-brand-700 hover:text-brand-900 underline underline-offset-2 flex items-center gap-1"
+              >
+                <span>Browse All Products in Store</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
             </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {HERO_PRODUCTS.map((prod, idx) => {
+                const isSel = selectedIndex === idx;
+                return (
+                  <button
+                    key={prod.id}
+                    onClick={() => setSelectedIndex(idx)}
+                    className={`p-3 rounded-2xl border text-left transition-all flex items-center gap-3 ${
+                      isSel
+                        ? 'bg-white border-brand-500 shadow-md ring-2 ring-brand-200/80 scale-102'
+                        : 'bg-white/60 hover:bg-white border-brand-100 hover:border-brand-200'
+                    }`}
+                  >
+                    <img
+                      src={prod.image}
+                      alt={prod.name}
+                      className="w-11 h-11 rounded-xl object-cover shrink-0 border border-gray-100 shadow-2xs"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[10px] font-bold text-brand-700 uppercase tracking-wider block truncate">
+                        {prod.brand}
+                      </span>
+                      <p className="text-xs font-bold text-charcoal-900 truncate">
+                        {prod.config3D.name}
+                      </p>
+                      <span className="text-xs font-semibold text-charcoal-600 block mt-0.5">
+                        {formatGHS(prod.price)}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Micro Trust Proof Ribbon */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm text-charcoal-600 font-medium">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>100% Verified Authentic Lab Formulations</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Truck className="w-4 h-4 text-brand-600 shrink-0" />
+            <span>Same-Day Accra Delivery &amp; Nationwide Courier</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <HeartHandshake className="w-4 h-4 text-gold-600 shrink-0" />
+            <span>Free Routine Consultation &amp; Guidance</span>
           </div>
         </div>
       </div>
