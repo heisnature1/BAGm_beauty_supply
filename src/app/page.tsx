@@ -6,10 +6,13 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
 import { HeroBanner } from '@/components/home/HeroBanner';
+import { TrustMarquee } from '@/components/home/TrustMarquee';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
-import { RoutineFinderTeaser } from '@/components/home/RoutineFinderTeaser';
 import { FeaturedSection } from '@/components/home/FeaturedSection';
+import { IngredientSpotlight } from '@/components/home/IngredientSpotlight';
+import { RoutineFinderTeaser } from '@/components/home/RoutineFinderTeaser';
 import { BrandMarquee } from '@/components/home/BrandMarquee';
+import { CommunityGlow } from '@/components/home/CommunityGlow';
 import { EditorialPreview } from '@/components/home/EditorialPreview';
 
 export const revalidate = 0; // Dynamic server rendering
@@ -19,9 +22,9 @@ export default function HomePage() {
   const categories = getCategories();
   const brands = getBrands();
 
-  const { products: featured } = getProducts({ isFeatured: true, limit: 8 });
-  const { products: bestsellers } = getProducts({ isBestseller: true, limit: 8 });
-  const { products: newArrivals } = getProducts({ isNewArrival: true, limit: 8 });
+  const { products: featured } = getProducts({ isFeatured: true, limit: 12 });
+  const { products: bestsellers } = getProducts({ isBestseller: true, limit: 12 });
+  const { products: newArrivals } = getProducts({ isNewArrival: true, limit: 12 });
 
   const db = getDb();
   const articles = db.prepare('SELECT * FROM editorial_articles WHERE is_published = 1 ORDER BY created_at DESC LIMIT 3').all() as any[];
@@ -34,10 +37,13 @@ export default function HomePage() {
 
       <main className="flex-1">
         <HeroBanner settings={settings} />
+        <TrustMarquee />
         <CategoryGrid categories={categories} />
         <FeaturedSection featured={featured} bestsellers={bestsellers} newArrivals={newArrivals} />
+        <IngredientSpotlight />
         <RoutineFinderTeaser />
         <BrandMarquee brands={brands} />
+        <CommunityGlow />
         <EditorialPreview articles={articles} />
       </main>
 

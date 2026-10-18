@@ -3,6 +3,7 @@ import './globals.css';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { CartProvider } from '@/components/providers/CartProvider';
 import { WishlistProvider } from '@/components/providers/WishlistProvider';
+import { ToastProvider } from '@/components/providers/ToastProvider';
 
 export const metadata: Metadata = {
   title: 'BAGm Beauty Supply | Authentic Luxury Skincare & Beauty Ghana',
@@ -30,7 +31,9 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
-              {children}
+              <ToastProvider>
+                {children}
+              </ToastProvider>
             </WishlistProvider>
           </CartProvider>
         </AuthProvider>
