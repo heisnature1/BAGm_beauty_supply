@@ -97,14 +97,6 @@ export function Header() {
   const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Shop All', href: '/shop' },
-    { label: 'Skincare', href: '/categories/skincare' },
-    { label: 'Facial Care', href: '/categories/facial-care' },
-    { label: 'Makeup', href: '/categories/makeup' },
-    { label: 'Body Care', href: '/categories/body-care' },
-    { label: 'Body Splashes', href: '/categories/body-splashes-and-sprays' },
-    { label: 'Brands', href: '/brands' },
-    { label: 'Routine Finder', href: '/routine-finder', highlight: true },
-    { label: 'Editorial', href: '/blog' },
   ];
 
   return (
@@ -113,7 +105,7 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Mobile Menu Button */}
-            <div className="flex items-center lg:hidden">
+            <div className="flex items-center md:hidden">
               <button
                 onClick={() => setMobileMenuOpen(true)}
                 className="p-2 text-charcoal-700 hover:text-brand-700 rounded-md transition-colors"
@@ -140,19 +132,18 @@ export function Header() {
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden xl:flex items-center space-x-6 text-[13px] font-medium tracking-wide text-charcoal-700">
+            {/* Desktop Navigation (Home & Shop All) */}
+            <nav className="hidden md:flex items-center space-x-8 text-sm font-semibold tracking-wide text-charcoal-700">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+                const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className={`transition-colors py-2 relative flex items-center gap-1 ${
-                      isActive ? 'text-brand-700 font-semibold' : 'hover:text-brand-600'
-                    } ${link.highlight ? 'text-brand-600 font-semibold' : ''}`}
+                    className={`transition-colors py-2 px-1 relative flex items-center gap-1.5 ${
+                      isActive ? 'text-brand-700 font-bold' : 'hover:text-brand-600'
+                    }`}
                   >
-                    {link.highlight && <Sparkles className="w-3.5 h-3.5 text-gold-500" />}
                     <span>{link.label}</span>
                     {isActive && (
                       <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-600 rounded-full" />
@@ -411,7 +402,7 @@ export function Header() {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
+        <div className="fixed inset-0 z-50 md:hidden flex">
           <div
             className="fixed inset-0 bg-charcoal-950/60 backdrop-blur-sm transition-opacity"
             onClick={() => setMobileMenuOpen(false)}
@@ -439,12 +430,9 @@ export function Header() {
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-medium text-charcoal-800 hover:bg-brand-50 hover:text-brand-700 transition-colors"
+                    className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold text-charcoal-800 hover:bg-brand-50 hover:text-brand-700 transition-colors"
                   >
-                    <span className="flex items-center gap-2">
-                      {link.highlight && <Sparkles className="w-4 h-4 text-gold-500" />}
-                      {link.label}
-                    </span>
+                    <span>{link.label}</span>
                   </Link>
                 ))}
               </div>
