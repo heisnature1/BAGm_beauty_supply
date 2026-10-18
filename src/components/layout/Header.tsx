@@ -30,6 +30,7 @@ export function Header() {
   const { count: wishlistCount } = useWishlist();
   const { user, logout } = useAuth();
 
+  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,6 +40,10 @@ export function Header() {
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close menus on path change
   useEffect(() => {
@@ -175,7 +180,7 @@ export function Header() {
                 aria-label="View Wishlist"
               >
                 <Heart className="w-5 h-5" />
-                {wishlistCount > 0 && (
+                {mounted && wishlistCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center animate-fade-in shadow-xs">
                     {wishlistCount}
                   </span>
@@ -190,7 +195,7 @@ export function Header() {
                   aria-label="Account Menu"
                 >
                   <UserIcon className="w-5 h-5" />
-                  {user && (
+                  {mounted && user && (
                     <span className="hidden md:inline-block text-xs font-semibold text-charcoal-800 max-w-[100px] truncate">
                       {user.first_name}
                     </span>
@@ -200,7 +205,7 @@ export function Header() {
 
                 {accountMenuOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-luxury border border-brand-100 py-2 z-50 animate-slide-down">
-                    {user ? (
+                    {mounted && user ? (
                       <div>
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-xs text-charcoal-500">Signed in as</p>
@@ -293,7 +298,7 @@ export function Header() {
               >
                 <div className="relative">
                   <ShoppingBag className="w-5 h-5 text-brand-700 group-hover:scale-105 transition-transform" />
-                  {totalItems > 0 && (
+                  {mounted && totalItems > 0 && (
                     <span className="absolute -top-1.5 -right-2 bg-brand-600 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                       {totalItems}
                     </span>

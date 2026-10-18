@@ -4,7 +4,11 @@ import { parseProductRow } from '@/lib/products';
 
 export async function POST(req: NextRequest) {
   try {
-    const { skinType, skinConcern, routineDepth, ingredientPreference } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const skinType = body.skinType || body.skin_type || 'all';
+    const skinConcern = body.skinConcern || body.skin_concern || body.concern || 'hydration';
+    const routineDepth = body.routineDepth || body.routine_depth || 'essential';
+    const ingredientPreference = body.ingredientPreference || body.ingredient_preference || 'any';
 
     const db = getDb();
 
@@ -32,12 +36,12 @@ export async function POST(req: NextRequest) {
       }
 
       // Skin type match
-      if (product.suitable_skin_types.includes(skinType) || product.suitable_skin_types.includes('all')) {
+      if (product.suitable_skin_types?.includes(skinType) || product.suitable_skin_types?.includes('all')) {
         score += 25;
       }
 
       // Skin concern match
-      if (product.relevant_concerns.includes(skinConcern)) {
+      if (product.relevant_concerns?.includes(skinConcern)) {
         score += 25;
       }
 
@@ -59,7 +63,7 @@ export async function POST(req: NextRequest) {
         .filter((c) => c.score > 0)
         .sort((a, b) => b.score - a.score);
 
-      return candidates[0]?.product || null;
+      return candidates[0]?.product || allProducts.find((p) => p.category_slug && categories.includes(p.category_slug)) || null;
     };
 
     const routine: Array<{
@@ -97,14 +101,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 3: Targeted Serum
-    const serum = getBestProduct(['serums-and-treatments', 'facial-care']);
+    const serum = getBestProduct(['serums-and-treatments', 'facial-care', 'skincare']);
     if (serum && !routine.some((r) => r.product.id === serum.id)) {
       routine.push({
         stepNumber: routine.length + 1,
         stepName: 'Targeted Treatment Serum',
         category: 'Treat',
         product: serum,
-        matchReason: `Directly targets ${skinConcern.replace('_', ' ')} with concentrated high-potency actives.`,
+        matchReason: `Directly targets ${String(skinConcern).replace(/_/g, ' ')} with concentrated high-potency actives.`,
       });
     }
 
@@ -121,7 +125,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 5: Sun Protection SPF
-    const spf = getBestProduct(['sun-protection']);
+    const spf = getBestProduct(['sun-protection', 'skincare', 'facial-care']);
     if (spf && !routine.some((r) => r.product.id === spf.id)) {
       routine.push({
         stepNumber: routine.length + 1,

@@ -5,14 +5,18 @@ import Link from 'next/link';
 import { Sparkles, ArrowRight, X } from 'lucide-react';
 
 export function AnnouncementBar() {
-  const [data, setData] = useState<{ enabled: boolean; text: string; link?: string } | null>(null);
+  const [data, setData] = useState<{ enabled: boolean; text: string; link?: string } | null>({
+    enabled: true,
+    text: '✨ Fast & Reliable Express Delivery across Greater Accra & Nationwide Courier Service across Ghana',
+    link: '/shop',
+  });
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     fetch('/api/settings/announcement')
       .then((r) => (r.ok ? r.json() : null))
       .then((res) => {
-        if (res && res.enabled) {
+        if (res && typeof res.enabled === 'boolean') {
           setData(res);
         }
       })

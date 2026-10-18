@@ -99,6 +99,19 @@ export async function POST(req: NextRequest) {
         const itemTotal = unitPrice * quantity;
         calculatedSubtotal += itemTotal;
 
+        let itemImage = item.image;
+        if (!itemImage) {
+          if (Array.isArray(product.images)) {
+            itemImage = product.images[0];
+          } else if (typeof product.images === 'string') {
+            try {
+              itemImage = JSON.parse(product.images)[0];
+            } catch {
+              itemImage = product.images;
+            }
+          }
+        }
+
         validatedItems.push({
           itemId: crypto.randomUUID(),
           productId: product.id,
@@ -110,7 +123,7 @@ export async function POST(req: NextRequest) {
           costPrice,
           quantity,
           totalPrice: itemTotal,
-          image: item.image || (product.images ? JSON.parse(product.images)[0] : null),
+          image: itemImage || null,
         });
 
         // 3. Atomically deduct stock from product
@@ -166,7 +179,7 @@ export async function POST(req: NextRequest) {
         ) VALUES (
           ?, ?, ?, ?, ?, ?,
           ?, ?, ?, ?,
-          ?, ?, ?, 'GHS', ?, 'pending',
+          ?, ?, ?, ?, ?, ?,
           ?, ?, ?, ?, ?, ?
         )
       `).run(
@@ -183,7 +196,9 @@ export async function POST(req: NextRequest) {
         calculatedSubtotal,
         deliveryFee,
         totalAmount,
+        'GHS',
         paymentMethod,
+        'pending',
         initialOrderStatus,
         customerNotes ? customerNotes.trim() : null,
         isGuest,
