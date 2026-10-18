@@ -11,6 +11,8 @@
     "db:seed": "node -r ts-node/register --loader ts-node/esm ./src/lib/seed.ts || node ./scripts/seed.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "@types/pg": "^8.23.1",
     "@types/sql.js": "^1.4.11",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "^2.4.3",
@@ -22,6 +24,7 @@
     "jspdf": "^2.5.2",
     "lucide-react": "^0.460.0",
     "next": "^14.2.24",
+    "pg": "^8.23.1",
     "postcss": "^8.4.47",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
