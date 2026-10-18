@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
-import { getUserFromRequest } from '@/lib/auth';
 import { formatGHS, formatDate } from '@/lib/utils';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -21,11 +20,15 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       } catch {}
     }
 
+    const paymentStatus = (order.payment_status || 'pending').toUpperCase();
+    const paymentMethod = (order.payment_method || 'momo').toUpperCase().replace(/_/g, ' ');
+    const fulfilmentType = (order.fulfilment_type || 'delivery').toUpperCase();
+
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Invoice #${order.order_number} - BAGm Beauty Supply</title>
+  <title>Invoice #${order.order_number || order.id} - BAGm Beauty Supply</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
     
@@ -99,100 +102,82 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       grid-template-columns: 1fr 1fr;
       gap: 32px;
       margin-bottom: 32px;
-      background: #faf8f7;
-      padding: 20px;
-      border-radius: 12px;
     }
     .addr-title {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #922244;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
     th {
-      background: #fdf2f4;
-      color: #922244;
+      background: #fbf7f7;
+      text-align: left;
+      padding: 12px 16px;
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      text-align: left;
-      padding: 12px 14px;
-      border-top: 1px solid #f2e1df;
-      border-bottom: 1px solid #f2e1df;
+      letter-spacing: 1px;
+      color: #555;
+      border-bottom: 2px solid #e5e5e5;
     }
     td {
-      padding: 14px;
+      padding: 14px 16px;
       border-bottom: 1px solid #eee;
     }
-    .text-right { text-align: right; }
+    .text-right {
+      text-align: right;
+    }
+    
     .totals {
-      width: 280px;
       margin-left: auto;
-      margin-bottom: 32px;
+      width: 320px;
+      border-top: 2px solid #f2e1df;
+      padding-top: 16px;
     }
     .totals-row {
       display: flex;
       justify-content: space-between;
-      padding: 6px 0;
+      margin-bottom: 8px;
       font-size: 13px;
       color: #555;
     }
     .grand-total {
-      border-top: 2px solid #922244;
-      padding-top: 10px;
-      margin-top: 6px;
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
       font-size: 18px;
+      font-weight: 700;
       color: #922244;
+      border-top: 1px solid #e5e5e5;
+      padding-top: 12px;
+      margin-top: 8px;
     }
     
     .footer {
+      margin-top: 48px;
       border-top: 1px solid #eee;
-      padding-top: 20px;
+      padding-top: 24px;
       text-align: center;
       font-size: 11px;
       color: #777;
     }
-    
-    .print-actions {
-      max-width: 800px;
-      margin: 0 auto 20px auto;
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-    }
-    .btn {
-      padding: 10px 18px;
-      background: #922244;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .btn-secondary { background: #333; }
-    
+
     @media print {
-      body { padding: 0; background: #fff; }
-      .invoice-card { border: none; box-shadow: none; padding: 0; }
-      .print-actions { display: none; }
+      body { padding: 0; background: none; }
+      .invoice-card { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+      .no-print { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="print-actions">
-    <button onclick="window.print()" class="btn">🖨️ Print / Save PDF Invoice</button>
+  <div class="no-print" style="max-width: 800px; margin: 0 auto 20px auto; display: flex; justify-content: flex-end; gap: 12px;">
+    <button onclick="window.print()" style="background: #922244; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+      🖨️ Print / Save PDF
+    </button>
   </div>
 
   <div class="invoice-card">
@@ -202,17 +187,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         <div class="brand-sub">Luxury Skincare & Authenticity Hub</div>
         <p class="meta-text" style="margin-top: 8px;">
           Lagos Avenue, East Legon, Accra, Ghana<br/>
-          Tel: +233 24 000 0000 • Web: bagmbeauty.com<br/>
+          Tel: +233 24 123 4567 • Web: bagmbeauty.com<br/>
           TIN: C0028918237
         </p>
       </div>
 
       <div class="invoice-meta">
         <div class="invoice-title">OFFICIAL INVOICE</div>
-        <div class="meta-text"><strong>Invoice #:</strong> ${order.order_number}</div>
+        <div class="meta-text"><strong>Invoice #:</strong> ${order.order_number || order.id}</div>
         <div class="meta-text"><strong>Issue Date:</strong> ${formatDate(order.created_at)}</div>
         <span class="badge ${order.payment_status === 'paid' ? 'badge-paid' : 'badge-unpaid'}">
-          Payment: ${order.payment_status.toUpperCase()}
+          Payment: ${paymentStatus}
         </span>
       </div>
     </div>
@@ -225,15 +210,15 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         <p>${order.customer_phone || ''}</p>
         ${
           order.fulfilment_type === 'delivery' && deliveryAddress
-            ? `<p style="margin-top: 4px;">${deliveryAddress.street}<br/>${deliveryAddress.city}, ${deliveryAddress.region}</p>`
+            ? `<p style="margin-top: 4px;">${deliveryAddress.street_address || deliveryAddress.street || ''}<br/>${deliveryAddress.city || 'Accra'}, ${deliveryAddress.region || 'Greater Accra'}</p>`
             : '<p style="margin-top: 4px;">Store Pickup at East Legon Flagship</p>'
         }
       </div>
 
       <div>
         <div class="addr-title">Payment &amp; Logistics Details:</div>
-        <p><strong>Payment Method:</strong> ${order.payment_method.toUpperCase().replace(/_/g, ' ')}</p>
-        <p><strong>Fulfilment Mode:</strong> ${order.fulfilment_type.toUpperCase()}</p>
+        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+        <p><strong>Fulfilment Mode:</strong> ${fulfilmentType}</p>
         ${order.payment_reference ? `<p><strong>Reference:</strong> ${order.payment_reference}</p>` : ''}
         ${order.courier_name ? `<p><strong>Courier:</strong> ${order.courier_name}</p>` : ''}
       </div>
@@ -250,7 +235,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         </tr>
       </thead>
       <tbody>
-        ${items
+        ${(items || [])
           .map(
             (i) => `
           <tr>

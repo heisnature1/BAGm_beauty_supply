@@ -41,31 +41,47 @@ export function getStoreSettings(): StoreSettings {
 
 export function parseProductRow(row: any): Product {
   let images: string[] = [];
-  try {
-    images = JSON.parse(row.images || '[]');
-  } catch {
-    images = row.images ? [row.images] : [];
+  if (Array.isArray(row.images)) {
+    images = row.images;
+  } else if (typeof row.images === 'string') {
+    try {
+      images = JSON.parse(row.images || '[]');
+    } catch {
+      images = row.images ? [row.images] : [];
+    }
   }
 
   let benefits: string[] = [];
-  try {
-    benefits = JSON.parse(row.benefits || '[]');
-  } catch {
-    benefits = [];
+  if (Array.isArray(row.benefits)) {
+    benefits = row.benefits;
+  } else if (typeof row.benefits === 'string') {
+    try {
+      benefits = JSON.parse(row.benefits || '[]');
+    } catch {
+      benefits = [];
+    }
   }
 
   let suitable_skin_types: string[] = [];
-  try {
-    suitable_skin_types = JSON.parse(row.suitable_skin_types || '[]');
-  } catch {
-    suitable_skin_types = [];
+  if (Array.isArray(row.suitable_skin_types)) {
+    suitable_skin_types = row.suitable_skin_types;
+  } else if (typeof row.suitable_skin_types === 'string') {
+    try {
+      suitable_skin_types = JSON.parse(row.suitable_skin_types || '[]');
+    } catch {
+      suitable_skin_types = [];
+    }
   }
 
   let relevant_concerns: string[] = [];
-  try {
-    relevant_concerns = JSON.parse(row.relevant_concerns || '[]');
-  } catch {
-    relevant_concerns = [];
+  if (Array.isArray(row.relevant_concerns)) {
+    relevant_concerns = row.relevant_concerns;
+  } else if (typeof row.relevant_concerns === 'string') {
+    try {
+      relevant_concerns = JSON.parse(row.relevant_concerns || '[]');
+    } catch {
+      relevant_concerns = [];
+    }
   }
 
   return {
