@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Category } from '@/types';
-import { ArrowUpRight, Sparkles, ArrowRight, Sun, ShieldCheck, Heart } from 'lucide-react';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
 
 const CATEGORY_BADGES: { [slug: string]: string } = {
   'skincare': '👑 Most Popular',
@@ -48,7 +48,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
         </div>
 
         {/* Category Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {categories.map((cat) => {
             const badge = CATEGORY_BADGES[cat.slug] || '✨ Curated';
             return (
@@ -94,67 +94,6 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
               </Link>
             );
           })}
-        </div>
-
-        {/* Dual Promotional Highlight Banners (Everything Beauty GH Aesthetic) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {/* Banner 1: Melanin SPF Sun Protection Edit */}
-          <div className="relative rounded-3xl overflow-hidden p-8 sm:p-10 bg-gradient-to-br from-rose-900 via-brand-950 to-charcoal-950 text-white shadow-luxury flex flex-col justify-between group">
-            <div className="space-y-3 z-10">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-gold-300 text-xs font-bold">
-                <Sun className="w-3.5 h-3.5" />
-                <span>The Melanin SPF Edit</span>
-              </div>
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
-                100% Invisible Daily Sunscreens (Zero White Cast)
-              </h3>
-              <p className="text-xs sm:text-sm text-white/85 leading-relaxed max-w-md">
-                Formulated for dark skin tones under the West African sun. Sweat-resistant, non-chalky, broad spectrum UVA/UVB defense.
-              </p>
-            </div>
-
-            <div className="pt-6 z-10">
-              <Link
-                href="/categories/sun-protection"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-brand-950 hover:bg-gold-300 font-bold text-xs sm:text-sm transition-all shadow-md group-hover:scale-102"
-              >
-                <span>Shop Sun Protection</span>
-                <ArrowRight className="w-4 h-4 text-brand-700" />
-              </Link>
-            </div>
-
-            {/* Decorative background circle */}
-            <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-500/20 rounded-full blur-2xl pointer-events-none" />
-          </div>
-
-          {/* Banner 2: Handcrafted Ghanaian Botanicals */}
-          <div className="relative rounded-3xl overflow-hidden p-8 sm:p-10 bg-gradient-to-br from-amber-950 via-charcoal-950 to-stone-900 text-white shadow-luxury flex flex-col justify-between group">
-            <div className="space-y-3 z-10">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-amber-300 text-xs font-bold">
-                <Heart className="w-3.5 h-3.5" />
-                <span>Handcrafted in Ghana 🇬🇭</span>
-              </div>
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
-                Pure Northern Shea, Baobab &amp; Raw Cocoa Soufflés
-              </h3>
-              <p className="text-xs sm:text-sm text-white/85 leading-relaxed max-w-md">
-                Artisanal skincare from Nokware, Kaeme, Skin Gourmet, and BAGm Signature. Ethically wild-harvested and whipped to velvet perfection.
-              </p>
-            </div>
-
-            <div className="pt-6 z-10">
-              <Link
-                href="/categories/body-care"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-charcoal-950 hover:bg-amber-300 font-bold text-xs sm:text-sm transition-all shadow-md group-hover:scale-102"
-              >
-                <span>Explore Ghanaian Brands</span>
-                <ArrowRight className="w-4 h-4 text-amber-700" />
-              </Link>
-            </div>
-
-            {/* Decorative background circle */}
-            <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-amber-500/20 rounded-full blur-2xl pointer-events-none" />
-          </div>
         </div>
       </div>
     </section>
