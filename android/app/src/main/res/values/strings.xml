@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">BAGm Beauty</string>
+    <string name="title_activity_main">BAGm Beauty</string>
+    <string name="package_name">com.bagmbeauty.app</string>
+    <string name="custom_url_scheme">com.bagmbeauty.app</string>
+</resources>

@@ -1,7 +1,7 @@
 {
   "appId": "com.bagmbeauty.app",
   "appName": "BAGm Beauty",
-  "webDir": "out",
+  "webDir": "public",
   "bundledWebRuntime": false,
   "server": {
     "url": "https://bagmbeautysupply.vercel.app",
