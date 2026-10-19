@@ -1,0 +1,3 @@
+// Dummy cordova plugins build file
+ext {
+}
