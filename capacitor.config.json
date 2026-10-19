@@ -1,0 +1,33 @@
+{
+  "appId": "com.bagmbeauty.app",
+  "appName": "BAGm Beauty",
+  "webDir": "out",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://bagmbeautysupply.vercel.app",
+    "cleartext": true,
+    "allowNavigation": [
+      "bagmbeautysupply.vercel.app",
+      "*.paystack.co",
+      "checkout.paystack.com"
+    ]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#922244",
+      "showSpinner": false,
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP"
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#922244"
+    },
+    "Keyboard": {
+      "resize": "body",
+      "style": "DARK",
+      "resizeOnFullScreen": true
+    }
+  }
+}
