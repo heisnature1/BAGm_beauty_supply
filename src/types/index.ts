@@ -205,6 +205,9 @@ export type OrderStatus =
   | 'refunded';
 
 export type PaymentMethod =
+  | 'moolre_momo'
+  | 'moolre_card'
+  | 'moolre_bank'
   | 'paystack_momo'
   | 'paystack_card'
   | 'bank_transfer'
@@ -370,6 +373,12 @@ export interface StoreSettings {
   hero_image_url: string;
   currency_code: string;
   currency_symbol: string;
+  moolre_enabled?: number;
+  moolre_environment?: 'sandbox' | 'production';
+  moolre_public_key?: string | null;
+  moolre_secret_key?: string | null;
+  moolre_account_number?: string | null;
+  moolre_merchant_id?: string | null;
   paystack_public_key?: string | null;
   paystack_secret_key?: string | null;
   paystack_enabled: number;
