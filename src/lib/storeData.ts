@@ -54,7 +54,7 @@ export const INITIAL_STORE_DATA: InitialStoreData = {
     {
       id: 'admin-001',
       email: 'admin@bagmbeauty.com',
-      password_hash: '$2a$10$Wq3iP4Gq3MvP2cNuYp8Y9On6qRkY0R9/0eSj0T2nF4S3bV6mZ2gOu',
+      password_hash: '$2a$10$gYqZjprli63CAsHwt1jfCOViqA.NgL1U/.sjbgtwjxFWOtcWoVmSW',
       first_name: 'BAGm',
       last_name: 'Administrator',
       phone: '+233 24 123 4567',
@@ -66,7 +66,7 @@ export const INITIAL_STORE_DATA: InitialStoreData = {
     {
       id: 'cust-001',
       email: 'customer@example.com',
-      password_hash: '$2a$10$uWk7zHw3P3kU7xJ1fF2uYe8I9K0aN7qV1bM3xY5zW7eT9pQ2rL4sK',
+      password_hash: '$2a$10$1tHYJsoI0HY0p6wDsUhEr.eV1IdIjhL0T2FdN0NgMG.lrRE2.mZEW',
       first_name: 'Akosua',
       last_name: 'Mensah',
       phone: '+233 24 987 6543',

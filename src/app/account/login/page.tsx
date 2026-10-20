@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { Lock, Mail, ArrowRight, AlertCircle, ShieldCheck } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle, ShieldCheck, Sparkles } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -19,6 +19,18 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const fillCustomerCredentials = () => {
+    setEmail('customer@example.com');
+    setPassword('Password123!');
+    setError('');
+  };
+
+  const fillAdminCredentials = () => {
+    setEmail('admin@bagmbeauty.com');
+    setPassword('AdminPassword2026!');
+    setError('');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +53,7 @@ function LoginForm() {
   return (
     <div className="bg-white rounded-3xl p-8 sm:p-10 border border-brand-100 shadow-luxury space-y-6">
       <div className="text-center space-y-2">
-        <div className="w-12 h-12 rounded-full bg-brand-50 text-brand-700 flex items-center justify-center mx-auto font-serif font-bold text-xl">
+        <div className="w-12 h-12 rounded-full bg-brand-50 text-brand-700 flex items-center justify-center mx-auto font-serif font-bold text-xl border border-brand-200">
           B
         </div>
         <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
@@ -72,7 +84,7 @@ function LoginForm() {
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full text-xs p-3 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500"
+              className="w-full text-xs p-3 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 font-medium"
             />
           </div>
         </div>
@@ -97,7 +109,7 @@ function LoginForm() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full text-xs p-3 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500"
+              className="w-full text-xs p-3 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 font-medium"
             />
           </div>
         </div>
@@ -105,7 +117,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-40 text-white text-xs font-semibold shadow-md transition-all flex items-center justify-center gap-2 active:scale-98"
+          className="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-40 text-white text-xs font-semibold shadow-md transition-all flex items-center justify-center gap-2 active:scale-98 cursor-pointer"
         >
           {loading ? (
             <span>Signing In...</span>
@@ -118,7 +130,33 @@ function LoginForm() {
         </button>
       </form>
 
-      <div className="pt-4 border-t border-gray-100 text-center space-y-3">
+      {/* Demo Credentials Quick-Fill Card */}
+      <div className="p-4 bg-brand-50/60 rounded-2xl border border-brand-200/80 text-xs text-charcoal-700 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-charcoal-900 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-gold-500" />
+            <span>Quick Demo Sign-In:</span>
+          </span>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <button
+            type="button"
+            onClick={fillCustomerCredentials}
+            className="flex-1 py-2 px-3 rounded-xl bg-white hover:bg-rose-50 border border-brand-200 text-[11px] font-semibold text-brand-700 shadow-2xs transition-colors flex items-center justify-center gap-1"
+          >
+            <span>👤 Customer: Akosua Mensah</span>
+          </button>
+          <button
+            type="button"
+            onClick={fillAdminCredentials}
+            className="flex-1 py-2 px-3 rounded-xl bg-white hover:bg-rose-50 border border-brand-200 text-[11px] font-semibold text-charcoal-800 shadow-2xs transition-colors flex items-center justify-center gap-1"
+          >
+            <span>🔑 Admin: Administrator</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="pt-2 border-t border-gray-100 text-center space-y-3">
         <p className="text-xs text-charcoal-500">
           Don&apos;t have an account yet?{' '}
           <Link
@@ -128,12 +166,6 @@ function LoginForm() {
             Create Customer Account
           </Link>
         </p>
-
-        <div className="p-3 bg-brand-50/50 rounded-xl border border-brand-100 text-[11px] text-charcoal-500 text-left">
-          <span className="font-bold text-charcoal-700 block mb-0.5">Demo Accounts:</span>
-          <div>Customer: <code className="bg-white px-1 rounded">customer@example.com</code> / <code className="bg-white px-1 rounded">Password123!</code></div>
-          <div>Admin: <code className="bg-white px-1 rounded">admin@bagmbeauty.com</code> / <code className="bg-white px-1 rounded">AdminPassword2026!</code></div>
-        </div>
       </div>
     </div>
   );
