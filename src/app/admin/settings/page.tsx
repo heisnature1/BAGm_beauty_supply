@@ -12,6 +12,11 @@ export default function AdminSettingsPage() {
     low_stock_threshold: '5',
     admin_notification_email: 'orders@bagmbeauty.com',
     cod_enabled: 'true',
+    moolre_enabled: 'true',
+    moolre_environment: 'sandbox',
+    moolre_account_number: 'MOOLRE-GH-BAGM-01',
+    moolre_public_key: 'moolre_pk_sandbox_bagm_beauty_2026',
+    moolre_secret_key: 'moolre_sk_sandbox_bagm_beauty_2026',
     bank_name: 'Standard Chartered Ghana',
     bank_account_name: 'BAGm Beauty Supply Ltd',
     bank_account_number: '0100123456789',
@@ -175,6 +180,80 @@ export default function AdminSettingsPage() {
                 onChange={(e) => handleChange('admin_notification_email', e.target.value)}
                 className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Moolre Payment Gateway Configuration */}
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-rose-100">
+            <div className="flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-brand-600" />
+              <h3 className="font-serif font-bold text-base text-charcoal-900">Moolre Payment Gateway (Ghana)</h3>
+            </div>
+            <span className="text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+              https://sandbox.moolre.com
+            </span>
+          </div>
+
+          <div className="space-y-3 text-xs">
+            <div className="p-3 bg-brand-50/50 rounded-xl border border-brand-100 text-[11px] text-charcoal-600 leading-relaxed">
+              Moolre handles real-time Mobile Money (MTN MoMo, Telecel Cash, AT Money), Visa &amp; Mastercard, and Ghana GhIPSS instant bank transfers.
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                  Gateway Environment
+                </label>
+                <select
+                  value={settings.moolre_environment}
+                  onChange={(e) => handleChange('moolre_environment', e.target.value)}
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-semibold focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                >
+                  <option value="sandbox">Sandbox (https://sandbox.moolre.com)</option>
+                  <option value="production">Production Live (https://api.moolre.com)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                  Moolre Merchant / Account Number
+                </label>
+                <input
+                  type="text"
+                  value={settings.moolre_account_number}
+                  onChange={(e) => handleChange('moolre_account_number', e.target.value)}
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                  placeholder="MOOLRE-GH-BAGM-01"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                  Moolre Secret Key (sk_...)
+                </label>
+                <input
+                  type="password"
+                  value={settings.moolre_secret_key}
+                  onChange={(e) => handleChange('moolre_secret_key', e.target.value)}
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                  placeholder="moolre_sk_sandbox_..."
+                />
+              </div>
+
+              <div>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                  Moolre Public Key (pk_...)
+                </label>
+                <input
+                  type="text"
+                  value={settings.moolre_public_key}
+                  onChange={(e) => handleChange('moolre_public_key', e.target.value)}
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                  placeholder="moolre_pk_sandbox_..."
+                />
+              </div>
             </div>
           </div>
         </div>

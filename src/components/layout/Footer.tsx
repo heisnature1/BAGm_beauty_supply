@@ -312,6 +312,9 @@ export function Footer() {
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
             <span className="text-[11px] font-semibold text-charcoal-600 mr-1">Accepted in Ghana:</span>
             <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
+              Moolre Payments ⚡
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
               MTN MoMo 🟡
             </span>
             <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
@@ -322,9 +325,6 @@ export function Footer() {
             </span>
             <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
               Visa &amp; Mastercard 💳
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
-              Paystack ⚡
             </span>
             <span className="px-2.5 py-1 rounded-lg bg-white border border-brand-200 text-[10px] text-charcoal-800 font-bold shadow-2xs">
               Cash on Delivery 📦

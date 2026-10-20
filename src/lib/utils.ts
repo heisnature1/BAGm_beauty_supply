@@ -140,6 +140,12 @@ export function getPaymentStatusLabel(status: string): { label: string; color: s
 
 export function getPaymentMethodLabel(method: string): string {
   switch (method) {
+    case 'moolre_momo':
+      return 'Moolre Mobile Money (MTN MoMo, Telecel Cash, AT Money)';
+    case 'moolre_card':
+      return 'Moolre Cards (Visa & Mastercard)';
+    case 'moolre_bank':
+      return 'Moolre Bank Transfer & QR';
     case 'paystack_momo':
       return 'Mobile Money (MTN / Telecel / AT)';
     case 'paystack_card':

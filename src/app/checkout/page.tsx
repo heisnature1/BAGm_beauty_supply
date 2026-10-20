@@ -53,7 +53,8 @@ export default function CheckoutPage() {
   const [selectedPickupId, setSelectedPickupId] = useState('');
 
   // Payment
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('paystack_momo');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('moolre_momo');
+  const [momoNetwork, setMomoNetwork] = useState<'MTN' | 'TELECEL' | 'AT'>('MTN');
   const [customerNotes, setCustomerNotes] = useState('');
 
   // Submission State
@@ -155,6 +156,7 @@ export default function CheckoutPage() {
             : null,
         pickupLocationId: fulfilmentType === 'pickup' ? selectedPickupId : null,
         paymentMethod,
+        momoNetwork,
         customerNotes,
       };
 
@@ -498,120 +500,217 @@ export default function CheckoutPage() {
 
                 {/* 4. Payment Method Selection */}
                 <div className="bg-white rounded-3xl p-6 sm:p-8 border border-brand-100 shadow-card space-y-4">
-                  <h3 className="font-serif font-bold text-lg text-charcoal-900 flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-brand-100 text-brand-800 text-xs font-bold flex items-center justify-center">4</span>
-                    <span>Select Payment Method (Ghana)</span>
-                  </h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-brand-100">
+                    <h3 className="font-serif font-bold text-lg text-charcoal-900 flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-brand-100 text-brand-800 text-xs font-bold flex items-center justify-center">4</span>
+                      <span>Select Payment Method (Ghana)</span>
+                    </h3>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-bold">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Moolre Payments Sandbox Active</span>
+                    </div>
+                  </div>
 
                   <div className="space-y-3">
-                    {/* Paystack Mobile Money */}
-                    <label
-                      className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
-                        paymentMethod === 'paystack_momo'
+                    {/* Moolre Mobile Money */}
+                    <div
+                      onClick={() => setPaymentMethod('moolre_momo')}
+                      className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+                        paymentMethod === 'moolre_momo'
                           ? 'border-brand-600 bg-brand-50/70 ring-2 ring-brand-200'
-                          : 'border-gray-200 hover:border-brand-200'
+                          : 'border-gray-200 hover:border-brand-200 bg-white'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="payment_method"
-                        checked={paymentMethod === 'paystack_momo'}
-                        onChange={() => setPaymentMethod('paystack_momo')}
-                        className="mt-1 text-brand-600 focus:ring-0"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
-                            <Smartphone className="w-4 h-4 text-brand-600" />
-                            <span>Mobile Money (MTN MoMo, Telecel Cash, AT Money)</span>
-                          </span>
-                          <span className="text-[10px] font-bold uppercase bg-amber-100 text-amber-800 px-2 py-0.5 rounded">
-                            Popular 🇬🇭
-                          </span>
-                        </div>
-                        <p className="text-xs text-charcoal-500 mt-0.5">
-                          Instant, secure payment via your mobile money wallet. Prompted on your phone.
-                        </p>
-                      </div>
-                    </label>
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === 'moolre_momo'}
+                          onChange={() => setPaymentMethod('moolre_momo')}
+                          className="mt-1 text-brand-600 focus:ring-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
+                              <Smartphone className="w-4 h-4 text-brand-600" />
+                              <span>Moolre Mobile Money</span>
+                            </span>
+                            <span className="text-[10px] font-bold uppercase bg-amber-100 text-amber-800 px-2 py-0.5 rounded">
+                              Instant MoMo 🟡🔴🔵
+                            </span>
+                          </div>
+                          <p className="text-xs text-charcoal-600 mt-1">
+                            Pay directly via MTN Mobile Money, Telecel Cash, or AT Money. Powered by Moolre sandbox gateway.
+                          </p>
 
-                    {/* Paystack Cards */}
-                    <label
-                      className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
-                        paymentMethod === 'paystack_card'
+                          {/* Network Selector */}
+                          {paymentMethod === 'moolre_momo' && (
+                            <div className="mt-3 pt-3 border-t border-brand-200/60 flex flex-wrap items-center gap-2">
+                              <span className="text-[11px] font-bold text-charcoal-700">Choose Network:</span>
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setMomoNetwork('MTN'); }}
+                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                                  momoNetwork === 'MTN'
+                                    ? 'bg-amber-400 text-charcoal-900 shadow-2xs'
+                                    : 'bg-white border border-gray-200 text-charcoal-600 hover:bg-gray-50'
+                                }`}
+                              >
+                                MTN MoMo 🟡
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setMomoNetwork('TELECEL'); }}
+                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                                  momoNetwork === 'TELECEL'
+                                    ? 'bg-red-500 text-white shadow-2xs'
+                                    : 'bg-white border border-gray-200 text-charcoal-600 hover:bg-gray-50'
+                                }`}
+                              >
+                                Telecel Cash 🔴
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setMomoNetwork('AT'); }}
+                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                                  momoNetwork === 'AT'
+                                    ? 'bg-blue-600 text-white shadow-2xs'
+                                    : 'bg-white border border-gray-200 text-charcoal-600 hover:bg-gray-50'
+                                }`}
+                              >
+                                AT Money 🔵
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Moolre Cards */}
+                    <div
+                      onClick={() => setPaymentMethod('moolre_card')}
+                      className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+                        paymentMethod === 'moolre_card'
                           ? 'border-brand-600 bg-brand-50/70 ring-2 ring-brand-200'
-                          : 'border-gray-200 hover:border-brand-200'
+                          : 'border-gray-200 hover:border-brand-200 bg-white'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="payment_method"
-                        checked={paymentMethod === 'paystack_card'}
-                        onChange={() => setPaymentMethod('paystack_card')}
-                        className="mt-1 text-brand-600 focus:ring-0"
-                      />
-                      <div className="flex-1">
-                        <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
-                          <CreditCard className="w-4 h-4 text-brand-600" />
-                          <span>Credit / Debit Card (Visa, Mastercard)</span>
-                        </span>
-                        <p className="text-xs text-charcoal-500 mt-0.5">
-                          Bank-grade security with 3D Secure OTP verification.
-                        </p>
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === 'moolre_card'}
+                          onChange={() => setPaymentMethod('moolre_card')}
+                          className="mt-1 text-brand-600 focus:ring-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
+                              <CreditCard className="w-4 h-4 text-brand-600" />
+                              <span>Moolre Cards (Visa &amp; Mastercard)</span>
+                            </span>
+                            <span className="text-[10px] font-bold uppercase bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
+                              Cards 💳
+                            </span>
+                          </div>
+                          <p className="text-xs text-charcoal-600 mt-1">
+                            Secure local and international credit or debit card payment with 3D Secure verification.
+                          </p>
+                        </div>
                       </div>
-                    </label>
+                    </div>
+
+                    {/* Moolre Bank Transfer / QR */}
+                    <div
+                      onClick={() => setPaymentMethod('moolre_bank')}
+                      className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+                        paymentMethod === 'moolre_bank'
+                          ? 'border-brand-600 bg-brand-50/70 ring-2 ring-brand-200'
+                          : 'border-gray-200 hover:border-brand-200 bg-white'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === 'moolre_bank'}
+                          onChange={() => setPaymentMethod('moolre_bank')}
+                          className="mt-1 text-brand-600 focus:ring-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
+                              <Building className="w-4 h-4 text-brand-600" />
+                              <span>Moolre Instant Bank Transfer &amp; QR</span>
+                            </span>
+                            <span className="text-[10px] font-bold uppercase bg-purple-100 text-purple-800 px-2 py-0.5 rounded">
+                              Ghana QR ⚡
+                            </span>
+                          </div>
+                          <p className="text-xs text-charcoal-600 mt-1">
+                            Instant Ghana Interbank Payment (GhIPSS Instant Pay / GIP) and GhQR scan-to-pay.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
                     {/* Direct Bank Transfer */}
-                    <label
-                      className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
+                    <div
+                      onClick={() => setPaymentMethod('bank_transfer')}
+                      className={`p-4 rounded-2xl border cursor-pointer transition-all ${
                         paymentMethod === 'bank_transfer'
                           ? 'border-brand-600 bg-brand-50/70 ring-2 ring-brand-200'
-                          : 'border-gray-200 hover:border-brand-200'
+                          : 'border-gray-200 hover:border-brand-200 bg-white'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="payment_method"
-                        checked={paymentMethod === 'bank_transfer'}
-                        onChange={() => setPaymentMethod('bank_transfer')}
-                        className="mt-1 text-brand-600 focus:ring-0"
-                      />
-                      <div className="flex-1">
-                        <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
-                          <Banknote className="w-4 h-4 text-brand-600" />
-                          <span>Direct Bank Transfer (GCB Ghana)</span>
-                        </span>
-                        <p className="text-xs text-charcoal-500 mt-0.5">
-                          Bank transfer details will be shown on the order confirmation page. Admin confirms receipt.
-                        </p>
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === 'bank_transfer'}
+                          onChange={() => setPaymentMethod('bank_transfer')}
+                          className="mt-1 text-brand-600 focus:ring-0"
+                        />
+                        <div className="flex-1">
+                          <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
+                            <Banknote className="w-4 h-4 text-brand-600" />
+                            <span>Direct Bank Transfer (Manual GCB Ghana)</span>
+                          </span>
+                          <p className="text-xs text-charcoal-600 mt-1">
+                            Bank transfer details will be shown on the order confirmation page. Admin confirms receipt.
+                          </p>
+                        </div>
                       </div>
-                    </label>
+                    </div>
 
                     {/* Cash on Delivery */}
-                    <label
-                      className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
+                    <div
+                      onClick={() => setPaymentMethod('cash_on_delivery')}
+                      className={`p-4 rounded-2xl border cursor-pointer transition-all ${
                         paymentMethod === 'cash_on_delivery'
                           ? 'border-brand-600 bg-brand-50/70 ring-2 ring-brand-200'
-                          : 'border-gray-200 hover:border-brand-200'
+                          : 'border-gray-200 hover:border-brand-200 bg-white'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="payment_method"
-                        checked={paymentMethod === 'cash_on_delivery'}
-                        onChange={() => setPaymentMethod('cash_on_delivery')}
-                        className="mt-1 text-brand-600 focus:ring-0"
-                      />
-                      <div className="flex-1">
-                        <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
-                          <Banknote className="w-4 h-4 text-emerald-600" />
-                          <span>Cash on Delivery (COD)</span>
-                        </span>
-                        <p className="text-xs text-charcoal-500 mt-0.5">
-                          Pay cash directly to the courier upon inspection and delivery. Available in selected zones.
-                        </p>
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="radio"
+                          name="payment_method"
+                          checked={paymentMethod === 'cash_on_delivery'}
+                          onChange={() => setPaymentMethod('cash_on_delivery')}
+                          className="mt-1 text-brand-600 focus:ring-0"
+                        />
+                        <div className="flex-1">
+                          <span className="font-semibold text-sm text-charcoal-900 flex items-center gap-2">
+                            <Banknote className="w-4 h-4 text-emerald-600" />
+                            <span>Cash on Delivery (COD)</span>
+                          </span>
+                          <p className="text-xs text-charcoal-600 mt-1">
+                            Pay cash directly to the courier upon delivery across Greater Accra.
+                          </p>
+                        </div>
                       </div>
-                    </label>
+                    </div>
                   </div>
                 </div>
               </div>
