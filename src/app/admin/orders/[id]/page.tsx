@@ -19,6 +19,7 @@ import {
   RotateCcw,
   XCircle,
   ShieldCheck,
+  Package,
 } from 'lucide-react';
 
 export default function AdminOrderDetailPage({ params }: { params: { id: string } }) {
@@ -98,18 +99,22 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
       const res = await fetch('/api/payments/manual-confirm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: order?.id }),
+        body: JSON.stringify({
+          orderId: order?.id,
+          reference: `MANUAL-ADM-${Date.now()}`,
+        }),
       });
 
       const data = await res.json();
       if (res.ok && data.success) {
         setPaymentModalOpen(false);
+        setStatusFeedback('Payment confirmed and recorded successfully.');
         loadOrder();
       } else {
-        alert(data.error || 'Failed to confirm manual payment');
+        alert(data.error || 'Payment confirmation failed');
       }
     } catch {
-      alert('Error confirming manual payment');
+      alert('Error confirming payment');
     } finally {
       setConfirmingPayment(false);
     }
@@ -117,8 +122,8 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
 
   if (loading || !order) {
     return (
-      <div className="py-12 text-center text-xs text-charcoal-500 font-semibold">
-        Loading order #{params.id}...
+      <div className="py-24 text-center text-xs text-charcoal-500 font-semibold max-w-5xl mx-auto">
+        Loading order details...
       </div>
     );
   }
@@ -140,13 +145,13 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
         <div className="flex items-center gap-3">
           <Link
             href="/admin/orders"
-            className="p-2 bg-charcoal-800 hover:bg-charcoal-700 text-white rounded-xl"
+            className="p-2.5 bg-white hover:bg-rose-50 text-charcoal-700 border border-rose-200/90 rounded-xl transition-colors shadow-xs"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-serif font-bold text-2xl text-white">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="font-serif font-bold text-2xl text-charcoal-900">
                 Order #{order.order_number}
               </h1>
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${statusInfo.color}`}>
@@ -156,8 +161,8 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                 {paymentInfo.label}
               </span>
             </div>
-            <p className="text-xs text-charcoal-400 mt-1">
-              Placed on {formatDate(order.created_at)} • {order.fulfilment_type.toUpperCase()}
+            <p className="text-xs text-charcoal-500 mt-1">
+              Placed on {formatDate(order.created_at)} • <span className="uppercase font-semibold text-charcoal-700">{order.fulfilment_type}</span>
             </p>
           </div>
         </div>
@@ -167,27 +172,27 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
             href={`/api/invoice/${order.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2 bg-white hover:bg-rose-50 text-charcoal-800 border border-rose-200/90 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <Printer className="w-4 h-4 text-brand-400" />
-            <span>Print Invoice / Slip</span>
+            <Printer className="w-4 h-4 text-brand-600" />
+            <span>Print Invoice</span>
           </a>
 
           {order.payment_status !== 'paid' && (
             <button
               onClick={() => setPaymentModalOpen(true)}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-soft transition-all cursor-pointer"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>Confirm Payment Receipt</span>
+              <span>Confirm Payment</span>
             </button>
           )}
         </div>
       </div>
 
       {statusFeedback && (
-        <div className="p-4 rounded-2xl bg-emerald-950/70 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 shadow-xs">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
           <span>{statusFeedback}</span>
         </div>
       )}
@@ -197,64 +202,64 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
         {/* Left Side: Items & Customer Details */}
         <div className="lg:col-span-7 space-y-6">
           {/* Order Items Table */}
-          <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-            <h3 className="font-serif font-bold text-base text-white pb-2 border-b border-charcoal-800">
+          <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+            <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">
               Purchased Items ({order.items?.length || 0})
             </h3>
 
-            <div className="divide-y divide-charcoal-800">
+            <div className="divide-y divide-rose-100/70">
               {order.items?.map((item) => (
                 <div key={item.id} className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-3">
                     <img
                       src={item.image_url || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80'}
                       alt={item.product_name}
-                      className="w-12 h-12 rounded-xl object-cover bg-charcoal-900 border border-charcoal-800 shrink-0"
+                      className="w-12 h-12 rounded-xl object-cover bg-rose-50 border border-rose-200/80 shrink-0"
                     />
                     <div>
-                      <span className="font-semibold text-white block">{item.product_name}</span>
-                      <span className="text-[10px] text-charcoal-400 font-mono">SKU: {item.sku}</span>
+                      <span className="font-semibold text-charcoal-900 block">{item.product_name}</span>
+                      <span className="text-[10px] text-charcoal-500 font-mono">SKU: {item.sku}</span>
                       <p className="text-[11px] text-charcoal-500">
-                        Qty: {item.quantity} × {formatGHS(item.unit_price)} (Cost: {formatGHS(item.cost_price)})
+                        Qty: {item.quantity} × {formatGHS(item.unit_price)}
                       </p>
                     </div>
                   </div>
 
-                  <span className="font-serif font-bold text-white text-sm">
+                  <span className="font-serif font-bold text-charcoal-900 text-sm">
                     {formatGHS(item.total_price)}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="pt-3 border-t border-charcoal-800 space-y-2 text-xs">
-              <div className="flex items-center justify-between text-charcoal-400">
+            <div className="pt-3 border-t border-rose-100 space-y-2 text-xs">
+              <div className="flex items-center justify-between text-charcoal-600">
                 <span>Items Subtotal</span>
-                <span className="font-semibold text-white">{formatGHS(order.subtotal)}</span>
+                <span className="font-semibold text-charcoal-900">{formatGHS(order.subtotal)}</span>
               </div>
-              <div className="flex items-center justify-between text-charcoal-400">
+              <div className="flex items-center justify-between text-charcoal-600">
                 <span>Delivery Charge</span>
-                <span className="font-semibold text-white">{formatGHS(order.delivery_fee)}</span>
+                <span className="font-semibold text-charcoal-900">{formatGHS(order.delivery_fee)}</span>
               </div>
-              <div className="pt-2 border-t border-charcoal-800 flex items-center justify-between text-sm">
-                <span className="font-bold text-white">Grand Total Amount</span>
-                <span className="font-serif font-bold text-lg text-brand-400">{formatGHS(order.total_amount)}</span>
+              <div className="pt-2 border-t border-rose-100 flex items-center justify-between text-sm">
+                <span className="font-bold text-charcoal-900">Grand Total Amount</span>
+                <span className="font-serif font-bold text-lg text-brand-700">{formatGHS(order.total_amount)}</span>
               </div>
             </div>
           </div>
 
           {/* Customer & Address Information */}
-          <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-            <h3 className="font-serif font-bold text-base text-white pb-2 border-b border-charcoal-800">
+          <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+            <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">
               Customer &amp; Fulfilment Information
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-charcoal-300">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-charcoal-700">
               <div>
                 <span className="text-charcoal-500 font-bold uppercase text-[10px] block mb-1">Customer Details</span>
-                <p className="font-semibold text-white text-sm">{order.customer_name}</p>
-                <p className="text-charcoal-400">{order.customer_email}</p>
-                <p className="text-charcoal-400">{order.customer_phone}</p>
+                <p className="font-semibold text-charcoal-900 text-sm">{order.customer_name}</p>
+                <p className="text-charcoal-600">{order.customer_email}</p>
+                <p className="text-charcoal-600">{order.customer_phone}</p>
                 <p className="text-[11px] text-charcoal-500 mt-1">{order.is_guest ? 'Guest Checkout' : 'Registered Customer'}</p>
               </div>
 
@@ -264,21 +269,21 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                 </span>
                 {order.fulfilment_type === 'delivery' && deliveryAddressObj ? (
                   <div className="space-y-1">
-                    <p className="font-medium text-white">{deliveryAddressObj.street}</p>
-                    {deliveryAddressObj.landmark && <p className="text-charcoal-400">Landmark/GPS: {deliveryAddressObj.landmark}</p>}
-                    <p className="text-charcoal-400">{deliveryAddressObj.city}, {deliveryAddressObj.region}</p>
-                    {deliveryAddressObj.scheduled_slot && <p className="text-gold-400 text-[11px]">Slot: {deliveryAddressObj.scheduled_slot}</p>}
+                    <p className="font-medium text-charcoal-900">{deliveryAddressObj.street}</p>
+                    {deliveryAddressObj.landmark && <p className="text-charcoal-600">Landmark/GPS: {deliveryAddressObj.landmark}</p>}
+                    <p className="text-charcoal-600">{deliveryAddressObj.city}, {deliveryAddressObj.region}</p>
+                    {deliveryAddressObj.scheduled_slot && <p className="text-gold-700 text-[11px] font-medium">Slot: {deliveryAddressObj.scheduled_slot}</p>}
                   </div>
                 ) : (
-                  <p className="text-white">Store Pickup at East Legon Flagship.</p>
+                  <p className="text-charcoal-900">Store Pickup at East Legon Flagship.</p>
                 )}
               </div>
             </div>
 
             {order.customer_notes && (
-              <div className="p-3 bg-charcoal-900 rounded-xl border border-charcoal-800 text-xs">
-                <span className="text-charcoal-400 font-bold block mb-0.5">Customer Delivery Notes:</span>
-                <p className="text-charcoal-200">{order.customer_notes}</p>
+              <div className="p-3 bg-rose-50/50 rounded-xl border border-rose-200 text-xs">
+                <span className="text-charcoal-700 font-bold block mb-0.5">Customer Delivery Notes:</span>
+                <p className="text-charcoal-600">{order.customer_notes}</p>
               </div>
             )}
           </div>
@@ -286,20 +291,20 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
 
         {/* Right Side: Status Controls & Dispatch Form */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-5">
-            <h3 className="font-serif font-bold text-base text-white pb-2 border-b border-charcoal-800">
+          <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-5">
+            <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">
               Fulfilment &amp; Courier Controls
             </h3>
 
             <form onSubmit={handleUpdateStatus} className="space-y-4 text-xs">
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                   Update Order Status
                 </label>
                 <select
                   value={orderStatus}
                   onChange={(e) => setOrderStatus(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-medium focus:outline-none focus:border-brand-500"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-medium focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 >
                   <option value="order_placed">Order Placed</option>
                   <option value="awaiting_payment">Awaiting Payment</option>
@@ -316,7 +321,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                   Assigned Courier / Rider Name
                 </label>
                 <input
@@ -324,12 +329,12 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                   placeholder="e.g. BAGm Express (Kwame / +233240000000)"
                   value={courierName}
                   onChange={(e) => setCourierName(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 placeholder-charcoal-400 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                   Tracking Reference / Waybill #
                 </label>
                 <input
@@ -337,27 +342,27 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                   placeholder="e.g. BAGM-EXP-4491"
                   value={trackingRef}
                   onChange={(e) => setTrackingRef(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-mono focus:outline-none focus:border-brand-500"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono placeholder-charcoal-400 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                   Internal Administrative Notes
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Add private operational notes visible only to admin..."
+                  placeholder="Add private operational notes visible only to staff..."
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 placeholder-charcoal-400 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={updating}
-                className="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-40 text-white font-semibold transition-colors flex items-center justify-center gap-2 shadow-sm"
+                className="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-semibold transition-all flex items-center justify-center gap-2 shadow-soft cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 <span>{updating ? 'Saving Status...' : 'Save Fulfilment Updates'}</span>
@@ -366,13 +371,13 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
           </div>
 
           {/* Payment Method Summary */}
-          <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-3 text-xs">
-            <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Payment Metadata</h4>
-            <div className="space-y-1.5 text-charcoal-400">
-              <p>Method: <strong className="text-white">{getPaymentMethodLabel(order.payment_method)}</strong></p>
-              <p>Status: <strong className="text-white capitalize">{order.payment_status}</strong></p>
+          <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-3 text-xs">
+            <h4 className="font-bold text-charcoal-900 uppercase text-[11px] tracking-wider">Payment Metadata</h4>
+            <div className="space-y-1.5 text-charcoal-600">
+              <p>Method: <strong className="text-charcoal-900">{getPaymentMethodLabel(order.payment_method)}</strong></p>
+              <p>Status: <strong className="text-charcoal-900 capitalize">{order.payment_status}</strong></p>
               {order.payment_reference && (
-                <p>Gateway Reference: <strong className="text-white font-mono">{order.payment_reference}</strong></p>
+                <p>Gateway Reference: <strong className="text-charcoal-900 font-mono">{order.payment_reference}</strong></p>
               )}
             </div>
           </div>
@@ -381,29 +386,29 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
 
       {/* Manual Payment Confirmation Modal */}
       {paymentModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-charcoal-900 border border-charcoal-800 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-4 shadow-2xl">
-            <div className="w-12 h-12 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-800">
+        <div className="fixed inset-0 z-50 bg-charcoal-950/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white border border-rose-200 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-4 shadow-2xl">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto border border-emerald-200">
               <CheckCircle2 className="w-6 h-6" />
             </div>
 
-            <h3 className="font-serif font-bold text-xl text-white text-center">
+            <h3 className="font-serif font-bold text-xl text-charcoal-900 text-center">
               Confirm Payment Receipt
             </h3>
 
-            <p className="text-xs text-charcoal-400 text-center leading-relaxed">
-              Are you sure you have verified the credit of <strong className="text-emerald-400 font-bold">{formatGHS(order.total_amount)}</strong> for order <strong className="text-white">#{order.order_number}</strong>?
+            <p className="text-xs text-charcoal-600 text-center leading-relaxed">
+              Are you sure you have verified the credit of <strong className="text-emerald-700 font-bold">{formatGHS(order.total_amount)}</strong> for order <strong className="text-charcoal-900">#{order.order_number}</strong>?
             </p>
 
-            <p className="text-[11px] text-charcoal-500 bg-charcoal-950 p-3 rounded-xl border border-charcoal-800">
-              This action will mark the order as <strong>Paid</strong>, update order status to <strong>Payment Confirmed</strong>, send an automatic email receipt to the customer, and record an immutable administrative audit log.
+            <p className="text-[11px] text-charcoal-500 bg-rose-50/50 p-3 rounded-xl border border-rose-200">
+              This action will mark the order as <strong>Paid</strong>, update order status to <strong>Payment Confirmed</strong>, and record an administrative audit log.
             </p>
 
             <div className="flex gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setPaymentModalOpen(false)}
-                className="flex-1 py-3 rounded-xl border border-charcoal-700 text-charcoal-300 font-semibold text-xs"
+                className="flex-1 py-3 rounded-xl border border-rose-200 text-charcoal-700 font-semibold text-xs hover:bg-rose-50 transition-colors"
               >
                 Cancel
               </button>
@@ -411,7 +416,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                 type="button"
                 disabled={confirmingPayment}
                 onClick={handleConfirmManualPayment}
-                className="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm"
+                className="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-soft transition-all"
               >
                 {confirmingPayment ? 'Verifying...' : 'Yes, Confirm Paid'}
               </button>

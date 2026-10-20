@@ -50,20 +50,27 @@ export default function AdminReviewsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif font-bold text-2xl text-white">Verified Customer Reviews Moderation</h1>
-          <p className="text-xs text-charcoal-400 mt-1">
-            Moderate genuine customer feedback submitted by verified purchasers.
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+              Social Proof &amp; Ratings
+            </span>
+          </div>
+          <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
+            Verified Customer Reviews
+          </h1>
+          <p className="text-xs text-charcoal-500 mt-1">
+            Moderate genuine customer feedback submitted by verified purchasers across Ghana.
           </p>
         </div>
       </div>
 
-      <div className="bg-charcoal-950 rounded-3xl border border-charcoal-800 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-rose-200/80 shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
-            <thead className="bg-charcoal-900/60 text-[11px] uppercase tracking-wider text-charcoal-400 border-b border-charcoal-800">
+            <thead className="bg-rose-50/50 text-[11px] uppercase tracking-wider text-charcoal-600 border-b border-rose-100">
               <tr>
                 <th className="py-3 px-4">Product</th>
                 <th className="py-3 px-4">Customer</th>
@@ -74,44 +81,44 @@ export default function AdminReviewsPage() {
                 <th className="py-3 px-4 text-right">Moderation</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-charcoal-800 text-charcoal-300">
+            <tbody className="divide-y divide-rose-100/70 text-charcoal-700">
               {reviews.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-charcoal-500">
+                  <td colSpan={7} className="py-12 text-center text-charcoal-500">
                     No customer reviews to display.
                   </td>
                 </tr>
               ) : (
                 reviews.map((r) => (
-                  <tr key={r.id} className="hover:bg-charcoal-900/40">
-                    <td className="py-3 px-4 font-semibold text-white">{r.product_name}</td>
+                  <tr key={r.id} className="hover:bg-rose-50/40 transition-colors">
+                    <td className="py-3 px-4 font-semibold text-charcoal-900">{r.product_name}</td>
                     <td className="py-3 px-4">
-                      <span className="block text-white font-medium">{r.first_name} {r.last_name}</span>
-                      <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                      <span className="block text-charcoal-900 font-medium">{r.first_name} {r.last_name}</span>
+                      <span className="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3" />
                         <span>Verified Purchase</span>
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex text-amber-400">
+                      <div className="flex text-amber-500">
                         {[1, 2, 3, 4, 5].map((s) => (
-                          <Star key={s} className={`w-3 h-3 ${s <= r.rating ? 'fill-current' : 'text-charcoal-700'}`} />
+                          <Star key={s} className={`w-3 h-3 ${s <= r.rating ? 'fill-current' : 'text-gray-300'}`} />
                         ))}
                       </div>
                     </td>
                     <td className="py-3 px-4 max-w-xs">
-                      {r.title && <strong className="block text-white mb-0.5">{r.title}</strong>}
-                      <p className="line-clamp-2 text-charcoal-400">{r.comment}</p>
+                      {r.title && <strong className="block text-charcoal-900 mb-0.5">{r.title}</strong>}
+                      <p className="line-clamp-2 text-charcoal-600">{r.comment}</p>
                     </td>
-                    <td className="py-3 px-4 text-charcoal-400 font-mono text-[11px]">{formatDate(r.created_at)}</td>
+                    <td className="py-3 px-4 text-charcoal-500 font-mono text-[11px]">{formatDate(r.created_at)}</td>
                     <td className="py-3 px-4">
                       <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
                           r.status === 'approved'
-                            ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             : r.status === 'rejected'
-                            ? 'bg-red-950 text-red-400 border border-red-800'
-                            : 'bg-amber-950 text-amber-400 border border-amber-800'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : 'bg-amber-50 text-amber-700 border-amber-200'
                         }`}
                       >
                         {r.status.toUpperCase()}
@@ -122,7 +129,7 @@ export default function AdminReviewsPage() {
                         {r.status !== 'approved' && (
                           <button
                             onClick={() => handleUpdateStatus(r.id, 'approved')}
-                            className="p-1.5 bg-emerald-950 hover:bg-emerald-900 text-emerald-300 rounded-lg"
+                            className="p-1.5 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-200 rounded-lg transition-colors cursor-pointer"
                             title="Approve Review"
                           >
                             <Check className="w-3.5 h-3.5" />
@@ -131,7 +138,7 @@ export default function AdminReviewsPage() {
                         {r.status !== 'rejected' && (
                           <button
                             onClick={() => handleUpdateStatus(r.id, 'rejected')}
-                            className="p-1.5 bg-red-950 hover:bg-red-900 text-red-300 rounded-lg"
+                            className="p-1.5 bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-700 border border-rose-200 rounded-lg transition-colors cursor-pointer"
                             title="Reject Review"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -139,7 +146,7 @@ export default function AdminReviewsPage() {
                         )}
                         <button
                           onClick={() => handleDelete(r.id)}
-                          className="p-1.5 text-charcoal-500 hover:text-red-400 rounded-lg"
+                          className="p-1.5 text-charcoal-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

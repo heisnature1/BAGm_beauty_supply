@@ -66,190 +66,195 @@ export default function AdminSettingsPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif font-bold text-2xl text-white">Store Configuration &amp; Logistics Settings</h1>
-          <p className="text-xs text-charcoal-400 mt-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+              System Preferences
+            </span>
+          </div>
+          <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">Store Configuration &amp; Logistics</h1>
+          <p className="text-xs text-charcoal-500 mt-1">
             Configure Ghana delivery rates, bank transfer instructions, and inventory thresholds.
           </p>
         </div>
       </div>
 
       {saved && (
-        <div className="p-4 rounded-2xl bg-emerald-950/70 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 shadow-xs">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>Store configuration settings saved successfully!</span>
         </div>
       )}
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Delivery & Logistics Rates */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-charcoal-800">
-            <Truck className="w-4 h-4 text-brand-400" />
-            <h3 className="font-serif font-bold text-base text-white">Ghana Delivery Rates &amp; Free Threshold</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-rose-100">
+            <Truck className="w-4 h-4 text-brand-600" />
+            <h3 className="font-serif font-bold text-base text-charcoal-900">Ghana Delivery Rates &amp; Free Threshold</h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                 Complimentary Delivery Threshold (GH₵)
               </label>
               <input
                 type="number"
                 value={settings.free_delivery_threshold}
                 onChange={(e) => handleChange('free_delivery_threshold', e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-serif font-bold"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-serif font-bold focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
               <p className="text-[10px] text-charcoal-500 mt-1">Free delivery automatically applied above this cart subtotal.</p>
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                 Default Accra Central / East Legon Rate (GH₵)
               </label>
               <input
                 type="number"
                 value={settings.fee_accra_central}
                 onChange={(e) => handleChange('fee_accra_central', e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-serif font-bold"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-serif font-bold focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                 Outer Greater Accra Rate (GH₵)
               </label>
               <input
                 type="number"
                 value={settings.fee_accra_outer}
                 onChange={(e) => handleChange('fee_accra_outer', e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-serif font-bold"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-serif font-bold focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                 Nationwide Intercity VIP Parcel Rate (GH₵)
               </label>
               <input
                 type="number"
                 value={settings.fee_nationwide}
                 onChange={(e) => handleChange('fee_nationwide', e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-serif font-bold"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-serif font-bold focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Inventory & Alerts */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-charcoal-800">
-            <Bell className="w-4 h-4 text-amber-400" />
-            <h3 className="font-serif font-bold text-base text-white">Stock Warnings &amp; Notification Emails</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-rose-100">
+            <Bell className="w-4 h-4 text-amber-600" />
+            <h3 className="font-serif font-bold text-base text-charcoal-900">Stock Warnings &amp; Notification Emails</h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                 Default Low Stock Trigger (Units)
               </label>
               <input
                 type="number"
                 value={settings.low_stock_threshold}
                 onChange={(e) => handleChange('low_stock_threshold', e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-serif font-bold"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-serif font-bold focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
                 Administrator Alert Recipient
               </label>
               <input
                 type="email"
                 value={settings.admin_notification_email}
                 onChange={(e) => handleChange('admin_notification_email', e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-mono"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Payment Configuration */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-charcoal-800">
-            <CreditCard className="w-4 h-4 text-emerald-400" />
-            <h3 className="font-serif font-bold text-base text-white">Offline Payment Instructions (Bank &amp; MoMo)</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-rose-100">
+            <CreditCard className="w-4 h-4 text-emerald-600" />
+            <h3 className="font-serif font-bold text-base text-charcoal-900">Offline Payment Instructions (Bank &amp; MoMo)</h3>
           </div>
 
           <div className="space-y-3 text-xs">
-            <label className="flex items-center gap-2 cursor-pointer pb-2 border-b border-charcoal-800">
+            <label className="flex items-center gap-2 cursor-pointer p-3 bg-rose-50/50 rounded-xl border border-rose-200">
               <input
                 type="checkbox"
                 checked={settings.cod_enabled === 'true'}
                 onChange={(e) => handleChange('cod_enabled', e.target.checked ? 'true' : 'false')}
                 className="rounded text-brand-600"
               />
-              <span className="text-white font-semibold">Enable Cash on Delivery (COD) for Greater Accra</span>
+              <span className="text-charcoal-900 font-semibold">Enable Cash on Delivery (COD) for Greater Accra</span>
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Bank Name</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Bank Name</label>
                 <input
                   type="text"
                   value={settings.bank_name}
                   onChange={(e) => handleChange('bank_name', e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Account Name</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Account Name</label>
                 <input
                   type="text"
                   value={settings.bank_account_name}
                   onChange={(e) => handleChange('bank_account_name', e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Account Number</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Account Number</label>
                 <input
                   type="text"
                   value={settings.bank_account_number}
                   onChange={(e) => handleChange('bank_account_number', e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-mono"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Bank Branch</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Bank Branch</label>
                 <input
                   type="text"
                   value={settings.bank_branch}
                   onChange={(e) => handleChange('bank_branch', e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">MTN / Telecel MoMo Number</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">MTN / Telecel MoMo Number</label>
                 <input
                   type="text"
                   value={settings.momo_number}
                   onChange={(e) => handleChange('momo_number', e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-mono"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">MoMo Merchant Account Name</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">MoMo Merchant Account Name</label>
                 <input
                   type="text"
                   value={settings.momo_account_name}
                   onChange={(e) => handleChange('momo_account_name', e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
             </div>
@@ -259,7 +264,7 @@ export default function AdminSettingsPage() {
         <button
           type="submit"
           disabled={saving}
-          className="w-full py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-2xl font-semibold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors"
+          className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-xs flex items-center justify-center gap-2 shadow-soft transition-all cursor-pointer"
         >
           <Save className="w-4 h-4" />
           <span>{saving ? 'Saving Settings...' : 'Save Configuration Changes'}</span>

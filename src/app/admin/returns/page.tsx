@@ -83,20 +83,27 @@ export default function AdminReturnsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif font-bold text-2xl text-white">Returns &amp; Refunds Management</h1>
-          <p className="text-xs text-charcoal-400 mt-1">
-            Review customer return claims, inspect stock, and record verified refunds.
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+              Customer Experience
+            </span>
+          </div>
+          <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
+            Returns &amp; Refunds Management
+          </h1>
+          <p className="text-xs text-charcoal-500 mt-1">
+            Review customer return claims, inspect stock condition, and record verified refunds.
           </p>
         </div>
       </div>
 
-      <div className="bg-charcoal-950 rounded-3xl border border-charcoal-800 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-rose-200/80 shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
-            <thead className="bg-charcoal-900/60 text-[11px] uppercase tracking-wider text-charcoal-400 border-b border-charcoal-800">
+            <thead className="bg-rose-50/50 text-[11px] uppercase tracking-wider text-charcoal-600 border-b border-rose-100">
               <tr>
                 <th className="py-3 px-4">Return #</th>
                 <th className="py-3 px-4">Order #</th>
@@ -107,33 +114,33 @@ export default function AdminReturnsPage() {
                 <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-charcoal-800 text-charcoal-300">
+            <tbody className="divide-y divide-rose-100/70 text-charcoal-700">
               {returns.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-charcoal-500">
+                  <td colSpan={7} className="py-12 text-center text-charcoal-500">
                     No return requests submitted.
                   </td>
                 </tr>
               ) : (
                 returns.map((ret: any) => (
-                  <tr key={ret.id} className="hover:bg-charcoal-900/40">
-                    <td className="py-3 px-4 font-mono font-bold text-white">#{ret.return_number}</td>
-                    <td className="py-3 px-4 font-mono text-charcoal-400">#{ret.order_number}</td>
-                    <td className="py-3 px-4 font-medium text-white">
+                  <tr key={ret.id} className="hover:bg-rose-50/40 transition-colors">
+                    <td className="py-3 px-4 font-mono font-bold text-charcoal-900">#{ret.return_number}</td>
+                    <td className="py-3 px-4 font-mono text-charcoal-500">#{ret.order_number}</td>
+                    <td className="py-3 px-4 font-medium text-charcoal-900">
                       {ret.product_name} (Qty: {ret.quantity})
                     </td>
-                    <td className="py-3 px-4 text-charcoal-400 capitalize">{ret.reason.replace('_', ' ')}</td>
-                    <td className="py-3 px-4 text-charcoal-400 font-mono text-[11px]">{formatDate(ret.created_at)}</td>
+                    <td className="py-3 px-4 text-charcoal-600 capitalize">{ret.reason.replace('_', ' ')}</td>
+                    <td className="py-3 px-4 text-charcoal-500 font-mono text-[11px]">{formatDate(ret.created_at)}</td>
                     <td className="py-3 px-4">
                       <span
-                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
                           ret.status === 'refunded'
-                            ? 'bg-purple-950 text-purple-400 border border-purple-800'
+                            ? 'bg-purple-50 text-purple-700 border-purple-200'
                             : ret.status === 'approved'
-                            ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             : ret.status === 'rejected'
-                            ? 'bg-red-950 text-red-400 border border-red-800'
-                            : 'bg-amber-950 text-amber-400 border border-amber-800'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : 'bg-amber-50 text-amber-700 border-amber-200'
                         }`}
                       >
                         {ret.status.toUpperCase()}
@@ -142,7 +149,7 @@ export default function AdminReturnsPage() {
                     <td className="py-3 px-4 text-right">
                       <button
                         onClick={() => handleOpenReview(ret)}
-                        className="px-3 py-1 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-[11px] font-semibold"
+                        className="px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-[11px] font-semibold transition-all shadow-xs cursor-pointer"
                       >
                         Review Request
                       </button>
@@ -156,19 +163,19 @@ export default function AdminReturnsPage() {
       </div>
 
       {modalOpen && selectedReturn && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-charcoal-900 border border-charcoal-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4">
+        <div className="fixed inset-0 z-50 bg-charcoal-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-rose-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-serif font-bold text-xl text-white">Review Return #{selectedReturn.return_number}</h3>
-                <p className="text-xs text-charcoal-400">Order: #{selectedReturn.order_number}</p>
+                <h3 className="font-serif font-bold text-xl text-charcoal-900">Review Return #{selectedReturn.return_number}</h3>
+                <p className="text-xs text-charcoal-500">Order: #{selectedReturn.order_number}</p>
               </div>
-              <button onClick={() => setModalOpen(false)} className="text-charcoal-400 hover:text-white">
+              <button onClick={() => setModalOpen(false)} className="text-charcoal-400 hover:text-charcoal-700 p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="p-4 bg-charcoal-950 rounded-2xl border border-charcoal-800 text-xs space-y-2 text-charcoal-300">
+            <div className="p-4 bg-rose-50/50 rounded-2xl border border-rose-200 text-xs space-y-2 text-charcoal-700">
               <p><strong>Customer:</strong> {selectedReturn.customer_name} ({selectedReturn.customer_email})</p>
               <p><strong>Product:</strong> {selectedReturn.product_name} (Qty: {selectedReturn.quantity})</p>
               <p><strong>Reason:</strong> {selectedReturn.reason.replace('_', ' ')}</p>
@@ -177,11 +184,11 @@ export default function AdminReturnsPage() {
 
             <form onSubmit={handleSaveReturnStatus} className="space-y-3 text-xs">
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Return Status</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Return Status</label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 >
                   <option value="requested">Requested (Pending Review)</option>
                   <option value="approved">Approved for Collection / Return</option>
@@ -195,17 +202,17 @@ export default function AdminReturnsPage() {
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Inspection &amp; Assessment Notes</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Inspection &amp; Assessment Notes</label>
                 <textarea
                   rows={2}
                   placeholder="Notes on item physical condition, seal integrity, etc..."
                   value={inspectionNotes}
                   onChange={(e) => setInspectionNotes(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 placeholder-charcoal-400 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
-              <label className="flex items-center gap-2 p-3 bg-charcoal-950 rounded-xl border border-charcoal-800 cursor-pointer">
+              <label className="flex items-center gap-2 p-3 bg-rose-50/50 rounded-xl border border-rose-200 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={isResellable}
@@ -213,8 +220,8 @@ export default function AdminReturnsPage() {
                   className="rounded text-brand-600"
                 />
                 <div>
-                  <span className="font-bold text-white block">Restock Item to Inventory (Resellable)</span>
-                  <span className="text-[10px] text-charcoal-400">
+                  <span className="font-bold text-charcoal-900 block">Restock Item to Inventory (Resellable)</span>
+                  <span className="text-[10px] text-charcoal-500">
                     Check if packaging is 100% factory sealed and safe for resale in Ghana.
                   </span>
                 </div>
@@ -222,21 +229,21 @@ export default function AdminReturnsPage() {
 
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <div>
-                  <label className="font-bold uppercase text-charcoal-400 block mb-1">Refund Amount (GH₵)</label>
+                  <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Refund Amount (GH₵)</label>
                   <input
                     type="number"
                     step="0.01"
                     value={refundAmount}
                     onChange={(e) => setRefundAmount(parseFloat(e.target.value) || 0)}
-                    className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white font-serif font-bold"
+                    className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-serif font-bold focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="font-bold uppercase text-charcoal-400 block mb-1">Refund Method</label>
+                  <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Refund Method</label>
                   <select
                     value={refundMethod}
                     onChange={(e) => setRefundMethod(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                    className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                   >
                     <option value="momo_reversal">Mobile Money Reversal</option>
                     <option value="bank_transfer">Direct Bank Transfer</option>
@@ -246,13 +253,13 @@ export default function AdminReturnsPage() {
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Refund Transaction Reference</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Refund Transaction Reference</label>
                 <input
                   type="text"
                   placeholder="e.g. MOMO_REF_991823"
                   value={refundRef}
                   onChange={(e) => setRefundRef(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white font-mono"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono placeholder-charcoal-400 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
@@ -260,14 +267,14 @@ export default function AdminReturnsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl border border-charcoal-700 text-charcoal-400 font-semibold"
+                  className="flex-1 py-3 rounded-xl border border-rose-200 text-charcoal-700 font-semibold hover:bg-rose-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold"
+                  className="flex-1 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-soft transition-all"
                 >
                   {saving ? 'Saving...' : 'Save Return Updates'}
                 </button>

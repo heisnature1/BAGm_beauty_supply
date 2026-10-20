@@ -15,6 +15,9 @@ import {
   Plus,
   Boxes,
   FileSpreadsheet,
+  CheckCircle2,
+  Clock,
+  Sparkles,
 } from 'lucide-react';
 
 export const revalidate = 0;
@@ -79,14 +82,19 @@ export default function AdminOverviewPage() {
   const pendingRevenue = Number(salesRow?.pending_revenue || 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-7xl mx-auto">
       {/* Page Title & Quick Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif font-bold text-2xl sm:text-3xl text-white">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+              Operations Telemetry
+            </span>
+          </div>
+          <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
             Store Operations Overview
           </h1>
-          <p className="text-xs text-charcoal-400 mt-1">
+          <p className="text-xs text-charcoal-500 mt-1">
             Real-time business telemetry and orders processing for BAGm Beauty Supply.
           </p>
         </div>
@@ -94,24 +102,24 @@ export default function AdminOverviewPage() {
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
             href="/admin/products/new"
-            className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
+            className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-soft transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>Add Product</span>
           </Link>
           <Link
             href="/admin/inventory"
-            className="px-4 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2 bg-white hover:bg-rose-50 text-charcoal-800 border border-rose-200/90 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <Boxes className="w-4 h-4" />
+            <Boxes className="w-4 h-4 text-brand-600" />
             <span>Adjust Stock</span>
           </Link>
           <Link
             href="/admin/reports"
-            className="px-4 py-2 bg-charcoal-800 hover:bg-charcoal-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2 bg-white hover:bg-rose-50 text-charcoal-800 border border-rose-200/90 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
           >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span>Export Reports</span>
+            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+            <span>Reports</span>
           </Link>
         </div>
       </div>
@@ -119,78 +127,78 @@ export default function AdminOverviewPage() {
       {/* Top Telemetry KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Confirmed Revenue */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400 text-xs font-semibold uppercase tracking-wider">
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card hover:shadow-soft transition-all space-y-2">
+          <div className="flex items-center justify-between text-charcoal-500 text-xs font-bold uppercase tracking-wider">
             <span>Confirmed Revenue</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center border border-emerald-800">
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/80">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
-          <div className="font-serif font-bold text-2xl text-white">
+          <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
             {formatGHS(confirmedRevenue)}
           </div>
-          <p className="text-[11px] text-charcoal-400">
-            Pending unverified payments: <span className="text-amber-400 font-semibold">{formatGHS(pendingRevenue)}</span>
+          <p className="text-[11px] text-charcoal-500">
+            Pending unverified: <span className="text-amber-700 font-semibold">{formatGHS(pendingRevenue)}</span>
           </p>
         </div>
 
         {/* Total Orders */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400 text-xs font-semibold uppercase tracking-wider">
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card hover:shadow-soft transition-all space-y-2">
+          <div className="flex items-center justify-between text-charcoal-500 text-xs font-bold uppercase tracking-wider">
             <span>Total Orders</span>
-            <div className="w-8 h-8 rounded-lg bg-brand-950 text-brand-400 flex items-center justify-center border border-brand-800">
+            <div className="w-8 h-8 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center border border-brand-200/80">
               <ShoppingCart className="w-4 h-4" />
             </div>
           </div>
-          <div className="font-serif font-bold text-2xl text-white">
+          <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
             {salesRow?.total_orders || 0}
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-charcoal-400">
-            <span className="text-emerald-400 font-semibold">{salesRow?.paid_orders_count || 0} Paid</span>
+          <div className="flex items-center gap-2 text-[11px] text-charcoal-500">
+            <span className="text-emerald-700 font-semibold">{salesRow?.paid_orders_count || 0} Paid</span>
             <span>•</span>
-            <span className="text-amber-400 font-semibold">{salesRow?.pending_orders_count || 0} Awaiting</span>
+            <span className="text-amber-700 font-semibold">{salesRow?.pending_orders_count || 0} Awaiting</span>
           </div>
         </div>
 
         {/* Active Products & Low Stock */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400 text-xs font-semibold uppercase tracking-wider">
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card hover:shadow-soft transition-all space-y-2">
+          <div className="flex items-center justify-between text-charcoal-500 text-xs font-bold uppercase tracking-wider">
             <span>Product Catalog</span>
-            <div className="w-8 h-8 rounded-lg bg-blue-950 text-blue-400 flex items-center justify-center border border-blue-800">
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200/80">
               <Package className="w-4 h-4" />
             </div>
           </div>
-          <div className="font-serif font-bold text-2xl text-white">
-            {invRow?.total_products || 0} <span className="text-xs font-normal text-charcoal-400">Active</span>
+          <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
+            {invRow?.total_products || 0} <span className="text-xs font-normal text-charcoal-500">Active</span>
           </div>
           <div className="flex items-center gap-2 text-[11px]">
-            <span className="text-amber-400 font-semibold">{invRow?.low_stock_count || 0} Low Stock</span>
-            <span>•</span>
-            <span className="text-red-400 font-semibold">{invRow?.out_of_stock_count || 0} Out</span>
+            <span className="text-amber-700 font-semibold">{invRow?.low_stock_count || 0} Low Stock</span>
+            <span className="text-charcoal-400">•</span>
+            <span className="text-rose-700 font-semibold">{invRow?.out_of_stock_count || 0} Out</span>
           </div>
         </div>
 
         {/* Pending Actions / Requests */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-2">
-          <div className="flex items-center justify-between text-charcoal-400 text-xs font-semibold uppercase tracking-wider">
-            <span>Pending Action Queue</span>
-            <div className="w-8 h-8 rounded-lg bg-purple-950 text-purple-400 flex items-center justify-center border border-purple-800">
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card hover:shadow-soft transition-all space-y-2">
+          <div className="flex items-center justify-between text-charcoal-500 text-xs font-bold uppercase tracking-wider">
+            <span>Pending Queue</span>
+            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200/80">
               <RotateCcw className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="font-serif font-bold text-2xl text-white">
+            <span className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
               {(pendingReturns?.count || 0) + (newEnquiries?.count || 0)}
             </span>
-            <span className="text-xs text-charcoal-400">Items requiring attention</span>
+            <span className="text-xs text-charcoal-500">Items to review</span>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-charcoal-400">
-            <Link href="/admin/returns" className="text-brand-400 hover:underline">
+          <div className="flex items-center gap-2 text-[11px] text-charcoal-500">
+            <Link href="/admin/returns" className="text-brand-600 hover:text-brand-700 font-medium hover:underline">
               {pendingReturns?.count || 0} Returns
             </Link>
             <span>•</span>
-            <Link href="/admin/enquiries" className="text-brand-400 hover:underline">
-              {newEnquiries?.count || 0} Enquiries
+            <Link href="/admin/enquiries" className="text-brand-600 hover:text-brand-700 font-medium hover:underline">
+              {newEnquiries?.count || 0} Messages
             </Link>
           </div>
         </div>
@@ -199,10 +207,10 @@ export default function AdminOverviewPage() {
       {/* Main Grid: Recent Orders + Low Stock Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Recent Orders Table */}
-        <div className="lg:col-span-8 bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-charcoal-800">
-            <h3 className="font-serif font-bold text-lg text-white">Recent Store Orders</h3>
-            <Link href="/admin/orders" className="text-xs font-semibold text-brand-400 hover:text-brand-300">
+        <div className="lg:col-span-8 bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-rose-100">
+            <h3 className="font-serif font-bold text-lg text-charcoal-900">Recent Store Orders</h3>
+            <Link href="/admin/orders" className="text-xs font-semibold text-brand-600 hover:text-brand-700">
               View All Orders &rarr;
             </Link>
           </div>
@@ -212,47 +220,47 @@ export default function AdminOverviewPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left">
-                <thead className="text-[11px] uppercase tracking-wider text-charcoal-400 border-b border-charcoal-800">
+                <thead className="text-[11px] uppercase tracking-wider text-charcoal-600 bg-rose-50/50 rounded-xl">
                   <tr>
-                    <th className="py-2.5">Order Ref</th>
-                    <th className="py-2.5">Customer</th>
-                    <th className="py-2.5">Fulfilment</th>
-                    <th className="py-2.5">Payment</th>
-                    <th className="py-2.5 text-right">Amount</th>
-                    <th className="py-2.5 text-right">Action</th>
+                    <th className="py-2.5 px-3">Order Ref</th>
+                    <th className="py-2.5 px-2">Customer</th>
+                    <th className="py-2.5 px-2">Fulfilment</th>
+                    <th className="py-2.5 px-2">Payment</th>
+                    <th className="py-2.5 px-2 text-right">Amount</th>
+                    <th className="py-2.5 px-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-charcoal-800/60 text-charcoal-300">
+                <tbody className="divide-y divide-rose-100/70 text-charcoal-700">
                   {recentOrders.map((ord) => {
                     const statusInfo = getOrderStatusLabel(ord.order_status);
                     const paymentInfo = getPaymentStatusLabel(ord.payment_status);
 
                     return (
-                      <tr key={ord.id} className="hover:bg-charcoal-900/50 transition-colors">
-                        <td className="py-3 font-mono font-bold text-white">
+                      <tr key={ord.id} className="hover:bg-rose-50/40 transition-colors">
+                        <td className="py-3 px-3 font-mono font-bold text-charcoal-900">
                           #{ord.order_number}
                         </td>
-                        <td className="py-3">
-                          <span className="block font-medium text-white">{ord.customer_name}</span>
+                        <td className="py-3 px-2">
+                          <span className="block font-medium text-charcoal-900">{ord.customer_name}</span>
                           <span className="text-[10px] text-charcoal-500">{ord.customer_phone}</span>
                         </td>
-                        <td className="py-3">
+                        <td className="py-3 px-2">
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${statusInfo.color}`}>
                             {statusInfo.label}
                           </span>
                         </td>
-                        <td className="py-3">
+                        <td className="py-3 px-2">
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${paymentInfo.color}`}>
                             {paymentInfo.label}
                           </span>
                         </td>
-                        <td className="py-3 text-right font-serif font-bold text-white">
+                        <td className="py-3 px-2 text-right font-serif font-bold text-charcoal-900">
                           {formatGHS(ord.total_amount)}
                         </td>
-                        <td className="py-3 text-right">
+                        <td className="py-3 px-3 text-right">
                           <Link
                             href={`/admin/orders/${ord.id}`}
-                            className="px-2.5 py-1 bg-charcoal-800 hover:bg-brand-600 text-white rounded-lg text-[11px] font-semibold transition-colors"
+                            className="px-2.5 py-1 bg-rose-50 hover:bg-brand-600 hover:text-white text-brand-700 border border-rose-200 rounded-lg text-[11px] font-semibold transition-all inline-block"
                           >
                             Manage
                           </Link>
@@ -267,13 +275,13 @@ export default function AdminOverviewPage() {
         </div>
 
         {/* Low Stock Watchlist */}
-        <div className="lg:col-span-4 bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-charcoal-800">
+        <div className="lg:col-span-4 bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-rose-100">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <h3 className="font-serif font-bold text-base text-white">Low Stock Watchlist</h3>
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <h3 className="font-serif font-bold text-base text-charcoal-900">Low Stock Watchlist</h3>
             </div>
-            <Link href="/admin/inventory" className="text-xs font-semibold text-brand-400 hover:text-brand-300">
+            <Link href="/admin/inventory" className="text-xs font-semibold text-brand-600 hover:text-brand-700">
               Manage &rarr;
             </Link>
           </div>
@@ -283,13 +291,13 @@ export default function AdminOverviewPage() {
           ) : (
             <div className="space-y-3">
               {lowStockProducts.map((p) => (
-                <div key={p.id} className="p-3 rounded-2xl bg-charcoal-900 border border-charcoal-800 flex items-center justify-between text-xs">
+                <div key={p.id} className="p-3 rounded-xl bg-rose-50/40 border border-rose-200/70 flex items-center justify-between text-xs hover:border-brand-300 transition-colors">
                   <div>
-                    <h4 className="font-semibold text-white line-clamp-1">{p.name}</h4>
+                    <h4 className="font-semibold text-charcoal-900 line-clamp-1">{p.name}</h4>
                     <span className="font-mono text-[10px] text-charcoal-500">SKU: {p.sku}</span>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className={`font-bold block ${p.stock_quantity <= 0 ? 'text-red-400' : 'text-amber-400'}`}>
+                    <span className={`font-bold block ${p.stock_quantity <= 0 ? 'text-rose-600' : 'text-amber-700'}`}>
                       {p.stock_quantity} left
                     </span>
                     <span className="text-[10px] text-charcoal-500">Min: {p.low_stock_threshold}</span>

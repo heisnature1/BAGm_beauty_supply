@@ -86,67 +86,72 @@ export default function BrandsCategoriesPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-7xl mx-auto">
       <div>
-        <h1 className="font-serif font-bold text-2xl text-white">Brands &amp; Categories Management</h1>
-        <p className="text-xs text-charcoal-400 mt-1">
-          Manage product categories, brand affiliations, and country of origin labels.
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+            Store Taxonomy
+          </span>
+        </div>
+        <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">Brands &amp; Categories</h1>
+        <p className="text-xs text-charcoal-500 mt-1">
+          Manage product categories, brand portfolios, and country of origin labels.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Categories Section */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-charcoal-800">
-            <h2 className="font-serif font-bold text-lg text-white">Categories ({categories.length})</h2>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-rose-100">
+            <h2 className="font-serif font-bold text-lg text-charcoal-900">Categories ({categories.length})</h2>
             <button
               onClick={() => setCatModalOpen(true)}
-              className="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1"
+              className="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1 shadow-soft transition-all cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Category</span>
             </button>
           </div>
 
-          <div className="divide-y divide-charcoal-800">
+          <div className="divide-y divide-rose-100/70">
             {categories.map((c) => (
-              <div key={c.id} className="py-3 flex items-center justify-between text-xs">
+              <div key={c.id} className="py-3 flex items-center justify-between text-xs hover:bg-rose-50/30 px-2 rounded-xl transition-colors">
                 <div>
-                  <h4 className="font-bold text-white text-sm">{c.name}</h4>
-                  <p className="text-charcoal-400 line-clamp-1">{c.description || 'No description'}</p>
+                  <h4 className="font-bold text-charcoal-900 text-sm">{c.name}</h4>
+                  <p className="text-charcoal-500 line-clamp-1">{c.description || 'No description'}</p>
                 </div>
-                <span className="text-[11px] font-mono text-charcoal-500">{c.slug}</span>
+                <span className="text-[11px] font-mono text-charcoal-400">{c.slug}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Brands Section */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-charcoal-800">
-            <h2 className="font-serif font-bold text-lg text-white">Brands ({brands.length})</h2>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-rose-100">
+            <h2 className="font-serif font-bold text-lg text-charcoal-900">Brands ({brands.length})</h2>
             <button
               onClick={() => setBrandModalOpen(true)}
-              className="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1"
+              className="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1 shadow-soft transition-all cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Brand</span>
             </button>
           </div>
 
-          <div className="divide-y divide-charcoal-800">
+          <div className="divide-y divide-rose-100/70">
             {brands.map((b) => (
-              <div key={b.id} className="py-3 flex items-center justify-between text-xs">
+              <div key={b.id} className="py-3 flex items-center justify-between text-xs hover:bg-rose-50/30 px-2 rounded-xl transition-colors">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className="font-bold text-white text-sm">{b.name}</h4>
-                    <span className="px-2 py-0.2 rounded text-[10px] font-bold uppercase bg-charcoal-900 border border-charcoal-700 text-gold-400">
+                    <h4 className="font-bold text-charcoal-900 text-sm">{b.name}</h4>
+                    <span className="px-2 py-0.2 rounded text-[10px] font-bold uppercase bg-rose-50 border border-rose-200 text-gold-700">
                       {b.origin}
                     </span>
                   </div>
-                  <p className="text-charcoal-400 line-clamp-1">{b.description}</p>
+                  <p className="text-charcoal-500 line-clamp-1">{b.description}</p>
                 </div>
-                <span className="text-[11px] font-mono text-charcoal-500">{b.slug}</span>
+                <span className="text-[11px] font-mono text-charcoal-400">{b.slug}</span>
               </div>
             ))}
           </div>
@@ -155,47 +160,47 @@ export default function BrandsCategoriesPage() {
 
       {/* Category Modal */}
       {catModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-charcoal-900 border border-charcoal-800 rounded-3xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-charcoal-950/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white border border-rose-200 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between">
-              <h3 className="font-serif font-bold text-lg text-white">Add Product Category</h3>
-              <button onClick={() => setCatModalOpen(false)} className="text-charcoal-400 hover:text-white">
+              <h3 className="font-serif font-bold text-lg text-charcoal-900">Add Product Category</h3>
+              <button onClick={() => setCatModalOpen(false)} className="text-charcoal-400 hover:text-charcoal-700 p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSaveCategory} className="space-y-3 text-xs">
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Category Name</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Category Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Cleansers &amp; Toners"
                   value={catName}
                   onChange={(e) => setCatName(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Description</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Description</label>
                 <textarea
                   rows={2}
                   placeholder="Short description..."
                   value={catDesc}
                   onChange={(e) => setCatDesc(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Cover Image URL</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Cover Image URL</label>
                 <input
                   type="url"
                   placeholder="https://images.unsplash.com/..."
                   value={catImage}
                   onChange={(e) => setCatImage(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
@@ -203,13 +208,13 @@ export default function BrandsCategoriesPage() {
                 <button
                   type="button"
                   onClick={() => setCatModalOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl border border-charcoal-700 text-charcoal-400 font-semibold"
+                  className="flex-1 py-2.5 rounded-xl border border-rose-200 text-charcoal-700 font-semibold hover:bg-rose-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold"
+                  className="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-soft transition-all"
                 >
                   Save Category
                 </button>
@@ -221,34 +226,34 @@ export default function BrandsCategoriesPage() {
 
       {/* Brand Modal */}
       {brandModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-charcoal-900 border border-charcoal-800 rounded-3xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-charcoal-950/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white border border-rose-200 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between">
-              <h3 className="font-serif font-bold text-lg text-white">Add Beauty Brand</h3>
-              <button onClick={() => setBrandModalOpen(false)} className="text-charcoal-400 hover:text-white">
+              <h3 className="font-serif font-bold text-lg text-charcoal-900">Add Beauty Brand</h3>
+              <button onClick={() => setBrandModalOpen(false)} className="text-charcoal-400 hover:text-charcoal-700 p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSaveBrand} className="space-y-3 text-xs">
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Brand Name</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Brand Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Skin Gourmet"
                   value={brandName}
                   onChange={(e) => setBrandName(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Brand Heritage Origin</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Brand Heritage Origin</label>
                 <select
                   value={brandOrigin}
                   onChange={(e) => setBrandOrigin(e.target.value as any)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 >
                   <option value="Ghanaian">Ghanaian Brand 🇬🇭</option>
                   <option value="BAGm">BAGm Signature Line ✨</option>
@@ -257,24 +262,24 @@ export default function BrandsCategoriesPage() {
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Brand Story &amp; Description</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Brand Story &amp; Description</label>
                 <textarea
                   rows={3}
                   placeholder="Story and heritage..."
                   value={brandDesc}
                   onChange={(e) => setBrandDesc(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Website URL (Optional)</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Website URL (Optional)</label>
                 <input
                   type="url"
                   placeholder="https://..."
                   value={brandSite}
                   onChange={(e) => setBrandSite(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
@@ -282,13 +287,13 @@ export default function BrandsCategoriesPage() {
                 <button
                   type="button"
                   onClick={() => setBrandModalOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl border border-charcoal-700 text-charcoal-400 font-semibold"
+                  className="flex-1 py-2.5 rounded-xl border border-rose-200 text-charcoal-700 font-semibold hover:bg-rose-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold"
+                  className="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-soft transition-all"
                 >
                   Save Brand
                 </button>
