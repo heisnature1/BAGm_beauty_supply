@@ -39,7 +39,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [confirmingPayment, setConfirmingPayment] = useState(false);
 
-  const loadOrder = async () => {
+  const loadOrder = React.useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/orders/${params.id}`);
@@ -56,11 +56,11 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
 
   useEffect(() => {
     loadOrder();
-  }, [params.id]);
+  }, [loadOrder]);
 
   const handleUpdateStatus = async (e: React.FormEvent) => {
     e.preventDefault();

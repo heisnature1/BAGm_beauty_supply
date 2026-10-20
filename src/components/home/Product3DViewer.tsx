@@ -262,7 +262,7 @@ export function Product3DViewer({ product, className = '', shopHref = '/shop' }:
         rendererRef.current.dispose();
       }
     };
-  }, [product.id, autoRotate]);
+  }, [product, autoRotate]);
 
   // Rebuild product when product configuration changes
   useEffect(() => {

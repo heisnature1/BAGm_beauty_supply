@@ -40,16 +40,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (pathname !== '/admin/login' && mounted && !loading && (!user || user.role !== 'admin')) {
+      router.push('/admin/login');
+    }
+  }, [pathname, mounted, user, loading, router]);
+
   // If on admin login page, don't show the dashboard shell
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
-
-  useEffect(() => {
-    if (mounted && !loading && (!user || user.role !== 'admin')) {
-      router.push('/admin/login');
-    }
-  }, [mounted, user, loading, router]);
 
   // While checking or not authenticated, render a resilient loading fallback
   if (!mounted || loading || !user || user.role !== 'admin') {

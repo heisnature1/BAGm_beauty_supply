@@ -59,7 +59,7 @@ function AccountDashboardContent() {
     }
   }, [user, loading, router]);
 
-  const loadAccountData = async () => {
+  const loadAccountData = React.useCallback(async () => {
     if (!user) return;
     setLoadingData(true);
     try {
@@ -75,13 +75,13 @@ function AccountDashboardContent() {
     } finally {
       setLoadingData(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user) {
       loadAccountData();
     }
-  }, [user]);
+  }, [user, loadAccountData]);
 
   const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault();
