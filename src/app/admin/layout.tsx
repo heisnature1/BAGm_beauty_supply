@@ -25,7 +25,7 @@ import {
   ExternalLink,
   Menu,
   X,
-  Sparkles,
+  Loader2,
 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -33,6 +33,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const { user, loading, logout } = useAuth();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // If on admin login page, don't show the dashboard shell
   if (pathname === '/admin/login') {
@@ -40,15 +45,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   useEffect(() => {
-    if (!loading && (!user || user.role !== 'admin')) {
+    if (mounted && !loading && (!user || user.role !== 'admin')) {
       router.push('/admin/login');
     }
-  }, [user, loading, router]);
+  }, [mounted, user, loading, router]);
 
-  if (loading || !user || user.role !== 'admin') {
+  // While checking or not authenticated, render a resilient loading fallback
+  if (!mounted || loading || !user || user.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-charcoal-950 text-white flex items-center justify-center">
-        <p className="text-xs text-charcoal-400 font-semibold">Verifying administrative credentials...</p>
+      <div className="min-h-screen bg-charcoal-950 text-white flex flex-col items-center justify-center p-6 space-y-4">
+        <div className="w-12 h-12 rounded-2xl bg-charcoal-900 border border-charcoal-800 flex items-center justify-center">
+          <Loader2 className="w-6 h-6 text-brand-400 animate-spin" />
+        </div>
+        <p className="text-xs text-charcoal-300 font-semibold text-center">
+          Verifying administrative credentials...
+        </p>
+        <Link
+          href="/admin/login"
+          className="text-xs text-brand-400 hover:text-brand-300 underline font-medium"
+        >
+          Click here if you are not redirected automatically
+        </Link>
       </div>
     );
   }
@@ -70,6 +87,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { label: 'Store Settings', href: '/admin/settings', icon: Settings },
     { label: 'Audit Trail Logs', href: '/admin/audit-logs', icon: ShieldAlert },
   ];
+
+  const adminName = user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : 'Administrator';
 
   return (
     <div className="min-h-screen bg-charcoal-900 text-charcoal-100 flex flex-col md:flex-row">
@@ -146,7 +165,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <div className="flex items-center gap-3">
             <span className="text-xs text-charcoal-400 hidden sm:inline">
-              Logged in as <strong className="text-white">{user.first_name} {user.last_name}</strong>
+              Logged in as <strong className="text-white">{adminName}</strong>
             </span>
             <Link
               href="/"
@@ -177,24 +196,53 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Logo href="/admin" variant="admin" size="sm" />
               <button
                 onClick={() => setMobileSidebarOpen(false)}
-                className="p-1 text-charcoal-400 hover:text-white"
+                className="p-1.5 text-charcoal-400 hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
+
             <nav className="flex-1 overflow-y-auto p-3 space-y-1 text-xs">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileSidebarOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-charcoal-400 hover:text-white hover:bg-charcoal-900"
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive =
+                  item.href === '/admin'
+                    ? pathname === '/admin'
+                    : pathname.startsWith(item.href);
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileSidebarOpen(false)}
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
+                      isActive
+                        ? 'bg-brand-700 text-white font-semibold'
+                        : 'text-charcoal-400 hover:text-white hover:bg-charcoal-900'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
             </nav>
+
+            <div className="p-3 border-t border-charcoal-800 space-y-2">
+              <div className="text-[11px] text-charcoal-400 px-3 py-1">
+                Admin: <span className="text-white font-semibold">{adminName}</span>
+              </div>
+              <button
+                onClick={() => {
+                  setMobileSidebarOpen(false);
+                  logout();
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-950/40"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Sign Out</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
