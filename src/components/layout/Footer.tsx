@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Clock, ArrowRight, ShieldCheck, CheckCircle2, Sparkles, Truck, Sun, HeartHandshake, CreditCard } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, ArrowRight, ShieldCheck, CheckCircle2, Sparkles, Truck, Sun, CreditCard } from 'lucide-react';
 import { Logo } from '@/components/common/Logo';
 
 export function Footer() {
@@ -10,6 +10,29 @@ export function Footer() {
   const [consentChecked, setConsentChecked] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+
+  const [storeInfo, setStoreInfo] = useState({
+    address: 'Plot 42 Lagos Avenue, East Legon, Accra, Ghana',
+    phone: '+233 24 123 4567 / +233 55 987 6543',
+    email: 'support@bagmbeauty.com',
+    hours: 'Monday – Saturday: 9:00 AM – 7:00 PM GMT',
+  });
+
+  useEffect(() => {
+    fetch('/api/settings/announcement')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data) {
+          setStoreInfo((prev) => ({
+            address: data.store_address || prev.address,
+            phone: data.store_phone || prev.phone,
+            email: data.store_email || prev.email,
+            hours: data.store_hours || prev.hours,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,19 +136,19 @@ export function Footer() {
             <div className="space-y-2.5 text-xs text-charcoal-600 pt-2">
               <div className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-brand-600 shrink-0" />
-                <span>Plot 42 Lagos Avenue, East Legon, Accra, Ghana</span>
+                <span>{storeInfo.address}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-brand-600 shrink-0" />
-                <span>+233 24 123 4567 / +233 55 987 6543</span>
+                <span>{storeInfo.phone}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-brand-600 shrink-0" />
-                <span>support@bagmbeauty.com</span>
+                <span>{storeInfo.email}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-brand-600 shrink-0" />
-                <span>Monday – Saturday: 9:00 AM – 7:00 PM GMT</span>
+                <span>{storeInfo.hours}</span>
               </div>
             </div>
           </div>

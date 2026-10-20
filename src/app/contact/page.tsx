@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
@@ -17,6 +17,29 @@ export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+
+  const [storeInfo, setStoreInfo] = useState({
+    address: 'Plot 42 Lagos Avenue, East Legon, Accra, Ghana',
+    phone: '+233 24 123 4567 / +233 55 987 6543',
+    email: 'support@bagmbeauty.com',
+    hours: 'Monday – Saturday: 9:00 AM – 7:00 PM GMT',
+  });
+
+  useEffect(() => {
+    fetch('/api/settings/announcement')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data) {
+          setStoreInfo((prev) => ({
+            address: data.store_address || prev.address,
+            phone: data.store_phone || prev.phone,
+            email: data.store_email || prev.email,
+            hours: data.store_hours || prev.hours,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +103,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <strong className="block text-charcoal-900 font-semibold">Flagship Hub Address</strong>
-                      <span>Plot 42 Lagos Avenue, East Legon, Accra, Ghana</span>
+                      <span>{storeInfo.address}</span>
                     </div>
                   </div>
 
@@ -90,7 +113,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <strong className="block text-charcoal-900 font-semibold">Phone &amp; Telephone</strong>
-                      <span>+233 24 123 4567 / +233 55 987 6543</span>
+                      <span>{storeInfo.phone}</span>
                     </div>
                   </div>
 
@@ -100,7 +123,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <strong className="block text-charcoal-900 font-semibold">Customer Email</strong>
-                      <span>support@bagmbeauty.com</span>
+                      <span>{storeInfo.email}</span>
                     </div>
                   </div>
 
@@ -110,7 +133,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <strong className="block text-charcoal-900 font-semibold">Operating Hours</strong>
-                      <span>Monday – Saturday: 9:00 AM – 7:00 PM GMT</span>
+                      <span>{storeInfo.hours}</span>
                     </div>
                   </div>
                 </div>
@@ -137,117 +160,117 @@ export default function ContactPage() {
                 {submitted ? (
                   <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3 animate-fade-in">
                     <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
-                    <h4 className="font-serif font-bold text-xl text-emerald-900">Enquiry Received!</h4>
-                    <p className="text-xs sm:text-sm text-emerald-800 max-w-sm mx-auto leading-relaxed">
-                      Thank you for contacting BAGm Beauty Supply. Our team has received your message and will be in touch shortly.
+                    <h4 className="font-serif font-bold text-lg text-emerald-900">
+                      Enquiry Received
+                    </h4>
+                    <p className="text-xs text-emerald-700 max-w-sm mx-auto">
+                      Thank you for contacting BAGm Beauty Supply. Our customer care desk in East Legon will review your message and reply promptly.
                     </p>
                     <button
                       onClick={() => setSubmitted(false)}
-                      className="mt-2 text-xs font-semibold text-brand-700 hover:underline"
+                      className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold"
                     >
-                      Send Another Enquiry
+                      Send Another Message
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="font-bold text-charcoal-700 block mb-1">
-                          Your Full Name <span className="text-red-500">*</span>
+                        <label className="block text-xs font-semibold text-charcoal-700 mb-1">
+                          Full Name *
                         </label>
                         <input
                           type="text"
                           required
-                          placeholder="e.g. Ama Frimpong"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500"
+                          placeholder="e.g. Ama Osei"
+                          className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
                         />
                       </div>
 
                       <div>
-                        <label className="font-bold text-charcoal-700 block mb-1">
-                          Email Address <span className="text-red-500">*</span>
+                        <label className="block text-xs font-semibold text-charcoal-700 mb-1">
+                          Email Address *
                         </label>
                         <input
                           type="email"
                           required
-                          placeholder="name@example.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500"
+                          placeholder="ama@example.com"
+                          className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="font-bold text-charcoal-700 block mb-1">Ghana Phone Number</label>
+                        <label className="block text-xs font-semibold text-charcoal-700 mb-1">
+                          Ghana Phone (Optional)
+                        </label>
                         <input
                           type="tel"
-                          placeholder="024 123 4567"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500"
+                          placeholder="024 123 4567"
+                          className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
                         />
                       </div>
 
                       <div>
-                        <label className="font-bold text-charcoal-700 block mb-1">Enquiry Category</label>
+                        <label className="block text-xs font-semibold text-charcoal-700 mb-1">
+                          Enquiry Category *
+                        </label>
                         <select
                           value={category}
-                          onChange={(e) => setCategory(e.target.value as any)}
-                          className="w-full p-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-brand-500"
+                          onChange={(e: any) => setCategory(e.target.value)}
+                          className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 bg-white"
                         >
-                          <option value="general">General Enquiry</option>
-                          <option value="order_inquiry">Order Status / Receipt</option>
-                          <option value="product_advice">Skincare &amp; Product Advice</option>
-                          <option value="delivery">Delivery &amp; Pickup Coordination</option>
+                          <option value="general">General Inquiry</option>
+                          <option value="order_inquiry">Order Status / Payment</option>
+                          <option value="delivery">Delivery &amp; Pickup Tracking</option>
+                          <option value="product_advice">Skincare Routine &amp; Product Advice</option>
                         </select>
                       </div>
                     </div>
 
                     <div>
-                      <label className="font-bold text-charcoal-700 block mb-1">
-                        Subject <span className="text-red-500">*</span>
+                      <label className="block text-xs font-semibold text-charcoal-700 mb-1">
+                        Subject *
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Question regarding CeraVe Hydrating Cleanser"
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
-                        className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500"
+                        placeholder="Brief summary of your question"
+                        className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
                       />
                     </div>
 
                     <div>
-                      <label className="font-bold text-charcoal-700 block mb-1">
-                        Message <span className="text-red-500">*</span>
+                      <label className="block text-xs font-semibold text-charcoal-700 mb-1">
+                        Message *
                       </label>
                       <textarea
                         required
                         rows={5}
-                        placeholder="Please write your detailed enquiry here..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500"
+                        placeholder="Please provide details so we can help you as quickly as possible..."
+                        className="w-full text-xs p-3.5 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full py-3.5 px-6 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-40 text-white font-semibold flex items-center justify-center gap-2 shadow-md transition-all active:scale-98"
+                      className="w-full py-3 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-soft"
                     >
-                      {submitting ? (
-                        <span>Submitting Message...</span>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4" />
-                          <span>Send Message</span>
-                        </>
-                      )}
+                      <Send className="w-3.5 h-3.5" />
+                      <span>{submitting ? 'Sending Enquiry...' : 'Submit Message'}</span>
                     </button>
                   </form>
                 )}
