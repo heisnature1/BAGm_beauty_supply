@@ -32,10 +32,10 @@ export function Logo({
       <div
         className={`relative flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-300 ${
           variant === 'admin'
-            ? 'p-1.5 bg-charcoal-950 border border-charcoal-800 shadow-sm group-hover:border-brand-500'
+            ? 'p-1.5 bg-white border border-rose-200/90 shadow-xs group-hover:border-brand-500'
             : variant === 'footer'
             ? 'p-1.5 bg-charcoal-950 border border-charcoal-800 shadow-md group-hover:border-brand-500'
-            : 'p-1.5 bg-charcoal-950 border border-charcoal-800 shadow-sm group-hover:border-brand-500/60 group-hover:shadow-md'
+            : 'p-1.5 bg-white border border-rose-200 shadow-sm group-hover:border-brand-500/60 group-hover:shadow-md'
         }`}
       >
         <img
@@ -51,10 +51,10 @@ export function Logo({
         <div className="flex flex-col justify-center text-left">
           {variant === 'admin' ? (
             <>
-              <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-white group-hover:text-brand-300 transition-colors leading-none">
-                BAGm <span className="font-sans font-light text-brand-400">Admin</span>
+              <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-charcoal-900 group-hover:text-brand-700 transition-colors leading-none">
+                BAGm <span className="font-sans font-light text-brand-600">Admin</span>
               </span>
-              <span className="text-[10px] tracking-[0.22em] uppercase font-bold text-gold-400 mt-1 block">
+              <span className="text-[10px] tracking-[0.22em] uppercase font-bold text-gold-600 mt-1 block">
                 Store Operations
               </span>
             </>

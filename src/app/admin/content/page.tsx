@@ -74,133 +74,138 @@ export default function AdminContentPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif font-bold text-2xl text-white">Storefront Content &amp; Announcements</h1>
-          <p className="text-xs text-charcoal-400 mt-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+              Content Management
+            </span>
+          </div>
+          <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">Storefront Content &amp; Announcements</h1>
+          <p className="text-xs text-charcoal-500 mt-1">
             Update top announcement notices, hero banner copy, and physical hub details.
           </p>
         </div>
       </div>
 
       {saved && (
-        <div className="p-4 rounded-2xl bg-emerald-950/70 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 shadow-xs">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>Storefront content updated successfully!</span>
         </div>
       )}
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Announcement Bar */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-charcoal-800">
-            <Megaphone className="w-4 h-4 text-brand-400" />
-            <h3 className="font-serif font-bold text-base text-white">Top Announcement Bar</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-rose-100">
+            <Megaphone className="w-4 h-4 text-brand-600" />
+            <h3 className="font-serif font-bold text-base text-charcoal-900">Top Announcement Bar</h3>
           </div>
 
           <div className="space-y-3 text-xs">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">
-                Announcement Message (Delivery / Consultation Notice)
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                Announcement Message (Delivery / Notice)
               </label>
               <input
                 type="text"
                 value={announcementText}
                 onChange={(e) => setAnnouncementText(e.target.value)}
                 placeholder="e.g. Complimentary Delivery in Accra on Orders Above GH₵ 600"
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-medium"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-medium focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
-              <p className="text-[10px] text-charcoal-500 mt-1">
+              <p className="text-[10px] text-charcoal-400 mt-1">
                 Note: No discount codes or coupon mentions allowed per store policy.
               </p>
             </div>
 
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer p-2.5 rounded-xl bg-rose-50/50 border border-rose-200/80">
               <input
                 type="checkbox"
                 checked={announcementActive}
                 onChange={(e) => setAnnouncementActive(e.target.checked)}
                 className="rounded text-brand-600"
               />
-              <span className="text-white font-semibold">Enable Announcement Bar on Storefront</span>
+              <span className="text-charcoal-900 font-semibold">Enable Announcement Bar on Storefront</span>
             </label>
           </div>
         </div>
 
         {/* Hero Section Copy */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-charcoal-800">
-            <Sparkles className="w-4 h-4 text-gold-400" />
-            <h3 className="font-serif font-bold text-base text-white">Homepage Hero Banner</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-rose-100">
+            <Sparkles className="w-4 h-4 text-gold-600" />
+            <h3 className="font-serif font-bold text-base text-charcoal-900">Homepage Hero Banner</h3>
           </div>
 
           <div className="space-y-3 text-xs">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Hero Main Headline</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Hero Main Headline</label>
               <input
                 type="text"
                 value={heroHeadline}
                 onChange={(e) => setHeroHeadline(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-serif font-bold text-base"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-serif font-bold text-base focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Hero Subheadline / Bio</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Hero Subheadline / Bio</label>
               <textarea
                 rows={3}
                 value={heroSubheadline}
                 onChange={(e) => setHeroSubheadline(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white leading-relaxed"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 leading-relaxed focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Hero Button Label</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Hero Button Label</label>
               <input
                 type="text"
                 value={heroCtaText}
                 onChange={(e) => setHeroCtaText(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Physical Store & Contact Information */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-charcoal-800">
-            <MapPin className="w-4 h-4 text-brand-400" />
-            <h3 className="font-serif font-bold text-base text-white">East Legon Store &amp; Operating Hours</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-rose-100">
+            <MapPin className="w-4 h-4 text-brand-600" />
+            <h3 className="font-serif font-bold text-base text-charcoal-900">East Legon Store &amp; Operating Hours</h3>
           </div>
 
           <div className="space-y-3 text-xs">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Store Address</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Store Address</label>
               <input
                 type="text"
                 value={storeAddress}
                 onChange={(e) => setStoreAddress(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Contact Phone</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Contact Phone</label>
                 <input
                   type="text"
                   value={storePhone}
                   onChange={(e) => setStorePhone(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white font-mono"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 font-mono focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="font-bold uppercase text-charcoal-400 block mb-1">Opening Hours</label>
+                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Opening Hours</label>
                 <input
                   type="text"
                   value={storeHours}
                   onChange={(e) => setStoreHours(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white"
+                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
                 />
               </div>
             </div>
@@ -210,7 +215,7 @@ export default function AdminContentPage() {
         <button
           type="submit"
           disabled={saving}
-          className="w-full py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-2xl font-semibold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors"
+          className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-xs flex items-center justify-center gap-2 shadow-soft transition-all cursor-pointer"
         >
           <Save className="w-4 h-4" />
           <span>{saving ? 'Saving Changes...' : 'Save Content Settings'}</span>

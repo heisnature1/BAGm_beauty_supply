@@ -26,6 +26,7 @@ import {
   Menu,
   X,
   Loader2,
+  Sparkles,
 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -53,16 +54,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   // While checking or not authenticated, render a resilient loading fallback
   if (!mounted || loading || !user || user.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-charcoal-950 text-white flex flex-col items-center justify-center p-6 space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-charcoal-900 border border-charcoal-800 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 text-brand-400 animate-spin" />
+      <div className="min-h-screen bg-[#faf7f5] text-charcoal-900 flex flex-col items-center justify-center p-6 space-y-4">
+        <div className="w-14 h-14 rounded-2xl bg-white border border-rose-200 shadow-card flex items-center justify-center">
+          <Loader2 className="w-6 h-6 text-brand-600 animate-spin" />
         </div>
-        <p className="text-xs text-charcoal-300 font-semibold text-center">
+        <p className="text-xs text-charcoal-600 font-semibold text-center">
           Verifying administrative credentials...
         </p>
         <Link
           href="/admin/login"
-          className="text-xs text-brand-400 hover:text-brand-300 underline font-medium"
+          className="text-xs text-brand-600 hover:text-brand-700 underline font-medium"
         >
           Click here if you are not redirected automatically
         </Link>
@@ -73,11 +74,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { label: 'Overview', href: '/admin', icon: LayoutDashboard },
     { label: 'Products', href: '/admin/products', icon: Package },
-    { label: 'Inventory & Movements', href: '/admin/inventory', icon: Boxes },
-    { label: 'Orders & Fulfilment', href: '/admin/orders', icon: ShoppingCart },
+    { label: 'Inventory & Stock', href: '/admin/inventory', icon: Boxes },
+    { label: 'Orders & Shipping', href: '/admin/orders', icon: ShoppingCart },
     { label: 'Returns & Refunds', href: '/admin/returns', icon: RotateCcw },
     { label: 'Verified Reviews', href: '/admin/reviews', icon: Star },
-    { label: 'Customer Directory', href: '/admin/customers', icon: Users },
+    { label: 'Customer CRM', href: '/admin/customers', icon: Users },
     { label: 'Brands & Categories', href: '/admin/brands-categories', icon: Tags },
     { label: 'Content & Editorial', href: '/admin/content', icon: FileText },
     { label: 'Subscribers', href: '/admin/subscribers', icon: Mail },
@@ -91,10 +92,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const adminName = user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : 'Administrator';
 
   return (
-    <div className="min-h-screen bg-charcoal-900 text-charcoal-100 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#faf7f5] text-charcoal-800 flex flex-col md:flex-row font-sans selection:bg-brand-100 selection:text-brand-900">
       {/* Sidebar for Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-charcoal-950 border-r border-charcoal-800 shrink-0">
-        <div className="p-4 border-b border-charcoal-800 flex items-center justify-between">
+      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-rose-200/80 shrink-0 shadow-xs">
+        <div className="p-4 border-b border-rose-100/80 flex items-center justify-between bg-white">
           <Logo href="/admin" variant="admin" size="sm" />
         </div>
 
@@ -111,13 +112,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                   isActive
-                    ? 'bg-brand-700 text-white font-semibold shadow-xs'
-                    : 'text-charcoal-400 hover:text-white hover:bg-charcoal-900'
+                    ? 'bg-brand-600 text-white font-semibold shadow-soft'
+                    : 'text-charcoal-600 hover:text-brand-700 hover:bg-rose-50/70'
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-charcoal-400 group-hover:text-brand-600'}`} />
                 <span>{item.label}</span>
               </Link>
             );
@@ -125,21 +126,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Bottom Actions */}
-        <div className="p-3 border-t border-charcoal-800 space-y-1">
+        <div className="p-3 border-t border-rose-100/80 space-y-1 bg-white">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-charcoal-400 hover:text-white hover:bg-charcoal-900 transition-colors"
+            className="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-charcoal-600 hover:text-brand-700 hover:bg-rose-50 transition-colors"
           >
             <span className="flex items-center gap-2">
-              <ExternalLink className="w-4 h-4" />
-              <span>View Storefront</span>
+              <ExternalLink className="w-4 h-4 text-brand-600" />
+              <span>Live Storefront</span>
             </span>
           </Link>
 
           <button
             onClick={() => logout()}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-950/40 hover:text-red-300 transition-colors text-left"
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-colors text-left font-medium"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out Admin</span>
@@ -150,36 +151,41 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Header */}
-        <header className="bg-charcoal-950/90 backdrop-blur-md border-b border-charcoal-800 h-16 flex items-center justify-between px-4 sm:px-6 z-30">
+        <header className="bg-white/95 backdrop-blur-md border-b border-rose-200/80 h-16 flex items-center justify-between px-4 sm:px-6 z-30 shadow-xs">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileSidebarOpen(true)}
-              className="p-2 text-charcoal-400 hover:text-white md:hidden"
+              className="p-2 text-charcoal-600 hover:text-brand-600 rounded-lg hover:bg-rose-50 md:hidden transition-colors"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <div className="text-xs text-charcoal-400 hidden sm:block">
-              Primary Currency: <strong className="text-white">Ghanaian Cedi (GH₵)</strong> • Server Time: <strong className="text-white">GMT (Accra)</strong>
+            <div className="text-xs text-charcoal-500 hidden sm:flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Currency: <strong className="text-charcoal-900 font-semibold">Ghanaian Cedi (GH₵)</strong></span>
+              <span className="text-charcoal-300">•</span>
+              <span>Time: <strong className="text-charcoal-900 font-semibold">GMT (Accra)</strong></span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs text-charcoal-400 hidden sm:inline">
-              Logged in as <strong className="text-white">{adminName}</strong>
-            </span>
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-200/70 text-xs">
+              <span className="w-2 h-2 rounded-full bg-gold-500"></span>
+              <span className="text-charcoal-600">Logged in as:</span>
+              <strong className="text-charcoal-900 font-semibold">{adminName}</strong>
+            </div>
             <Link
               href="/"
               target="_blank"
-              className="px-3 py-1.5 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="px-3.5 py-1.5 rounded-xl bg-charcoal-950 hover:bg-black text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Live Storefront</span>
+              <span>View Storefront</span>
             </Link>
           </div>
         </header>
 
         {/* Page Content View */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-charcoal-900">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#faf7f5]">
           {children}
         </main>
       </div>
@@ -188,15 +194,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {mobileSidebarOpen && (
         <div className="fixed inset-0 z-50 md:hidden flex">
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-charcoal-950/60 backdrop-blur-xs"
             onClick={() => setMobileSidebarOpen(false)}
           />
-          <div className="relative w-4/5 max-w-xs bg-charcoal-950 h-full shadow-2xl flex flex-col z-10">
-            <div className="p-4 border-b border-charcoal-800 flex items-center justify-between">
+          <div className="relative w-4/5 max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 border-r border-rose-200">
+            <div className="p-4 border-b border-rose-100 flex items-center justify-between">
               <Logo href="/admin" variant="admin" size="sm" />
               <button
                 onClick={() => setMobileSidebarOpen(false)}
-                className="p-1.5 text-charcoal-400 hover:text-white"
+                className="p-1.5 text-charcoal-400 hover:text-charcoal-700 rounded-lg hover:bg-rose-50"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -217,8 +223,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     onClick={() => setMobileSidebarOpen(false)}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                       isActive
-                        ? 'bg-brand-700 text-white font-semibold'
-                        : 'text-charcoal-400 hover:text-white hover:bg-charcoal-900'
+                        ? 'bg-brand-600 text-white font-semibold shadow-soft'
+                        : 'text-charcoal-600 hover:text-brand-700 hover:bg-rose-50'
                     }`}
                   >
                     <Icon className="w-4 h-4 shrink-0" />
@@ -228,16 +234,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               })}
             </nav>
 
-            <div className="p-3 border-t border-charcoal-800 space-y-2">
-              <div className="text-[11px] text-charcoal-400 px-3 py-1">
-                Admin: <span className="text-white font-semibold">{adminName}</span>
+            <div className="p-3 border-t border-rose-100 space-y-2 bg-rose-50/40">
+              <div className="text-[11px] text-charcoal-600 px-3 py-1">
+                Admin: <span className="text-charcoal-900 font-semibold">{adminName}</span>
               </div>
               <button
                 onClick={() => {
                   setMobileSidebarOpen(false);
                   logout();
                 }}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-950/40"
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-rose-600 hover:bg-rose-100/60 font-semibold transition-colors"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Sign Out</span>

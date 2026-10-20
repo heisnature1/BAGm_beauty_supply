@@ -98,10 +98,11 @@ function NewProductAdminContent() {
     try {
       const benefits = benefitsText
         .split('\n')
-        .map((s) => s.trim())
+        .map((b) => b.trim())
         .filter(Boolean);
 
-      const images = [imageUrl, secondaryImageUrl].filter(Boolean);
+      const images = [imageUrl.trim()];
+      if (secondaryImageUrl.trim()) images.push(secondaryImageUrl.trim());
 
       const payload = {
         id: editId || undefined,
@@ -109,10 +110,10 @@ function NewProductAdminContent() {
         sku,
         brand_id: brandId,
         category_id: categoryId,
-        price: parseFloat(price),
-        cost_price: parseFloat(costPrice || '0'),
-        stock_quantity: parseInt(stockQuantity, 10),
-        low_stock_threshold: parseInt(lowStockThreshold, 10),
+        price: parseFloat(price) || 0,
+        cost_price: parseFloat(costPrice) || 0,
+        stock_quantity: parseInt(stockQuantity, 10) || 0,
+        low_stock_threshold: parseInt(lowStockThreshold, 10) || 5,
         description,
         ingredients,
         benefits,
@@ -165,15 +166,20 @@ function NewProductAdminContent() {
         <div className="flex items-center gap-3">
           <Link
             href="/admin/products"
-            className="p-2 bg-charcoal-800 hover:bg-charcoal-700 text-white rounded-xl transition-colors"
+            className="p-2.5 bg-white hover:bg-rose-50 text-charcoal-700 border border-rose-200/90 rounded-xl transition-colors shadow-xs"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <h1 className="font-serif font-bold text-2xl text-white">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+                Catalog Editor
+              </span>
+            </div>
+            <h1 className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
               {editId ? 'Edit Product Record' : 'Add New Beauty Formulation'}
             </h1>
-            <p className="text-xs text-charcoal-400">
+            <p className="text-xs text-charcoal-500 mt-1">
               Configure product details, selling price in GH₵, ingredients, and stock.
             </p>
           </div>
@@ -181,56 +187,56 @@ function NewProductAdminContent() {
       </div>
 
       {error && (
-        <div className="p-4 rounded-2xl bg-red-950/70 border border-red-800 text-red-300 text-xs flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-800 text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
           <span>{error}</span>
         </div>
       )}
 
       {success && (
-        <div className="p-4 rounded-2xl bg-emerald-950/70 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 shadow-xs">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
           <span>Product saved successfully! Redirecting...</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6 text-xs">
         {/* Basic Info */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <h3 className="font-serif font-bold text-base text-white">1. Basic Product Details</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">1. Basic Product Details</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Product Title</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Product Title</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. BAGm Silk Barrier Peptide Cream 50ml"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">SKU (Stock Keeping Unit)</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">SKU (Stock Keeping Unit)</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. BAGM-CR-001"
                 value={sku}
                 onChange={(e) => setSku(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500 uppercase font-mono"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 uppercase font-mono transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Brand</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Brand</label>
               <select
                 required
                 value={brandId}
                 onChange={(e) => setBrandId(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               >
                 {brands.map((b) => (
                   <option key={b.id} value={b.id}>{b.name} ({b.origin})</option>
@@ -239,12 +245,12 @@ function NewProductAdminContent() {
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Category</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Category</label>
               <select
                 required
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>
@@ -255,12 +261,12 @@ function NewProductAdminContent() {
         </div>
 
         {/* Pricing & Stock */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <h3 className="font-serif font-bold text-base text-white">2. Pricing &amp; Inventory</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">2. Pricing &amp; Inventory</h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Price (GH₵)</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Price (GH₵)</label>
               <input
                 type="number"
                 step="0.01"
@@ -268,145 +274,145 @@ function NewProductAdminContent() {
                 placeholder="340.00"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500 font-serif font-bold"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 font-serif font-bold transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Cost Price (GH₵)</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Cost Price (GH₵)</label>
               <input
                 type="number"
                 step="0.01"
                 placeholder="180.00"
                 value={costPrice}
                 onChange={(e) => setCostPrice(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
-              <span className="text-[10px] text-charcoal-500">For profit reporting</span>
+              <span className="text-[10px] text-charcoal-400">For profit reporting</span>
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Available Stock</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Available Stock</label>
               <input
                 type="number"
                 required
                 value={stockQuantity}
                 onChange={(e) => setStockQuantity(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500 font-bold"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 font-bold transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Low Stock Limit</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Low Stock Limit</label>
               <input
                 type="number"
                 required
                 value={lowStockThreshold}
                 onChange={(e) => setLowStockThreshold(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Media & Images */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <h3 className="font-serif font-bold text-base text-white">3. Product Images (URLs)</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">3. Product Images (URLs)</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Primary Image URL</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Primary Image URL</label>
               <input
                 type="url"
                 required
                 placeholder="https://images.unsplash.com/..."
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Secondary Hover Image URL</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Secondary Hover Image URL</label>
               <input
                 type="url"
                 placeholder="https://images.unsplash.com/..."
                 value={secondaryImageUrl}
                 onChange={(e) => setSecondaryImageUrl(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Descriptions, Benefits & Ingredients */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <h3 className="font-serif font-bold text-base text-white">4. Formulation Descriptions &amp; Ingredients</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">4. Formulation Descriptions &amp; Ingredients</h3>
 
           <div className="space-y-4">
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Product Description</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Product Description</label>
               <textarea
                 required
                 rows={4}
                 placeholder="Detailed description of the beauty product..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500 leading-relaxed"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 leading-relaxed transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Key Benefits (One per line)</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Key Benefits (One per line)</label>
               <textarea
                 rows={3}
                 placeholder="Deeply restores compromised lipid skin barriers&#10;Improves elasticity and smooths texture"
                 value={benefitsText}
                 onChange={(e) => setBenefitsText(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Directions for Use</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Directions for Use</label>
               <textarea
                 rows={2}
                 placeholder="Warm a dime-sized amount and gently press into cleansed skin..."
                 value={directions}
                 onChange={(e) => setDirections(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
               />
             </div>
 
             <div>
-              <label className="font-bold uppercase text-charcoal-400 block mb-1">Full Ingredients List</label>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Full Ingredients List</label>
               <textarea
                 rows={3}
                 placeholder="Aqua/Water, Glycerin, Ceramide NP, ..."
                 value={ingredients}
                 onChange={(e) => setIngredients(e.target.value)}
-                className="w-full p-3 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white focus:outline-none focus:border-brand-500 font-mono text-[11px]"
+                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 font-mono text-[11px] transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Skin Types & Concerns Tagger for Routine Finder */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-4">
-          <h3 className="font-serif font-bold text-base text-white">5. Routine Finder Attribute Matching</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+          <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">5. Routine Finder Attribute Matching</h3>
 
           <div>
-            <label className="font-bold uppercase text-charcoal-400 block mb-2">Suitable Skin Types</label>
+            <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-2">Suitable Skin Types</label>
             <div className="flex flex-wrap gap-2">
               {['all', 'oily', 'dry', 'combination', 'normal', 'sensitive'].map((st) => (
                 <button
                   type="button"
                   key={st}
                   onClick={() => toggleSkinType(st)}
-                  className={`px-3 py-1.5 rounded-xl border font-semibold capitalize transition-colors ${
+                  className={`px-3 py-1.5 rounded-xl border font-semibold capitalize transition-all cursor-pointer ${
                     suitableSkinTypes.includes(st)
-                      ? 'bg-brand-600 border-brand-500 text-white'
-                      : 'bg-charcoal-900 border-charcoal-700 text-charcoal-400 hover:text-white'
+                      ? 'bg-brand-600 border-brand-600 text-white shadow-soft'
+                      : 'bg-rose-50/40 border-rose-200 text-charcoal-600 hover:border-brand-300'
                   }`}
                 >
                   {st}
@@ -416,17 +422,17 @@ function NewProductAdminContent() {
           </div>
 
           <div>
-            <label className="font-bold uppercase text-charcoal-400 block mb-2">Relevant Skin Concerns</label>
+            <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-2">Relevant Skin Concerns</label>
             <div className="flex flex-wrap gap-2">
               {['dryness', 'uneven_tone', 'excess_oil', 'blemishes', 'hydration', 'pores', 'aging'].map((sc) => (
                 <button
                   type="button"
                   key={sc}
                   onClick={() => toggleConcern(sc)}
-                  className={`px-3 py-1.5 rounded-xl border font-semibold capitalize transition-colors ${
+                  className={`px-3 py-1.5 rounded-xl border font-semibold capitalize transition-all cursor-pointer ${
                     relevantConcerns.includes(sc)
-                      ? 'bg-brand-600 border-brand-500 text-white'
-                      : 'bg-charcoal-900 border-charcoal-700 text-charcoal-400 hover:text-white'
+                      ? 'bg-brand-600 border-brand-600 text-white shadow-soft'
+                      : 'bg-rose-50/40 border-rose-200 text-charcoal-600 hover:border-brand-300'
                   }`}
                 >
                   {sc.replace('_', ' ')}
@@ -437,48 +443,48 @@ function NewProductAdminContent() {
         </div>
 
         {/* Status Toggles */}
-        <div className="bg-charcoal-950 p-6 rounded-3xl border border-charcoal-800 space-y-3">
-          <h3 className="font-serif font-bold text-base text-white mb-2">6. Publication Flags</h3>
+        <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-3">
+          <h3 className="font-serif font-bold text-base text-charcoal-900 mb-2">6. Publication Flags</h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <label className="flex items-center gap-2 p-3 rounded-xl bg-charcoal-900 border border-charcoal-800 cursor-pointer">
+            <label className="flex items-center gap-2 p-3 rounded-xl bg-rose-50/40 border border-rose-200 cursor-pointer">
               <input
                 type="checkbox"
                 checked={isPublished}
                 onChange={(e) => setIsPublished(e.target.checked)}
                 className="rounded text-brand-600"
               />
-              <span className="font-semibold text-white">Published</span>
+              <span className="font-semibold text-charcoal-900">Published</span>
             </label>
 
-            <label className="flex items-center gap-2 p-3 rounded-xl bg-charcoal-900 border border-charcoal-800 cursor-pointer">
+            <label className="flex items-center gap-2 p-3 rounded-xl bg-rose-50/40 border border-rose-200 cursor-pointer">
               <input
                 type="checkbox"
                 checked={isFeatured}
                 onChange={(e) => setIsFeatured(e.target.checked)}
                 className="rounded text-brand-600"
               />
-              <span className="font-semibold text-white">Featured Product</span>
+              <span className="font-semibold text-charcoal-900">Featured</span>
             </label>
 
-            <label className="flex items-center gap-2 p-3 rounded-xl bg-charcoal-900 border border-charcoal-800 cursor-pointer">
+            <label className="flex items-center gap-2 p-3 rounded-xl bg-rose-50/40 border border-rose-200 cursor-pointer">
               <input
                 type="checkbox"
                 checked={isBestseller}
                 onChange={(e) => setIsBestseller(e.target.checked)}
                 className="rounded text-brand-600"
               />
-              <span className="font-semibold text-white">Bestseller</span>
+              <span className="font-semibold text-charcoal-900">Bestseller</span>
             </label>
 
-            <label className="flex items-center gap-2 p-3 rounded-xl bg-charcoal-900 border border-charcoal-800 cursor-pointer">
+            <label className="flex items-center gap-2 p-3 rounded-xl bg-rose-50/40 border border-rose-200 cursor-pointer">
               <input
                 type="checkbox"
                 checked={isNewArrival}
                 onChange={(e) => setIsNewArrival(e.target.checked)}
                 className="rounded text-brand-600"
               />
-              <span className="font-semibold text-white">New Arrival</span>
+              <span className="font-semibold text-charcoal-900">New Arrival</span>
             </label>
           </div>
         </div>
@@ -487,14 +493,14 @@ function NewProductAdminContent() {
         <div className="flex justify-end gap-3 pt-4">
           <Link
             href="/admin/products"
-            className="px-6 py-3 rounded-xl border border-charcoal-700 text-charcoal-300 hover:bg-charcoal-800 font-semibold"
+            className="px-6 py-3 rounded-xl border border-rose-200 text-charcoal-700 hover:bg-rose-50 font-semibold transition-colors"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={saving}
-            className="px-8 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-40 text-white font-semibold flex items-center gap-2 shadow-lg"
+            className="px-8 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-semibold flex items-center gap-2 shadow-soft transition-all cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>{saving ? 'Saving Product...' : 'Save Product Record'}</span>
