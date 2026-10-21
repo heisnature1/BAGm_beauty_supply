@@ -4,7 +4,8 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Brand, Category } from '@/types';
 import Link from 'next/link';
-import { ArrowLeft, Save, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Save, AlertCircle, CheckCircle2, UploadCloud, ImageIcon } from 'lucide-react';
+import { ImageUploadZone } from '@/components/admin/ImageUploadZone';
 
 function NewProductAdminContent() {
   const router = useRouter();
@@ -315,33 +316,35 @@ function NewProductAdminContent() {
           </div>
         </div>
 
-        {/* Media & Images */}
+        {/* Media & Images Upload */}
         <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
-          <h3 className="font-serif font-bold text-base text-charcoal-900 pb-2 border-b border-rose-100">3. Product Images (URLs)</h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex items-center justify-between pb-2 border-b border-rose-100">
             <div>
-              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Primary Image URL</label>
-              <input
-                type="url"
-                required
-                placeholder="https://images.unsplash.com/..."
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
-              />
+              <h3 className="font-serif font-bold text-base text-charcoal-900">3. Product Imagery &amp; Media</h3>
+              <p className="text-[11px] text-charcoal-500">Upload high-resolution bottle and packaging photos directly from your device.</p>
             </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-brand-700 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
+              Direct File Upload
+            </span>
+          </div>
 
-            <div>
-              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">Secondary Hover Image URL</label>
-              <input
-                type="url"
-                placeholder="https://images.unsplash.com/..."
-                value={secondaryImageUrl}
-                onChange={(e) => setSecondaryImageUrl(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ImageUploadZone
+              label="Primary Product Image"
+              value={imageUrl}
+              onChange={setImageUrl}
+              folder="products"
+              helperText="Main catalog & showcase image (PNG, JPG, WebP up to 10MB)"
+              required
+            />
+
+            <ImageUploadZone
+              label="Secondary Hover Image"
+              value={secondaryImageUrl}
+              onChange={setSecondaryImageUrl}
+              folder="products"
+              helperText="Secondary angle or lifestyle shot revealed on card hover"
+            />
           </div>
         </div>
 

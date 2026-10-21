@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Brand, Category } from '@/types';
-import { Tags, Plus, Edit, Trash2, X, Sparkles, Building } from 'lucide-react';
+import { Tags, Plus, Edit, Trash2, X, Sparkles, Building, UploadCloud } from 'lucide-react';
+import { ImageUploadZone } from '@/components/admin/ImageUploadZone';
 
 export default function BrandsCategoriesPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -194,13 +195,12 @@ export default function BrandsCategoriesPage() {
               </div>
 
               <div>
-                <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1">Cover Image URL</label>
-                <input
-                  type="url"
-                  placeholder="https://images.unsplash.com/..."
+                <ImageUploadZone
+                  label="Category Cover Banner"
                   value={catImage}
-                  onChange={(e) => setCatImage(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                  onChange={setCatImage}
+                  folder="categories"
+                  helperText="Upload category card image (PNG, JPG, WebP)"
                 />
               </div>
 
@@ -269,6 +269,16 @@ export default function BrandsCategoriesPage() {
                   value={brandDesc}
                   onChange={(e) => setBrandDesc(e.target.value)}
                   className="w-full p-2.5 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                />
+              </div>
+
+              <div>
+                <ImageUploadZone
+                  label="Brand Logo / Emblem"
+                  value={brandLogo}
+                  onChange={setBrandLogo}
+                  folder="brands"
+                  helperText="Upload official brand logo / mark (PNG or JPG)"
                 />
               </div>
 
