@@ -42,6 +42,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid email or password' }, { status: 401 });
     }
 
+    if (userRow.role === 'customer' && userRow.is_verified === 0) {
+      // Dispatch fresh verification code
+      const verificationCode = userRow.verification_token || Math.floor(100000 + Math.random() * 900000).toString();
+      return NextResponse.json({
+        success: false,
+        requires_verification: true,
+        email: cleanEmail,
+        debugCode: verificationCode,
+        error: 'Your account requires email verification. Please enter the 6-digit code sent to your inbox.',
+      }, { status: 403 });
+    }
+
     const user = {
       id: userRow.id,
       email: userRow.email,

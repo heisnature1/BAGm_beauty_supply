@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hashPassword, signToken, AUTH_COOKIE_NAME } from '@/lib/auth';
+import { hashPassword } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { randomUUID } from 'crypto';
 import { syncUserToSupabase, syncSubscriberToSupabase } from '@/lib/supabase';
+import { sendVerificationCodeEmail } from '@/lib/email';
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,18 +21,43 @@ export async function POST(req: NextRequest) {
     const cleanEmail = email.trim().toLowerCase();
     const db = getDb();
 
-    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(cleanEmail);
+    const existing = db.prepare('SELECT id, is_verified FROM users WHERE email = ?').get(cleanEmail) as any;
     if (existing) {
-      return NextResponse.json({ success: false, error: 'An account with this email already exists.' }, { status: 400 });
+      if (existing.is_verified === 1) {
+        return NextResponse.json({ success: false, error: 'An active account with this email already exists. Please log in.' }, { status: 400 });
+      }
+      // If user exists but is unverified, regenerate code and allow them to verify
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const passwordHash = hashPassword(password);
+      const now = new Date().toISOString();
+
+      db.prepare(`
+        UPDATE users
+        SET password_hash = ?, first_name = ?, last_name = ?, phone = ?, verification_token = ?, updated_at = ?
+        WHERE email = ?
+      `).run(passwordHash, first_name.trim(), last_name.trim(), phone ? phone.trim() : null, verificationCode, now, cleanEmail);
+
+      sendVerificationCodeEmail(cleanEmail, verificationCode, first_name.trim()).catch((err) =>
+        console.error('Email verification error:', err)
+      );
+
+      return NextResponse.json({
+        success: true,
+        requires_verification: true,
+        email: cleanEmail,
+        message: 'A fresh 6-digit verification code has been sent to your email.',
+        debugCode: verificationCode,
+      });
     }
 
     const userId = randomUUID();
     const passwordHash = hashPassword(password);
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     const now = new Date().toISOString();
 
     db.prepare(`
-      INSERT INTO users (id, email, password_hash, first_name, last_name, phone, role, is_verified, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO users (id, email, password_hash, first_name, last_name, phone, role, is_verified, verification_token, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       userId,
       cleanEmail,
@@ -40,7 +66,8 @@ export async function POST(req: NextRequest) {
       last_name.trim(),
       phone ? phone.trim() : null,
       'customer',
-      1,
+      0,
+      verificationCode,
       now,
       now
     );
@@ -71,43 +98,20 @@ export async function POST(req: NextRequest) {
       }).catch((err) => console.error('Supabase subscriber background notice:', err));
     }
 
-    const user = {
-      id: userId,
-      email: cleanEmail,
-      first_name: first_name.trim(),
-      last_name: last_name.trim(),
-      phone: phone ? phone.trim() : '',
-      role: 'customer' as const,
-      is_verified: 1,
-      newsletter_subscribed: newsletter ? 1 : 0,
-      created_at: now,
-      updated_at: now,
-    };
+    // Send the 6-digit OTP email
+    sendVerificationCodeEmail(cleanEmail, verificationCode, first_name.trim()).catch((err) =>
+      console.error('Email verification error:', err)
+    );
 
-    const token = signToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      name: `${user.first_name} ${user.last_name}`,
-    });
-
-    const response = NextResponse.json({
+    return NextResponse.json({
       success: true,
-      user,
+      requires_verification: true,
+      email: cleanEmail,
+      message: 'We sent a 6-digit verification code to your email address.',
+      debugCode: verificationCode,
     });
-
-    response.cookies.set({
-      name: AUTH_COOKIE_NAME,
-      value: token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    return response;
   } catch (error: any) {
+    console.error('Registration error:', error);
     return NextResponse.json({ success: false, error: 'Registration failed. Please try again.' }, { status: 500 });
   }
 }
