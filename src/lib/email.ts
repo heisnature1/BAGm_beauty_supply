@@ -1,6 +1,7 @@
 import { getDb } from './db';
 import crypto from 'crypto';
 import { formatGHS, formatDate } from './utils';
+import { getSupabaseAdmin } from './supabase';
 
 export interface EmailOptions {
   to: string;
@@ -15,8 +16,6 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
   const logId = crypto.randomUUID();
   const createdAt = new Date().toISOString();
 
-  // In production, integration with Resend / SendGrid / Postmark / SMTP can be configured via RESEND_API_KEY / SMTP_HOST
-  // If an external key is set, we attempt provider dispatch; otherwise we log and persist to database for full traceability.
   let isDelivered = true;
   let errorMessage: string | null = null;
 
@@ -41,11 +40,11 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
         errorMessage = JSON.stringify(err);
       }
     } else {
-      // Development & Sandbox logger
-      console.log(`[Transactional Email] TO: ${options.to} | SUBJECT: ${options.subject} | TEMPLATE: ${options.template}`);
+      // Sandbox & Live environment logger
+      console.log(`[BAGm Beauty Transactional Email] -> TO: ${options.to} | SUBJECT: ${options.subject} | TEMPLATE: ${options.template}`);
     }
 
-    // Persist to email_logs table for audit & inspection
+    // Persist to local store
     db.prepare(`
       INSERT INTO email_logs (id, recipient, subject, template, status, error_message, body_preview, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -59,6 +58,25 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
       options.html.substring(0, 500) + '...',
       createdAt
     );
+
+    // Sync to Supabase email_logs table for audit & administrator inspection
+    try {
+      const supabase = getSupabaseAdmin();
+      if (supabase) {
+        supabase.from('email_logs').insert({
+          id: logId,
+          recipient: options.to,
+          subject: options.subject,
+          template: options.template,
+          status: isDelivered ? 'sent' : 'failed',
+          error_message: errorMessage,
+          body_preview: options.html.substring(0, 500) + '...',
+          created_at: createdAt,
+        }).then();
+      }
+    } catch (sbErr) {
+      console.error('Supabase email log sync error:', sbErr);
+    }
 
     return {
       success: isDelivered,

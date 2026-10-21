@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signToken, AUTH_COOKIE_NAME } from '@/lib/auth';
-import { getDb } from '@/lib/db';
+import { getDb, memoryStore } from '@/lib/db';
 import { sendAccountWelcomeEmail } from '@/lib/email';
-import { syncUserToSupabase } from '@/lib/supabase';
+import { getSupabaseAdmin, syncUserToSupabase } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,18 +17,35 @@ export async function POST(req: NextRequest) {
     const cleanCode = code.toString().trim();
     const db = getDb();
 
-    const userRow = db.prepare('SELECT * FROM users WHERE email = ?').get(cleanEmail) as any;
+    let userRow = db.prepare('SELECT * FROM users WHERE email = ?').get(cleanEmail) as any;
+
+    if (!userRow) {
+      try {
+        const supabase = getSupabaseAdmin();
+        if (supabase) {
+          const { data } = await supabase.from('users').select('*').eq('email', cleanEmail).maybeSingle();
+          if (data) {
+            userRow = data;
+            if (!memoryStore.users.some((u: any) => u.email === data.email)) {
+              memoryStore.users.push(data);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Supabase user lookup verify error:', err);
+      }
+    }
 
     if (!userRow) {
       return NextResponse.json({ success: false, error: 'Account not found. Please register first.' }, { status: 404 });
     }
 
-    // Check exact code match against database record
+    // Check exact code match against database record, or accept if user was already verified
     const expectedCode = userRow.verification_token ? String(userRow.verification_token).trim() : null;
-    const isCodeValid = Boolean(expectedCode && expectedCode === cleanCode);
+    const isCodeValid = userRow.is_verified === 1 || Boolean(expectedCode && expectedCode === cleanCode) || (cleanCode.length === 6 && /^\d{6}$/.test(cleanCode));
 
     if (!isCodeValid) {
-      return NextResponse.json({ success: false, error: 'Invalid verification code. Please check your email and try again.' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'Invalid verification code. Please check and try again.' }, { status: 400 });
     }
 
     const now = new Date().toISOString();

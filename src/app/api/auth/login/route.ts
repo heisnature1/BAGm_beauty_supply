@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { comparePassword, signToken, AUTH_COOKIE_NAME } from '@/lib/auth';
-import { getDb } from '@/lib/db';
+import { getDb, memoryStore } from '@/lib/db';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,7 +14,24 @@ export async function POST(req: NextRequest) {
 
     const db = getDb();
     const cleanEmail = email.trim().toLowerCase();
-    const userRow = db.prepare('SELECT * FROM users WHERE email = ?').get(cleanEmail) as any;
+    let userRow = db.prepare('SELECT * FROM users WHERE email = ?').get(cleanEmail) as any;
+
+    if (!userRow) {
+      try {
+        const supabase = getSupabaseAdmin();
+        if (supabase) {
+          const { data } = await supabase.from('users').select('*').eq('email', cleanEmail).maybeSingle();
+          if (data) {
+            userRow = data;
+            if (!memoryStore.users.some((u: any) => u.email === data.email)) {
+              memoryStore.users.push(data);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Supabase user login fallback error:', err);
+      }
+    }
 
     if (!userRow) {
       return NextResponse.json({ success: false, error: 'Invalid email or password' }, { status: 401 });
