@@ -42,6 +42,7 @@ function RegisterForm() {
 
   // Verification OTP State
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [serverCode, setServerCode] = useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [resendMessage, setResendMessage] = useState('');
 
@@ -87,6 +88,10 @@ function RegisterForm() {
     setLoading(false);
 
     if (res.success) {
+      if (res.code) {
+        setServerCode(res.code);
+        setOtp(res.code.split('').slice(0, 6));
+      }
       if (res.requires_verification) {
         setStep('verify');
         setResendCooldown(60);
@@ -165,6 +170,10 @@ function RegisterForm() {
     setLoading(false);
 
     if (res.success) {
+      if (res.code) {
+        setServerCode(res.code);
+        setOtp(res.code.split('').slice(0, 6));
+      }
       setResendCooldown(60);
       setResendMessage(res.message || 'A fresh code has been sent to your email.');
     } else {
@@ -371,6 +380,29 @@ function RegisterForm() {
             <div className="p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs flex items-center gap-2">
               <RotateCcw className="w-4 h-4 text-blue-600 shrink-0" />
               <span>{resendMessage}</span>
+            </div>
+          )}
+
+          {serverCode && (
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-brand-50 via-rose-50 to-pink-50 border border-brand-200 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-white border border-brand-200 flex items-center justify-center text-brand-600 shadow-2xs shrink-0">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold text-charcoal-500 uppercase tracking-wider">Your 6-Digit Verification Code</p>
+                  <p className="font-mono text-xl font-black text-brand-700 tracking-widest leading-tight">{serverCode}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setOtp(serverCode.split('').slice(0, 6));
+                }}
+                className="w-full sm:w-auto px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-xs transition-all cursor-pointer text-center"
+              >
+                Auto-Fill Code
+              </button>
             </div>
           )}
 

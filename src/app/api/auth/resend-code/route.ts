@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      code: verificationCode,
       message: 'A fresh 6-digit verification code has been dispatched to your email.',
     });
   } catch (error: any) {

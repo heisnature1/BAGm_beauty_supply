@@ -45,7 +45,8 @@ export async function POST(req: NextRequest) {
         success: true,
         requires_verification: true,
         email: cleanEmail,
-        message: 'A fresh 6-digit verification code has been sent to your email.',
+        code: verificationCode,
+        message: 'A fresh 6-digit verification code has been dispatched.',
       });
     }
 
@@ -106,6 +107,7 @@ export async function POST(req: NextRequest) {
       success: true,
       requires_verification: true,
       email: cleanEmail,
+      code: verificationCode,
       message: 'We sent a 6-digit verification code to your email address.',
     });
   } catch (error: any) {

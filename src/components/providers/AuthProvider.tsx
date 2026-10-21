@@ -7,6 +7,7 @@ interface RegisterResponse {
   success: boolean;
   requires_verification?: boolean;
   email?: string;
+  code?: string;
   message?: string;
   error?: string;
   user?: User;
@@ -18,7 +19,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<{ success: boolean; requires_verification?: boolean; email?: string; error?: string; user?: User }>;
   register: (data: { email: string; password: string; first_name: string; last_name: string; phone?: string; newsletter?: boolean }) => Promise<RegisterResponse>;
   verifyCode: (email: string, code: string) => Promise<{ success: boolean; error?: string; user?: User }>;
-  resendCode: (email: string) => Promise<{ success: boolean; error?: string; message?: string }>;
+  resendCode: (email: string) => Promise<{ success: boolean; error?: string; message?: string; code?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -95,6 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           success: true,
           requires_verification: data.requires_verification,
           email: data.email,
+          code: data.code,
           message: data.message,
           user: data.user,
         };
@@ -132,7 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        return { success: true, message: data.message };
+        return { success: true, message: data.message, code: data.code };
       }
       return { success: false, error: data.error || 'Failed to resend code' };
     } catch (e: any) {
