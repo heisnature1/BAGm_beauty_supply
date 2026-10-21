@@ -53,15 +53,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid email or password' }, { status: 401 });
     }
 
-    if (userRow.role === 'customer' && userRow.is_verified === 0) {
-      return NextResponse.json({
-        success: false,
-        requires_verification: true,
-        email: cleanEmail,
-        error: 'Your account requires email verification. Please enter the 6-digit code sent to your inbox.',
-      }, { status: 403 });
-    }
-
     const user = {
       id: userRow.id,
       email: userRow.email,
@@ -69,7 +60,7 @@ export async function POST(req: NextRequest) {
       last_name: userRow.last_name,
       phone: userRow.phone,
       role: userRow.role,
-      is_verified: userRow.is_verified,
+      is_verified: 1,
       newsletter_subscribed: userRow.newsletter_subscribed,
       created_at: userRow.created_at,
       updated_at: userRow.updated_at,

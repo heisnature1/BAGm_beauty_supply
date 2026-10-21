@@ -25,7 +25,6 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setRequiresVerification(false);
 
     const res = await login(email.trim(), password);
     if (res.success) {
@@ -35,9 +34,6 @@ function LoginForm() {
         router.push(redirect);
       }
     } else {
-      if (res.requires_verification) {
-        setRequiresVerification(true);
-      }
       setError(res.error || 'Invalid email or password');
       setLoading(false);
     }
@@ -58,20 +54,9 @@ function LoginForm() {
       </div>
 
       {error && (
-        <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
-            <span>{error}</span>
-          </div>
-          {requiresVerification && (
-            <Link
-              href={`/account/register?step=verify&email=${encodeURIComponent(email)}&redirect=${encodeURIComponent(redirect)}`}
-              className="mt-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs transition-colors self-start"
-            >
-              <span>Enter 6-Digit Verification Code</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          )}
+        <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
