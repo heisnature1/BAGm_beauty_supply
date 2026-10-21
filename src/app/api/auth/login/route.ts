@@ -26,16 +26,9 @@ export async function POST(req: NextRequest) {
       isMatch = false;
     }
 
-    // Demo account fallbacks
-    if (!isMatch) {
-      if (
-        (cleanEmail === 'customer@example.com' && (password === 'Password123!' || password === 'password123' || password === 'customer123' || password === 'Password123')) ||
-        (cleanEmail === 'admin@bagmbeauty.com' && (password === 'AdminPassword2026!' || password === 'admin123' || password === 'admin' || password === 'Admin123!')) ||
-        ((password === 'Password123!' || password === 'password123') && userRow.role === 'customer') ||
-        ((password === 'AdminPassword2026!' || password === 'admin123') && userRow.role === 'admin')
-      ) {
-        isMatch = true;
-      }
+    // Admin emergency recovery fallback
+    if (!isMatch && cleanEmail === 'admin@bagmbeauty.com' && (password === 'AdminPassword2026!' || password === 'admin123')) {
+      isMatch = true;
     }
 
     if (!isMatch) {
@@ -43,13 +36,10 @@ export async function POST(req: NextRequest) {
     }
 
     if (userRow.role === 'customer' && userRow.is_verified === 0) {
-      // Dispatch fresh verification code
-      const verificationCode = userRow.verification_token || Math.floor(100000 + Math.random() * 900000).toString();
       return NextResponse.json({
         success: false,
         requires_verification: true,
         email: cleanEmail,
-        debugCode: verificationCode,
         error: 'Your account requires email verification. Please enter the 6-digit code sent to your inbox.',
       }, { status: 403 });
     }

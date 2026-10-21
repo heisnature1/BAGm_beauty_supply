@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { Lock, Mail, ArrowRight, AlertCircle, ShieldCheck, Sparkles } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle, ShieldCheck } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -19,19 +19,6 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const fillCustomerCredentials = () => {
-    setEmail('customer@example.com');
-    setPassword('Password123!');
-    setError('');
-  };
-
-  const fillAdminCredentials = () => {
-    setEmail('admin@bagmbeauty.com');
-    setPassword('AdminPassword2026!');
-    setError('');
-  };
-
   const [requiresVerification, setRequiresVerification] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,7 +27,7 @@ function LoginForm() {
     setError('');
     setRequiresVerification(false);
 
-    const res = await login(email, password);
+    const res = await login(email.trim(), password);
     if (res.success) {
       if (res.user?.role === 'admin' && redirect === '/account') {
         router.push('/admin');
@@ -146,32 +133,6 @@ function LoginForm() {
           )}
         </button>
       </form>
-
-      {/* Demo Credentials Quick-Fill Card */}
-      <div className="p-4 bg-brand-50/60 rounded-2xl border border-brand-200/80 text-xs text-charcoal-700 space-y-2.5">
-        <div className="flex items-center justify-between">
-          <span className="font-bold text-charcoal-900 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-gold-500" />
-            <span>Quick Demo Sign-In:</span>
-          </span>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <button
-            type="button"
-            onClick={fillCustomerCredentials}
-            className="flex-1 py-2 px-3 rounded-xl bg-white hover:bg-rose-50 border border-brand-200 text-[11px] font-semibold text-brand-700 shadow-2xs transition-colors flex items-center justify-center gap-1"
-          >
-            <span>👤 Customer: Akosua Mensah</span>
-          </button>
-          <button
-            type="button"
-            onClick={fillAdminCredentials}
-            className="flex-1 py-2 px-3 rounded-xl bg-white hover:bg-rose-50 border border-brand-200 text-[11px] font-semibold text-charcoal-800 shadow-2xs transition-colors flex items-center justify-center gap-1"
-          >
-            <span>🔑 Admin: Administrator</span>
-          </button>
-        </div>
-      </div>
 
       <div className="pt-2 border-t border-gray-100 text-center space-y-3">
         <p className="text-xs text-charcoal-500">

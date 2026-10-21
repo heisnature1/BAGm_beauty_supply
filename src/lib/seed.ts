@@ -55,9 +55,8 @@ export function seedDatabase() {
     `).run();
   }
 
-  // 2. Admin & Demo Customer
+  // 2. Administrator Account
   const adminPasswordHash = bcrypt.hashSync('AdminPassword2026!', 10);
-  const customerPasswordHash = bcrypt.hashSync('Password123!', 10);
   const now = new Date().toISOString();
 
   const existingAdmin = db.prepare('SELECT id FROM users WHERE email = ?').get('admin@bagmbeauty.com');
@@ -75,45 +74,6 @@ export function seedDatabase() {
       'admin',
       1,
       now,
-      now
-    );
-  }
-
-  const existingCustomer = db.prepare('SELECT id FROM users WHERE email = ?').get('customer@example.com');
-  let customerId = 'cust-001';
-  if (!existingCustomer) {
-    db.prepare(`
-      INSERT INTO users (id, email, password_hash, first_name, last_name, phone, role, is_verified, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      customerId,
-      'customer@example.com',
-      customerPasswordHash,
-      'Akosua',
-      'Mensah',
-      '+233 24 987 6543',
-      'customer',
-      1,
-      now,
-      now
-    );
-
-    // Add address for demo customer
-    db.prepare(`
-      INSERT INTO addresses (id, user_id, title, first_name, last_name, phone, street_address, landmark_or_gps, city, region, is_default, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      'addr-001',
-      customerId,
-      'Home',
-      'Akosua',
-      'Mensah',
-      '+233 24 987 6543',
-      'House 14, Boundary Road',
-      'Near A&C Mall, GA-183-9022',
-      'East Legon, Accra',
-      'Greater Accra',
-      1,
       now
     );
   }

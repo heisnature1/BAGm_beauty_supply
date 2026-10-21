@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'A fresh 6-digit verification code has been dispatched to your email.',
-      debugCode: verificationCode,
     });
   } catch (error: any) {
     console.error('Resend code error:', error);

@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
         requires_verification: true,
         email: cleanEmail,
         message: 'A fresh 6-digit verification code has been sent to your email.',
-        debugCode: verificationCode,
       });
     }
 
@@ -108,7 +107,6 @@ export async function POST(req: NextRequest) {
       requires_verification: true,
       email: cleanEmail,
       message: 'We sent a 6-digit verification code to your email address.',
-      debugCode: verificationCode,
     });
   } catch (error: any) {
     console.error('Registration error:', error);
