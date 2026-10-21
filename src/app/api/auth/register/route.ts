@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { hashPassword, signToken, AUTH_COOKIE_NAME } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { randomUUID } from 'crypto';
+import { syncUserToSupabase, syncSubscriberToSupabase } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,11 +45,30 @@ export async function POST(req: NextRequest) {
       now
     );
 
+    // Sync to Supabase Auth & PostgreSQL
+    syncUserToSupabase({
+      id: userId,
+      email: cleanEmail,
+      password_hash: passwordHash,
+      first_name: first_name.trim(),
+      last_name: last_name.trim(),
+      phone: phone ? phone.trim() : null,
+      role: 'customer',
+      password,
+    }).catch((err) => console.error('Supabase sync background notice:', err));
+
     if (newsletter) {
+      const subId = randomUUID();
       db.prepare(`
         INSERT INTO subscribers (id, email, status, created_at)
         VALUES (?, ?, ?, ?)
-      `).run(randomUUID(), cleanEmail, 'subscribed', now);
+      `).run(subId, cleanEmail, 'subscribed', now);
+
+      syncSubscriberToSupabase({
+        id: subId,
+        email: cleanEmail,
+        status: 'subscribed',
+      }).catch((err) => console.error('Supabase subscriber background notice:', err));
     }
 
     const user = {

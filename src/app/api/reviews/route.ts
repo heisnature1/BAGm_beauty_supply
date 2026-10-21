@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUserFromRequest } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { randomUUID } from 'crypto';
+import { syncReviewToSupabase } from '@/lib/supabase';
 
 export async function GET(req: NextRequest) {
   try {
@@ -72,6 +73,12 @@ export async function POST(req: NextRequest) {
       reviewRecord.status,
       reviewRecord.created_at
     );
+
+    // Sync review to Supabase PostgreSQL
+    syncReviewToSupabase({
+      ...reviewRecord,
+      author_name: reviewRecord.user_name,
+    }).catch((err) => console.error('Supabase review sync notice:', err));
 
     return NextResponse.json({
       success: true,

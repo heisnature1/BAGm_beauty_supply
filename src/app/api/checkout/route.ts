@@ -5,6 +5,7 @@ import { generateOrderNumber } from '@/lib/utils';
 import { initializeMoolrePayment, getMoolreBaseUrl } from '@/lib/moolre';
 import { initializePaystackPayment, getPaystackSecretKey } from '@/lib/paystack';
 import { sendOrderConfirmationEmail, sendAdminNewOrderAlert, sendLowStockAlert } from '@/lib/email';
+import { syncOrderToSupabase } from '@/lib/supabase';
 import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
@@ -237,6 +238,12 @@ export async function POST(req: NextRequest) {
     checkoutTransaction();
 
     const orderRow = db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId) as any;
+
+    // Sync order to Supabase PostgreSQL database
+    syncOrderToSupabase(orderRow, validatedItems).catch((err) =>
+      console.error('Supabase order background sync notice:', err)
+    );
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || req.headers.get('origin') || 'http://localhost:3000';
 
     let authorizationUrl: string | null = null;
