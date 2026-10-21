@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Sparkles, ArrowRight, CheckCircle2, ShieldAlert, Heart, Sun, Droplets, Zap } from 'lucide-react';
+import { useGsapStaggerReveal } from '@/lib/gsap';
 
 const PREVIEW_ROUTINES = [
   {
@@ -57,6 +58,11 @@ const PREVIEW_ROUTINES = [
 
 export function RoutineFinderTeaser() {
   const [selectedProfile, setSelectedProfile] = useState(PREVIEW_ROUTINES[0]);
+  const stepsContainerRef = useGsapStaggerReveal('.gsap-routine-step', [selectedProfile.id], {
+    stagger: 0.05,
+    duration: 0.5,
+    y: 12,
+  });
 
   return (
     <section className="py-16 sm:py-20 bg-gradient-to-r from-blush via-blush-light to-brand-50/70 border-y border-brand-100">
@@ -147,9 +153,9 @@ export function RoutineFinderTeaser() {
               </div>
 
               {/* Step By Step List */}
-              <div className="space-y-2 pt-2">
+              <div ref={stepsContainerRef} className="space-y-2 pt-2">
                 {selectedProfile.steps.map((st, i) => (
-                  <div key={i} className="bg-white p-3 rounded-xl border border-brand-100 shadow-2xs flex items-center justify-between">
+                  <div key={i} className="gsap-routine-step bg-white p-3 rounded-xl border border-brand-100 shadow-2xs flex items-center justify-between">
                     <span className="text-xs font-bold text-brand-700">{st.step}</span>
                     <span className="text-xs text-charcoal-800 font-medium truncate max-w-[190px]">{st.desc}</span>
                   </div>

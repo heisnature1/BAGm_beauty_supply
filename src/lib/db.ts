@@ -700,6 +700,13 @@ function createUniversalDbClient() {
             return { count: list.length, total: list.length };
           }
 
+          // Count Users
+          if (lower.includes('count(id) as count from users') || lower.includes('count(*) as count from users') || (lower.includes('count') && lower.includes('from users'))) {
+            const role = lower.includes("role = 'customer'") ? 'customer' : lower.includes("role = 'admin'") ? 'admin' : null;
+            const count = role ? memoryStore.users.filter((u) => u.role === role).length : memoryStore.users.length;
+            return { count, total: count };
+          }
+
           // Single Users
           if (lower.includes('from users where email = ?')) {
             return memoryStore.users.find((u) => u.email.toLowerCase() === String(flat[0]).toLowerCase());

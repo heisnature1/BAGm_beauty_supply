@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Category } from '@/types';
 import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { useGsapStaggerReveal } from '@/lib/gsap';
 
 const CATEGORY_BADGES: { [slug: string]: string } = {
   'skincare': '👑 Most Popular',
@@ -17,6 +18,12 @@ const CATEGORY_BADGES: { [slug: string]: string } = {
 };
 
 export function CategoryGrid({ categories }: { categories: Category[] }) {
+  const gridRef = useGsapStaggerReveal('.gsap-category-card', [categories], {
+    stagger: 0.08,
+    duration: 0.7,
+    y: 20,
+  });
+
   return (
     <section className="py-16 sm:py-20 bg-gradient-to-b from-white via-blush-light/30 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,14 +55,14 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
         </div>
 
         {/* Category Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {categories.map((cat) => {
             const badge = CATEGORY_BADGES[cat.slug] || '✨ Curated';
             return (
               <Link
                 key={cat.id}
                 href={`/categories/${cat.slug}`}
-                className="group relative rounded-3xl overflow-hidden aspect-[4/5] bg-blush-light border border-brand-100 shadow-card hover:shadow-luxury-hover transition-all duration-500 flex flex-col justify-between p-4 sm:p-5"
+                className="gsap-category-card group relative rounded-3xl overflow-hidden aspect-[4/5] bg-blush-light border border-brand-100 shadow-card hover:shadow-luxury-hover transition-all duration-500 flex flex-col justify-between p-4 sm:p-5"
               >
                 {/* Background Image with Hover Zoom */}
                 <img
