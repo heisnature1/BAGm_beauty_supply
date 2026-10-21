@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Save, CheckCircle2, Sliders, Shield, Truck, CreditCard, Bell } from 'lucide-react';
+import { Save, CheckCircle2, Sliders, Shield, Truck, CreditCard, Bell, KeyRound, AlertCircle, Lock } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState({
@@ -27,6 +27,51 @@ export default function AdminSettingsPage() {
 
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Password Change State
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match.');
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordError('New password must be at least 8 characters long.');
+      return;
+    }
+
+    setChangingPassword(true);
+    try {
+      const res = await fetch('/api/admin/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setPasswordSuccess(data.message || 'Administrator password updated successfully!');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        setPasswordError(data.error || 'Failed to update administrator password.');
+      }
+    } catch (err: any) {
+      setPasswordError(err?.message || 'Error updating password.');
+    } finally {
+      setChangingPassword(false);
+    }
+  };
 
   const loadSettings = async () => {
     try {
@@ -349,6 +394,98 @@ export default function AdminSettingsPage() {
           <span>{saving ? 'Saving Settings...' : 'Save Configuration Changes'}</span>
         </button>
       </form>
+
+      {/* Administrator Authentication & Security */}
+      <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card space-y-4">
+        <div className="flex items-center gap-2 pb-2 border-b border-rose-100">
+          <KeyRound className="w-4 h-4 text-brand-600" />
+          <h3 className="font-serif font-bold text-base text-charcoal-900">Administrator Password &amp; Access</h3>
+        </div>
+
+        <p className="text-xs text-charcoal-500">
+          Update the master administrative password used to authenticate into the BAGm operations portal.
+        </p>
+
+        {passwordSuccess && (
+          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>{passwordSuccess}</span>
+          </div>
+        )}
+
+        {passwordError && (
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{passwordError}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleChangePassword} className="space-y-4 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                Current Password <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <Lock className="w-3.5 h-3.5 text-charcoal-400 absolute left-3 top-3" />
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••••••"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full p-2.5 pl-9 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                New Password <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <Lock className="w-3.5 h-3.5 text-charcoal-400 absolute left-3 top-3" />
+                <input
+                  type="password"
+                  required
+                  placeholder="At least 8 chars"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full p-2.5 pl-9 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="font-bold uppercase text-[11px] text-charcoal-700 block mb-1.5">
+                Confirm New Password <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <Lock className="w-3.5 h-3.5 text-charcoal-400 absolute left-3 top-3" />
+                <input
+                  type="password"
+                  required
+                  placeholder="Re-type new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full p-2.5 pl-9 rounded-xl bg-rose-50/30 border border-rose-200 text-charcoal-900 focus:outline-none focus:bg-white focus:border-brand-600 transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-2">
+            <button
+              type="submit"
+              disabled={changingPassword || !currentPassword || !newPassword}
+              className="py-2.5 px-6 bg-charcoal-900 hover:bg-black disabled:opacity-40 text-white rounded-xl font-semibold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+            >
+              <KeyRound className="w-3.5 h-3.5 text-gold-400" />
+              <span>{changingPassword ? 'Updating Password...' : 'Update Admin Password'}</span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
