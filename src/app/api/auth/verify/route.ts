@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Account not found. Please register first.' }, { status: 404 });
     }
 
-    // Check code match (or universal demo code for testing)
+    // Check exact code match against database record
     const expectedCode = userRow.verification_token ? String(userRow.verification_token).trim() : null;
-    const isCodeValid = (expectedCode && expectedCode === cleanCode) || cleanCode === '123456';
+    const isCodeValid = Boolean(expectedCode && expectedCode === cleanCode);
 
     if (!isCodeValid) {
       return NextResponse.json({ success: false, error: 'Invalid verification code. Please check your email and try again.' }, { status: 400 });

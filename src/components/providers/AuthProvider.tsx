@@ -8,7 +8,6 @@ interface RegisterResponse {
   requires_verification?: boolean;
   email?: string;
   message?: string;
-  debugCode?: string;
   error?: string;
   user?: User;
 }
@@ -16,10 +15,10 @@ interface RegisterResponse {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; requires_verification?: boolean; email?: string; debugCode?: string; error?: string; user?: User }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; requires_verification?: boolean; email?: string; error?: string; user?: User }>;
   register: (data: { email: string; password: string; first_name: string; last_name: string; phone?: string; newsletter?: boolean }) => Promise<RegisterResponse>;
   verifyCode: (email: string, code: string) => Promise<{ success: boolean; error?: string; user?: User }>;
-  resendCode: (email: string) => Promise<{ success: boolean; error?: string; message?: string; debugCode?: string }>;
+  resendCode: (email: string) => Promise<{ success: boolean; error?: string; message?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -66,7 +65,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         success: false,
         requires_verification: data.requires_verification,
         email: data.email,
-        debugCode: data.debugCode,
         error: data.error || 'Invalid credentials',
       };
     } catch (e: any) {
@@ -98,7 +96,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           requires_verification: data.requires_verification,
           email: data.email,
           message: data.message,
-          debugCode: data.debugCode,
           user: data.user,
         };
       }
@@ -135,7 +132,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        return { success: true, message: data.message, debugCode: data.debugCode };
+        return { success: true, message: data.message };
       }
       return { success: false, error: data.error || 'Failed to resend code' };
     } catch (e: any) {

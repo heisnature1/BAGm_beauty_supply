@@ -44,7 +44,6 @@ function RegisterForm() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [resendMessage, setResendMessage] = useState('');
-  const [debugCodeNotice, setDebugCodeNotice] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -91,9 +90,6 @@ function RegisterForm() {
       if (res.requires_verification) {
         setStep('verify');
         setResendCooldown(60);
-        if (res.debugCode) {
-          setDebugCodeNotice(res.debugCode);
-        }
         setSuccessMessage(res.message || 'Verification code sent to your email.');
       } else {
         router.push(redirect);
@@ -171,9 +167,6 @@ function RegisterForm() {
     if (res.success) {
       setResendCooldown(60);
       setResendMessage(res.message || 'A fresh code has been sent to your email.');
-      if (res.debugCode) {
-        setDebugCodeNotice(res.debugCode);
-      }
     } else {
       setError(res.error || 'Failed to resend code. Please try again.');
     }
@@ -359,27 +352,6 @@ function RegisterForm() {
               <span>{email}</span>
             </div>
           </div>
-
-          {debugCodeNotice && (
-            <div className="p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs flex items-center justify-between gap-2 shadow-xs">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
-                <span>
-                  Demo Mode Code: <strong className="font-mono text-sm tracking-widest">{debugCodeNotice}</strong>
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  const digits = debugCodeNotice.split('').slice(0, 6);
-                  setOtp(digits);
-                }}
-                className="px-2.5 py-1 bg-amber-200 hover:bg-amber-300 rounded-lg text-[11px] font-bold text-amber-900 transition-colors"
-              >
-                Auto-Fill
-              </button>
-            </div>
-          )}
 
           {error && (
             <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
