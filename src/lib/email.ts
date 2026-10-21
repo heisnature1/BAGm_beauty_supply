@@ -297,3 +297,63 @@ export async function sendLowStockAlert(productName: string, sku: string, curren
     html: wrapEmailTemplate(content, `Low stock alert for ${productName}`),
   });
 }
+
+export async function sendVerificationCodeEmail(email: string, code: string, name: string) {
+  const content = `
+    <h1 class="heading">Verify Your Customer Account ✨</h1>
+    <p class="text">Hello ${name || 'Beauty Lover'},</p>
+    <p class="text">Thank you for creating your account with <strong>BAGm Beauty Supply</strong>. Please use the 6-digit verification code below to verify your email address and activate your account:</p>
+    
+    <div style="text-align: center; margin: 32px 0;">
+      <div style="display: inline-block; background: #FFF5F7; border: 2px dashed #BE185D; border-radius: 12px; padding: 18px 36px;">
+        <span style="font-family: 'Courier New', Courier, monospace; font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #9D174D;">${code}</span>
+      </div>
+    </div>
+
+    <p class="text" style="font-size: 13px; color: #6B7280; text-align: center;">
+      ⏱️ This code will expire in <strong>15 minutes</strong>. If you did not request this account, please disregard this message.
+    </p>
+
+    <div class="card" style="margin-top: 28px;">
+      <p style="margin: 0; font-size: 13px; color: #4B5563;">
+        <strong>Why verify?</strong> Verifying your email secures your personal order history, allows express checkout with Mobile Money, and enables easy order tracking across Greater Accra and Ghana.
+      </p>
+    </div>
+  `;
+
+  return sendEmail({
+    to: email,
+    subject: `${code} is your BAGm Beauty Supply verification code`,
+    template: 'account_verification_code',
+    html: wrapEmailTemplate(content, `Your 6-digit verification code: ${code}`),
+  });
+}
+
+export async function sendAccountWelcomeEmail(email: string, name: string) {
+  const content = `
+    <h1 class="heading">Welcome to the BAGm Beauty Family! 🌸👑</h1>
+    <p class="text">Hello ${name || 'Beauty Lover'},</p>
+    <p class="text">Your customer account is now officially verified and active! We are thrilled to welcome you to Ghana’s premier luxury beauty and skincare destination.</p>
+    
+    <div class="card">
+      <h3 style="margin: 0 0 8px 0; color: #9D174D; font-size: 16px;">What you can do with your account:</h3>
+      <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #4B5563; line-height: 1.6;">
+        <li>✨ <strong>Instant Checkout:</strong> Seamless Mobile Money (MTN, Telecel, AT) and Card checkout.</li>
+        <li>🚚 <strong>Live Order Tracking:</strong> Track Accra delivery timelines directly from your dashboard.</li>
+        <li>⭐ <strong>Curated Routine Finder:</strong> Save tailored skin profiles and recommended formulations.</li>
+        <li>💬 <strong>Verified Reviews:</strong> Share authentic skincare ratings and reviews with the community.</li>
+      </ul>
+    </div>
+
+    <div style="text-align: center; margin: 32px 0;">
+      <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/shop" class="button">Explore Complete Catalog</a>
+    </div>
+  `;
+
+  return sendEmail({
+    to: email,
+    subject: `Welcome to BAGm Beauty Supply — Your Account is Verified! ✨`,
+    template: 'account_welcome',
+    html: wrapEmailTemplate(content, `Your BAGm Beauty Supply account is ready`),
+  });
+}

@@ -352,24 +352,52 @@ function createUniversalDbClient() {
 
           // 9. Users mutations
           else if (lower.startsWith('insert into users')) {
-            const [id, email, password_hash, first_name, last_name, phone, role, is_verified, created_at, updated_at] = flat;
-            memoryStore.users.push({
-              id,
-              email,
-              password_hash,
-              first_name,
-              last_name,
-              phone,
-              role: role || 'customer',
-              is_verified: is_verified !== undefined ? is_verified : 1,
-              created_at: created_at || new Date().toISOString(),
-              updated_at: updated_at || new Date().toISOString(),
-            });
+            const obj: any = {};
+            if (sql.includes('(') && sql.includes('VALUES')) {
+              const colPart = sql.slice(sql.indexOf('(') + 1, sql.indexOf(')'));
+              const cols = colPart.split(',').map((c: string) => c.trim().toLowerCase());
+              cols.forEach((col: string, idx: number) => {
+                obj[col] = flat[idx];
+              });
+            }
+            const existingIdx = memoryStore.users.findIndex(
+              (u) => u.email.toLowerCase() === String(obj.email || flat[1]).toLowerCase()
+            );
+            const userRecord = {
+              id: obj.id || flat[0],
+              email: (obj.email || flat[1] || '').toLowerCase().trim(),
+              password_hash: obj.password_hash || flat[2],
+              first_name: obj.first_name || flat[3] || '',
+              last_name: obj.last_name || flat[4] || '',
+              phone: obj.phone !== undefined ? obj.phone : flat[5],
+              role: obj.role || flat[6] || 'customer',
+              is_verified: obj.is_verified !== undefined ? obj.is_verified : (flat[7] !== undefined ? flat[7] : 1),
+              verification_token: obj.verification_token !== undefined ? obj.verification_token : (flat[8] || null),
+              reset_token_expiry: obj.reset_token_expiry !== undefined ? obj.reset_token_expiry : (flat[9] || null),
+              created_at: obj.created_at || new Date().toISOString(),
+              updated_at: obj.updated_at || new Date().toISOString(),
+            };
+            if (existingIdx >= 0) {
+              memoryStore.users[existingIdx] = { ...memoryStore.users[existingIdx], ...userRecord };
+            } else {
+              memoryStore.users.push(userRecord);
+            }
           } else if (lower.startsWith('update users')) {
-            const id = flat[flat.length - 1];
-            const user = memoryStore.users.find((u) => u.id === id || u.email === id);
-            if (user && flat[0]) {
-              user.password_hash = flat[0];
+            const target = String(flat[flat.length - 1]).toLowerCase();
+            const user = memoryStore.users.find(
+              (u) => (u.id && u.id.toLowerCase() === target) || (u.email && u.email.toLowerCase() === target)
+            );
+            if (user) {
+              if (lower.includes('is_verified = 1') || lower.includes('is_verified = ?')) {
+                user.is_verified = 1;
+                user.verification_token = null;
+              }
+              if (lower.includes('verification_token = ?')) {
+                user.verification_token = flat[0];
+              }
+              if (lower.includes('password_hash = ?')) {
+                user.password_hash = flat[0];
+              }
               user.updated_at = new Date().toISOString();
             }
           }
