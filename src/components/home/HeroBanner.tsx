@@ -12,10 +12,13 @@ import {
   CreditCard,
 } from 'lucide-react';
 import { StoreSettings } from '@/types';
+import { useGsapHeroReveal } from '@/lib/gsap';
 
 export function HeroBanner({ settings }: { settings: StoreSettings }) {
+  const heroRef = useGsapHeroReveal();
+
   return (
-    <section className="relative w-full overflow-hidden bg-charcoal-950">
+    <section ref={heroRef} className="relative w-full overflow-hidden bg-charcoal-950">
       {/* Full-Bleed Edge-to-Edge Hero Video Background */}
       <div className="relative w-full min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] xl:min-h-[780px] flex items-center justify-center">
         {/* HTML5 Muted Looping Video without any pause controls */}
@@ -38,13 +41,13 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
         {/* Direct Text & Action Overlay on Video */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-28 text-center text-white space-y-6">
           {/* Welcome Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md backdrop-blur-md animate-fade-in">
+          <div className="gsap-hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-gold-300 shrink-0" />
             <span>Welcome to BAGm Beauty Supply</span>
           </div>
 
           {/* Main Headline & Destination Subheading */}
-          <div className="space-y-2">
+          <div className="gsap-hero-heading space-y-2">
             <span className="text-xs sm:text-sm lg:text-base font-bold uppercase tracking-[0.25em] text-gold-300 block drop-shadow-md">
               Ghana’s Premier Luxury Beauty &amp; Skincare Destination
             </span>
@@ -54,7 +57,7 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
           </div>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base lg:text-xl text-white/95 max-w-2xl mx-auto font-normal leading-relaxed drop-shadow-md">
+          <p className="gsap-hero-subtitle text-sm sm:text-base lg:text-xl text-white/95 max-w-2xl mx-auto font-normal leading-relaxed drop-shadow-md">
             {settings.hero_subtitle ||
               'Discover curated beauty and skincare essentials selected to help you build a routine that feels right for you.'}
           </p>
@@ -63,7 +66,7 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/shop"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base transition-all shadow-luxury hover:shadow-luxury-hover hover:scale-102 active:scale-98"
+              className="gsap-hero-cta w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base transition-all shadow-luxury hover:shadow-luxury-hover hover:scale-102 active:scale-98"
             >
               <ShoppingBag className="w-4 h-4 text-white" />
               <span>Shop With Us</span>
@@ -72,7 +75,7 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
 
             <Link
               href="/routine-finder"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-white/20 hover:bg-white/30 text-white border border-white/40 font-semibold text-xs sm:text-sm sm:text-base backdrop-blur-md transition-all shadow-md hover:scale-102 active:scale-98"
+              className="gsap-hero-cta w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-white/20 hover:bg-white/30 text-white border border-white/40 font-semibold text-xs sm:text-sm sm:text-base backdrop-blur-md transition-all shadow-md hover:scale-102 active:scale-98"
             >
               <Sparkles className="w-4 h-4 text-gold-300" />
               <span>Take Skincare Routine Quiz</span>
@@ -83,7 +86,7 @@ export function HeroBanner({ settings }: { settings: StoreSettings }) {
       </div>
 
       {/* Micro Trust Proof Ribbon Beneath Full-Bleed Video Banner */}
-      <div className="bg-gradient-to-r from-blush via-white to-blush border-y border-brand-200/80 py-4">
+      <div className="gsap-hero-trust bg-gradient-to-r from-blush via-white to-blush border-y border-brand-200/80 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm text-charcoal-800 font-bold">
             <div className="flex items-center gap-2.5 p-2 sm:p-2.5">

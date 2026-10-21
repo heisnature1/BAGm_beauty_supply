@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Product } from '@/types';
 import { ProductCard } from '../product/ProductCard';
 import { ArrowRight, Sparkles, Flame, Sparkle, Heart, Stethoscope } from 'lucide-react';
+import { useGsapStaggerReveal } from '@/lib/gsap';
 
 interface FeaturedSectionProps {
   featured: Product[];
@@ -39,6 +40,12 @@ export function FeaturedSection({ featured, bestsellers, newArrivals }: Featured
   };
 
   const displayedProducts = getFilteredProducts();
+
+  const productsGridRef = useGsapStaggerReveal('.gsap-product-item', [activeTab], {
+    stagger: 0.06,
+    duration: 0.6,
+    y: 18,
+  });
 
   return (
     <section className="py-16 sm:py-20 bg-white">
@@ -119,9 +126,11 @@ export function FeaturedSection({ featured, bestsellers, newArrivals }: Featured
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div ref={productsGridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {displayedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <div key={product.id} className="gsap-product-item">
+              <ProductCard product={product} />
+            </div>
           ))}
         </div>
 

@@ -57,6 +57,10 @@ export default function AdminOverviewPage() {
   // Subscribers count
   const subscribersCount = db.prepare("SELECT COUNT(id) as count FROM newsletter_subscribers WHERE status = 'subscribed'").get() as { count: number };
 
+  // Registered customers count
+  const customerCountRow = db.prepare("SELECT COUNT(id) as count FROM users WHERE role = 'customer'").get() as { count: number };
+  const totalCustomers = customerCountRow?.count || 0;
+
   // Expenses total
   const expensesRow = db.prepare('SELECT SUM(amount) as total_expenses FROM expenses').get() as { total_expenses: number };
   const totalExpenses = Number(expensesRow?.total_expenses || 0);
@@ -80,6 +84,7 @@ export default function AdminOverviewPage() {
 
   const confirmedRevenue = Number(salesRow?.confirmed_revenue || 0);
   const pendingRevenue = Number(salesRow?.pending_revenue || 0);
+  const netProfit = confirmedRevenue - totalExpenses;
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
@@ -126,7 +131,7 @@ export default function AdminOverviewPage() {
 
       {/* Top Telemetry KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* Confirmed Revenue */}
+        {/* Confirmed Revenue & Net Margin */}
         <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card hover:shadow-soft transition-all space-y-2">
           <div className="flex items-center justify-between text-charcoal-500 text-xs font-bold uppercase tracking-wider">
             <span>Confirmed Revenue</span>
@@ -137,9 +142,12 @@ export default function AdminOverviewPage() {
           <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
             {formatGHS(confirmedRevenue)}
           </div>
-          <p className="text-[11px] text-charcoal-500">
-            Pending unverified: <span className="text-amber-700 font-semibold">{formatGHS(pendingRevenue)}</span>
-          </p>
+          <div className="flex items-center justify-between text-[11px] text-charcoal-500 pt-1 border-t border-rose-100/60">
+            <span>Net after expenses:</span>
+            <span className={`font-semibold ${netProfit >= 0 ? 'text-emerald-700' : 'text-rose-600'}`}>
+              {formatGHS(netProfit)}
+            </span>
+          </div>
         </div>
 
         {/* Total Orders */}
@@ -153,7 +161,7 @@ export default function AdminOverviewPage() {
           <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
             {salesRow?.total_orders || 0}
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-charcoal-500">
+          <div className="flex items-center justify-between text-[11px] text-charcoal-500 pt-1 border-t border-rose-100/60">
             <span className="text-emerald-700 font-semibold">{salesRow?.paid_orders_count || 0} Paid</span>
             <span>•</span>
             <span className="text-amber-700 font-semibold">{salesRow?.pending_orders_count || 0} Awaiting</span>
@@ -171,37 +179,88 @@ export default function AdminOverviewPage() {
           <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
             {invRow?.total_products || 0} <span className="text-xs font-normal text-charcoal-500">Active</span>
           </div>
-          <div className="flex items-center gap-2 text-[11px]">
+          <div className="flex items-center justify-between text-[11px] pt-1 border-t border-rose-100/60">
             <span className="text-amber-700 font-semibold">{invRow?.low_stock_count || 0} Low Stock</span>
-            <span className="text-charcoal-400">•</span>
+            <span className="text-charcoal-300">•</span>
             <span className="text-rose-700 font-semibold">{invRow?.out_of_stock_count || 0} Out</span>
           </div>
         </div>
 
-        {/* Pending Actions / Requests */}
+        {/* Registered Customers & Audience */}
         <div className="bg-white p-6 rounded-2xl border border-rose-200/80 shadow-card hover:shadow-soft transition-all space-y-2">
           <div className="flex items-center justify-between text-charcoal-500 text-xs font-bold uppercase tracking-wider">
-            <span>Pending Queue</span>
+            <span>Customer Base</span>
             <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200/80">
-              <RotateCcw className="w-4 h-4" />
+              <Users className="w-4 h-4" />
             </div>
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
-              {(pendingReturns?.count || 0) + (newEnquiries?.count || 0)}
-            </span>
-            <span className="text-xs text-charcoal-500">Items to review</span>
+          <div className="font-serif font-bold text-2xl sm:text-3xl text-charcoal-900">
+            {totalCustomers} <span className="text-xs font-normal text-charcoal-500">Accounts</span>
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-charcoal-500">
-            <Link href="/admin/returns" className="text-brand-600 hover:text-brand-700 font-medium hover:underline">
-              {pendingReturns?.count || 0} Returns
-            </Link>
-            <span>•</span>
-            <Link href="/admin/enquiries" className="text-brand-600 hover:text-brand-700 font-medium hover:underline">
-              {newEnquiries?.count || 0} Messages
+          <div className="flex items-center justify-between text-[11px] text-charcoal-500 pt-1 border-t border-rose-100/60">
+            <span>Subscribers:</span>
+            <Link href="/admin/subscribers" className="text-brand-600 hover:text-brand-700 font-semibold hover:underline">
+              {subscribersCount?.count || 0} VIP Emails
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Operational Queue & Fast Action Status Bar */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Link
+          href="/admin/returns"
+          className="p-4 bg-white hover:bg-rose-50/50 rounded-2xl border border-rose-200/80 shadow-card transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-200/70">
+              <RotateCcw className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-charcoal-900">Return Requests</p>
+              <p className="text-[11px] text-charcoal-500">
+                {pendingReturns?.count || 0} pending review
+              </p>
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-brand-600 transition-colors" />
+        </Link>
+
+        <Link
+          href="/admin/enquiries"
+          className="p-4 bg-white hover:bg-rose-50/50 rounded-2xl border border-rose-200/80 shadow-card transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center border border-brand-200/70">
+              <MessageSquare className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-charcoal-900">Customer Messages</p>
+              <p className="text-[11px] text-charcoal-500">
+                {newEnquiries?.count || 0} unread enquiries
+              </p>
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-brand-600 transition-colors" />
+        </Link>
+
+        <Link
+          href="/admin/expenses"
+          className="p-4 bg-white hover:bg-rose-50/50 rounded-2xl border border-rose-200/80 shadow-card transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/70">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-charcoal-900">Store Expenses</p>
+              <p className="text-[11px] text-charcoal-500">
+                {formatGHS(totalExpenses)} recorded
+              </p>
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-brand-600 transition-colors" />
+        </Link>
       </div>
 
       {/* Main Grid: Recent Orders + Low Stock Alerts */}
