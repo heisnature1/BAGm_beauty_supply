@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { randomUUID } from 'crypto';
+import { syncSubscriberToSupabase } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,16 +18,24 @@ export async function POST(req: NextRequest) {
 
     const cleanEmail = email.trim().toLowerCase();
     const db = getDb();
+    const subId = randomUUID();
 
     db.prepare(`
       INSERT INTO subscribers (id, email, status, created_at)
       VALUES (?, ?, ?, ?)
     `).run(
-      randomUUID(),
+      subId,
       cleanEmail,
       'subscribed',
       new Date().toISOString()
     );
+
+    // Sync to Supabase PostgreSQL
+    syncSubscriberToSupabase({
+      id: subId,
+      email: cleanEmail,
+      status: 'subscribed',
+    }).catch((err) => console.error('Supabase subscriber sync notice:', err));
 
     return NextResponse.json({
       success: true,

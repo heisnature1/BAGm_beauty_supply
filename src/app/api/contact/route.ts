@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
+import { syncEnquiryToSupabase } from '@/lib/supabase';
 import crypto from 'crypto';
 
 export async function POST(req: NextRequest) {
@@ -18,6 +19,18 @@ export async function POST(req: NextRequest) {
       INSERT INTO enquiries (id, name, email, phone, subject, message, status, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, 'unread', ?, ?)
     `).run(id, name, email, phone || null, subject || 'General Customer Inquiry', message, now, now);
+
+    // Sync to Supabase PostgreSQL
+    syncEnquiryToSupabase({
+      id,
+      name,
+      email,
+      phone: phone || null,
+      subject: subject || 'General Customer Inquiry',
+      message,
+      status: 'unread',
+      created_at: now,
+    }).catch((err) => console.error('Supabase enquiry sync notice:', err));
 
     return NextResponse.json({
       success: true,
